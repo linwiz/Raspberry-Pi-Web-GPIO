@@ -3,7 +3,9 @@ Raspberry-Pi-Web-GPIO
 
 PHP script to control Raspberry PI GPIO pins from the web.
 
+Raspberry Pi Web GPIO should work from any modern mobile or desktop browser, but this hasn't been tested.
 
+See http://linwiz.github.io/Raspberry-Pi-Web-GPIO/ page for screenshots.
 
 Requires:
 
