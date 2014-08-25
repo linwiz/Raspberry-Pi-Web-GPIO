@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `username`, `password`,) VALUES
+INSERT INTO `users` (`userID`, `username`, `password`) VALUES
 (1, 'admin', 'sha256:1000:24Aarkujuenoyl9f2XrMPdGN59N/rH8V:qOabv+A/6cjvLBtmKBicXmrYH+Ka3kTT');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
