@@ -79,10 +79,17 @@ else { // Logged in.
 		$action = $db->real_escape_string($_POST['action']);
 		// Update pin description.
 		if ($action == "update") {
-			$array = array(4, 17, 18, 21, 22, 23, 24, 25);
+			$array = $mobClass->arrayPins();
 			foreach ($array as $pin) {
-				$description = $db->real_escape_string($_POST['pinDescription' . $pin]);
-				$db->query("UPDATE pinDescription SET pinDescription='$description' WHERE pinNumber='$pin';");
+				$pinDescription = $db->real_escape_string($_POST['pinDescription' . $pin]);
+				if (isset($_POST['pinEnabled' . $pin])) {
+					$pinEnabled = 1;
+				}
+				else {
+					$pinEnabled = 0;
+				}
+				$db->query("UPDATE pinStatus SET pinEnabled='$pinEnabled' WHERE pinNumber='$pin'") or die ($db->error);
+				$db->query("UPDATE pinDescription SET pinDescription='$pinDescription' WHERE pinNumber='$pin'") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinDescriptionUpdated');
 		} 
@@ -102,7 +109,7 @@ else { // Logged in.
 			}
 
 			$resetQuery = "SELECT username, password FROM users WHERE username = '$username';";
-			$resetResult = $db->query($resetQuery);
+			$resetResult = $db->query($resetQuery) or die ($db->error);
 			If ($resetResult->num_rows < 1) {
 				header('location: ' . $thisScript . '?message=incorrectUser#drawer-settings');
 				die();
@@ -115,7 +122,7 @@ else { // Logged in.
 			}
 			$resetResult->free();
 			$newHash = create_hash($newPassword1);
-			$db->query("UPDATE users SET password='$newHash' WHERE username='$username'");
+			$db->query("UPDATE users SET password='$newHash' WHERE username='$username'") or die ($db->error);
 			header('location: ' . $thisScript . '?message=passwordChanged');
 		}
 
@@ -131,10 +138,10 @@ else { // Logged in.
 			$pin = $db->real_escape_string($_POST['pin']);
 			if ($action == "turnOn") {
 				$setting = "1";
-				$db->query("UPDATE pinStatus SET pinStatus='$setting' WHERE pinNumber='$pin';");
+				$db->query("UPDATE pinStatus SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
 			} else If ($action == "turnOff") {
 				$setting = "0";
-				$db->query("UPDATE pinStatus SET pinStatus='$setting' WHERE pinNumber='$pin';");
+				$db->query("UPDATE pinStatus SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinUpdated');
 		}
@@ -233,14 +240,12 @@ print '
 	</div>
 
 	<script>
-		function switchChange4(e) { $('#form4').submit(); }
-		function switchChange17(e) { $('#form17').submit(); }
-		function switchChange18(e) { $('#form18').submit(); }
-		function switchChange21(e) { $('#form21').submit(); }
-		function switchChange22(e) { $('#form22').submit(); }
-		function switchChange23(e) { $('#form23').submit(); }
-		function switchChange24(e) { $('#form24').submit(); }
-		function switchChange25(e) { $('#form25').submit(); }
+<?php
+	$array = $mobClass->arrayPins();
+	foreach ($array as $pin) {
+		print "		function switchChange" . $pin . "(e) { $('#form" . $pin . "').submit(); }\r\n";
+	}
+?>
 	</script>
 	<script>
 		var app = new kendo.mobile.Application(document.body);

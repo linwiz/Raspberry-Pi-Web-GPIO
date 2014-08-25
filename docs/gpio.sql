@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.1
+-- version 4.2.7.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 10, 2012 at 03:13 PM
--- Server version: 5.1.49-3
--- PHP Version: 5.3.3-7+squeeze8
+-- Generation Time: Aug 25, 2014 at 06:33 PM
+-- Server version: 5.5.38-0+wheezy1
+-- PHP Version: 5.4.4-14+deb7u14
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `gpio`
 --
-CREATE DATABASE `gpio` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `gpio` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `gpio`;
 
 -- --------------------------------------------------------
@@ -27,17 +27,12 @@ USE `gpio`;
 --
 -- Table structure for table `pinDescription`
 --
--- Creation: Jun 09, 2012 at 07:50 PM
--- Last update: Jun 10, 2012 at 02:11 PM
---
 
 DROP TABLE IF EXISTS `pinDescription`;
 CREATE TABLE IF NOT EXISTS `pinDescription` (
-  `pinID` int(11) NOT NULL AUTO_INCREMENT,
+`pinID` int(11) NOT NULL,
   `pinNumber` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
-  `pinDescription` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`pinID`),
-  UNIQUE KEY `pinNumber` (`pinNumber`)
+  `pinDescription` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
@@ -59,17 +54,12 @@ INSERT INTO `pinDescription` (`pinID`, `pinNumber`, `pinDescription`) VALUES
 --
 -- Table structure for table `pinDirection`
 --
--- Creation: Jun 09, 2012 at 06:18 PM
--- Last update: Jun 09, 2012 at 06:19 PM
---
 
 DROP TABLE IF EXISTS `pinDirection`;
 CREATE TABLE IF NOT EXISTS `pinDirection` (
-  `pinID` int(11) NOT NULL AUTO_INCREMENT,
+`pinID` int(11) NOT NULL,
   `pinNumber` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
-  `pinDirection` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`pinID`),
-  UNIQUE KEY `pinNumber` (`pinNumber`)
+  `pinDirection` varchar(3) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
@@ -91,49 +81,40 @@ INSERT INTO `pinDirection` (`pinID`, `pinNumber`, `pinDirection`) VALUES
 --
 -- Table structure for table `pinStatus`
 --
--- Creation: Jun 09, 2012 at 05:30 PM
--- Last update: Jun 10, 2012 at 01:54 PM
---
 
 DROP TABLE IF EXISTS `pinStatus`;
 CREATE TABLE IF NOT EXISTS `pinStatus` (
-  `pinID` int(11) NOT NULL AUTO_INCREMENT,
+`pinID` int(11) NOT NULL,
   `pinNumber` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
   `pinStatus` varchar(1) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`pinID`),
-  UNIQUE KEY `pinNumber` (`pinNumber`)
+  `pinEnabled` varchar(1) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `pinStatus`
 --
 
-INSERT INTO `pinStatus` (`pinID`, `pinNumber`, `pinStatus`) VALUES
-(1, '4', '0'),
-(2, '17', '0'),
-(3, '18', '0'),
-(4, '21', '0'),
-(5, '22', '0'),
-(6, '23', '0'),
-(7, '24', '0'),
-(8, '25', '0');
+INSERT INTO `pinStatus` (`pinID`, `pinNumber`, `pinStatus`, `pinEnabled`) VALUES
+(1, '4', '0', '1'),
+(2, '17', '0', '1'),
+(3, '18', '0', '1'),
+(4, '21', '0', '1'),
+(5, '22', '0', '1'),
+(6, '23', '0', '1'),
+(7, '24', '0', '1'),
+(8, '25', '0', '1');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
 --
--- Creation: Jun 10, 2012 at 02:07 PM
--- Last update: Jun 10, 2012 at 02:09 PM
---
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `userID` int(11) NOT NULL AUTO_INCREMENT,
+`userID` int(11) NOT NULL,
   `username` varchar(28) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`userID`),
-  UNIQUE KEY `username` (`username`)
+  `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
@@ -141,8 +122,60 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`userID`, `username`, `password`) VALUES
-(1, 'admin', 'sha256:1000:24Aarkujuenoyl9f2XrMPdGN59N/rH8V:qOabv+A/6cjvLBtmKBicXmrYH+Ka3kTT');
+(1, 'admin', 'sha256:1000:/Ec19+8Eal3Pwfc2uyscua+HQ3FGEpcp:Hpk4vO5V5P5a9rEpLgK');
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `pinDescription`
+--
+ALTER TABLE `pinDescription`
+ ADD PRIMARY KEY (`pinID`), ADD UNIQUE KEY `pinNumber` (`pinNumber`);
+
+--
+-- Indexes for table `pinDirection`
+--
+ALTER TABLE `pinDirection`
+ ADD PRIMARY KEY (`pinID`), ADD UNIQUE KEY `pinNumber` (`pinNumber`);
+
+--
+-- Indexes for table `pinStatus`
+--
+ALTER TABLE `pinStatus`
+ ADD PRIMARY KEY (`pinID`), ADD UNIQUE KEY `pinNumber` (`pinNumber`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+ ADD PRIMARY KEY (`userID`), ADD UNIQUE KEY `username` (`username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `pinDescription`
+--
+ALTER TABLE `pinDescription`
+MODIFY `pinID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `pinDirection`
+--
+ALTER TABLE `pinDirection`
+MODIFY `pinID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `pinStatus`
+--
+ALTER TABLE `pinStatus`
+MODIFY `pinID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -20,7 +20,7 @@ class mobClass {
 		$username = $db->real_escape_string($username);
 		$password = $db->real_escape_string($password);
 		$loginQuery = "SELECT userID, password FROM users WHERE username = '$username';";
-		$loginResult = $db->query($loginQuery);
+		$loginResult = $db->query($loginQuery) or die ($db->error);
 		if($loginResult->num_rows < 1){
 			return 'invalidUsername';
 		}
@@ -78,29 +78,41 @@ class mobClass {
 	// Generate page to edit pin descriptions.
 	public function fillEditPinForm() {
 		global $thisScript, $db;
-		$fillQuery = "SELECT pinNumber, pinStatus FROM pinStatus";
-		$fillResult = $db->query($fillQuery);
+		$fillQuery = "SELECT pinNumber, pinStatus, pinEnabled FROM pinStatus";
+		$fillResult = $db->query($fillQuery) or die ($db->error);
 		$fillQuery2 = "SELECT pinNumber, pinDescription FROM pinDescription";
-		$fillResult2 = $db->query($fillQuery2);
+		$fillResult2 = $db->query($fillQuery2) or die ($db->error);
 		$totalGPIOCount = $fillResult->num_rows;
 		$currentGPIOCount = 0;
-		print '<form id="formEditPin" action="' . $thisScript . '" method="post">' . "\r\n";
 		while ($currentGPIOCount < $totalGPIOCount) {
 			$pinRow = $fillResult->fetch_assoc();
 			$descRow = $fillResult2->fetch_assoc();
+			$pinEnabled = $pinRow['pinEnabled'];
 			$pinNumber = $pinRow['pinNumber'];
 			$pinDescription = $descRow['pinDescription'];
-			print '								<li>
-										<label>
-											Pin ' . $pinNumber . '
-											<input type="text" name="pinDescription' . $pinNumber . '" value="' . $pinDescription . '" />
-										</label>
-									</li>' . "\r\n";
+			if ($pinEnabled == 1) {
+				$pinChecked = 'checked="checked" ';
+			}
+			else {
+				$pinChecked = "";
+			}
+			print '
+							<li>
+								<label>
+									Pin ' . $pinNumber . '
+									<input type="text" name="pinDescription' . $pinNumber . '" value="' . $pinDescription . '" />
+								</label>
+							</li>
+							<li>
+								<label>
+									 Enable Pin ' . $pinNumber . '
+									<input type="checkbox" name="pinEnabled' . $pinNumber . '" ' . $pinChecked . ' />
+								</label>
+							</li>' . "\r\n";
 			$currentGPIOCount ++;
 		}
-		print '								<input type="submit" style="margin-left: -1000px" />
-									<input type="hidden" name="action" value="update" />
-								</form>' . "\r\n";
+		print '							<input type="hidden" name="action" value="update" />
+							<input type="submit" style="margin-left: -1000px" />' . "\r\n";
 		$fillResult->free();
 		$fillResult2->free();
 	}
@@ -108,15 +120,16 @@ class mobClass {
 	// Generate main form to toggle pin status.
 	public function fillToggleForm() {
 		global $thisScript, $db;
-		$fillQuery = "SELECT pinNumber, pinStatus FROM pinStatus";
-		$fillResult = $db->query($fillQuery);
+		$fillQuery = "SELECT pinNumber, pinStatus, pinEnabled FROM pinStatus";
+		$fillResult = $db->query($fillQuery) or die ($db->error);
 		$fillQuery2 = "SELECT pinNumber, pinDescription FROM pinDescription";
-		$fillResult2 = $db->query($fillQuery2);
+		$fillResult2 = $db->query($fillQuery2) or die ($db->error);
 		$totalGPIOCount = $fillResult->num_rows;
 		$currentGPIOCount = 0;
 		while ($currentGPIOCount < $totalGPIOCount) {
 			$pinRow = $fillResult->fetch_assoc();
 			$descRow = $fillResult2->fetch_assoc();
+			$pinEnabled = $pinRow['pinEnabled'];
 			$pinNumber = $pinRow['pinNumber'];
 			$pinStatus = $pinRow['pinStatus'];
 			$pinDescription = $descRow['pinDescription'];
@@ -127,7 +140,9 @@ class mobClass {
 				$action = "turnOff";
 				$checked = ' checked="checked"';
 			}
-	print '			<li>
+
+			if ($pinEnabled == 1) {
+				print '			<li>
 					<label>
 						' . $pinDescription . '
 						<form id="form' . $pinNumber . '" action="' . $thisScript . '" method="post">
@@ -137,12 +152,26 @@ class mobClass {
 						</form>
 					</label>
 				</li>' . "\r\n";
+			}
 			$currentGPIOCount ++;
 		}
 		$fillResult->free();
 		$fillResult2->free();
 	}
 	
+	// Generate array with pin numbers.
+	public function arrayPins() {
+		$newArray = array();
+		global $thisScript, $db;
+		$fillQuery = "SELECT pinNumber FROM pinStatus ORDER BY pinID ASC";
+		$fillResult = $db->query($fillQuery) or die ($db->error);
+		while (($pinRow =  $fillResult->fetch_assoc())) {
+			$newArray[] = $pinRow['pinNumber'];
+		}
+		$fillResult->free();
+		return $newArray;
+	}
+
 	// Print messages.
 	public function newMessage($code = '') {
 		global $thisScript;
