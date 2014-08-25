@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Raspberry-pi-web-gpio by linwiz</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Raspberry-pi-web-gpio</h1>
+        <p>PHP script to control Raspberry PI GPIO pins from the web</p>
+        <p class="view"><a href="https://github.com/linwiz/Raspberry-Pi-Web-GPIO">View the Project on GitHub <small>linwiz/Raspberry-Pi-Web-GPIO</small></a></p>
+        <ul>
+          <li><a href="https://github.com/linwiz/Raspberry-Pi-Web-GPIO/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/linwiz/Raspberry-Pi-Web-GPIO/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/linwiz/Raspberry-Pi-Web-GPIO">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>Requires:</p>
+
+<p>MySQL -- tested on 5.5.38</p>
+
+<p>mysqli</p>
+
+<p>PHP -- tested on 5.4.4</p>
+
+<p>mcrypt library</p>
+
+<p>Configuring:</p>
+
+<p>Import docs/gpio.sql into MySQL</p>
+
+<p>Create user for database gpio</p>
+
+<p>Set MySQLi username and password in GPIOServer.sh</p>
+
+<p>Set MySQLi connection information in config.php</p>
+
+<p>Usage:</p>
+
+<p>Execute GPIOServer.sh;</p>
+
+<p>Make sure the file has execute permissions</p>
+
+<p>chmod +x GPIOServer.sh</p>
+
+<p>run the script, retrieves pin status from the database and turns pins on or off</p>
+
+<p>./GPIOServer.sh &amp;</p>
+
+<p>Load the script in your browser/mobile device</p>
+
+<p>Default login information;</p>
+
+<p>username: admin</p>
+
+<p>password: rpi</p>
+
+<p>Credit goes to: Daniel Curzon</p>
+
+<p><a href="http://www.instructables.com/id/Web-Control-of-Raspberry-Pi-GPIO/1/?lang=en">http://www.instructables.com/id/Web-Control-of-Raspberry-Pi-GPIO/1/?lang=en</a></p>
+
+<p>GPIOServer.sh Script created by Daniel Curzon (<a href="http://www.instructables.com/member/drcurzon">http://www.instructables.com/member/drcurzon</a>)</p>
+
+<p>Password Hashing With PBKDF2 (<a href="http://crackstation.net/hashing-security.htm">http://crackstation.net/hashing-security.htm</a>).</p>
+
+<p>Copyright (c) 2013, Taylor Hornby</p>
+
+<p>All rights reserved.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/linwiz">linwiz</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
