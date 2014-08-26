@@ -2,9 +2,9 @@
 =====================
 <p>PHP script to control Raspberry PI GPIO pins from the web.
 
-<p>Raspberry Pi Web GPIO _should_ work from any modern mobile or desktop browser, but this hasn't been tested.
+Raspberry Pi Web GPIO _should_ work from any modern mobile or desktop browser, but this hasn't been tested.
 
-<p>See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
+See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.</p>
 
 <h4>Requires:</h4>
 <ul>
@@ -22,7 +22,7 @@
   </li>
 </ul>
 
-
+<p>
 Configuring:
 
 Import docs/gpio.sql into MySQL
@@ -63,5 +63,4 @@ GPIOServer.sh Script created by Daniel Curzon (https://code.google.com/p/raspber
 	
 Password Hashing With PBKDF2 (http://crackstation.net/hashing-security.htm).
 Copyright (c) 2013, Taylor Hornby
-All rights reserved.
-</p>
+All rights reserved.</p>
