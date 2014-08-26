@@ -1,10 +1,10 @@
 <h3>Raspberry-Pi-Web-GPIO</h3>
 =====================
-<p>PHP script to control Raspberry PI GPIO pins from the web.
+PHP script to control Raspberry PI GPIO pins from the web.
 
 Raspberry Pi Web GPIO _should_ work from any modern mobile or desktop browser, but this hasn't been tested.
 
-See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.</p>
+See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
 
 <h4>Requires:</h4>
 <ul>
@@ -22,7 +22,7 @@ See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.</p>
   </li>
 </ul>
 
-<p>
+
 Configuring:
 
 Import docs/gpio.sql into MySQL
@@ -50,9 +50,7 @@ run the script, retrieves pin status from the database and turns pins on or off
 ./GPIOServer.sh &
 ```
 
-Load the script in your browser/mobile device
-	
-		
+Load the script in your browser/mobile device	
 Default login information;
 username: admin
 password: rpi
@@ -63,4 +61,4 @@ GPIOServer.sh Script created by Daniel Curzon (https://code.google.com/p/raspber
 	
 Password Hashing With PBKDF2 (http://crackstation.net/hashing-security.htm).
 Copyright (c) 2013, Taylor Hornby
-All rights reserved.</p>
+All rights reserved.
