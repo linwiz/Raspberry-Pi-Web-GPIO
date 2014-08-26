@@ -1,10 +1,10 @@
 <h3>Raspberry-Pi-Web-GPIO</h3>
 =====================
-<p>PHP script to control Raspberry PI GPIO pins from the web.</p>
+<p>PHP script to control Raspberry PI GPIO pins from the web.
 
-<p>Raspberry Pi Web GPIO _should_ work from any modern mobile or desktop browser, but this hasn't been tested.</p>
+<p>Raspberry Pi Web GPIO _should_ work from any modern mobile or desktop browser, but this hasn't been tested.
 
-<p>See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.</p>
+<p>See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
 
 <h4>Requires:</h4>
 <ul>
@@ -29,14 +29,14 @@ Import docs/gpio.sql into MySQL
 
 Create user for database `gpio`
 
-Set MySQLi username and password in GPIOServer.sh
+Set MySQLi username and password in `GPIOServer.sh`
 
-Set MySQLi connection information in config.php
+Set MySQLi connection information in `config.php`
 
 
 Usage:
 
-Execute GPIOServer.sh;
+Execute `GPIOServer.sh`;
 
 Make sure the file has execute permissions
 
@@ -54,9 +54,7 @@ Load the script in your browser/mobile device
 	
 		
 Default login information;
-
 username: admin
-
 password: rpi
 
 		
@@ -66,3 +64,4 @@ GPIOServer.sh Script created by Daniel Curzon (https://code.google.com/p/raspber
 Password Hashing With PBKDF2 (http://crackstation.net/hashing-security.htm).
 Copyright (c) 2013, Taylor Hornby
 All rights reserved.
+</p>
