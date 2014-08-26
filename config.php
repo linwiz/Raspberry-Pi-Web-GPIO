@@ -7,5 +7,12 @@ $MySQLi_Password	= 'pass';		// Enter your MySQLi Password here.
 $MySQLi_DataBase	= 'gpio';		// Enter your MySQLi Database here.
 
 
+// Raspberry Pi board revision
+// Enter your revision if you know it, OR
+// leave this line default and run setup.py
+// eg; python setup.py
+$pi_rev = '';
+
+
 $db = new mysqli($MySQLi_Host, $MySQLi_User, $MySQLi_Password, $MySQLi_DataBase);
 ?>
