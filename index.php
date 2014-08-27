@@ -29,15 +29,15 @@ session_start();
 $break = Explode('/', $_SERVER["SCRIPT_NAME"]);
 $thisScript = $break[count($break) - 1];
 
+// MySQLi Connection.
+require_once('config.php');
+
 // Mobile class functions.
 require_once('mobClass.php');
 $mobClass = new mobClass;
  
 // Password hashing functions.
 require_once('passwordHash.php');
-
-// MySQLi Connection.
-require_once('config.php');
 
 if (isset($_GET['message'])) {
 	$messageCode = $db->real_escape_string($_GET['message']);
@@ -88,8 +88,7 @@ else { // Logged in.
 				else {
 					$pinEnabled = 0;
 				}
-				$db->query("UPDATE pinStatus SET pinEnabled='$pinEnabled' WHERE pinNumber='$pin'") or die ($db->error);
-				$db->query("UPDATE pinDescription SET pinDescription='$pinDescription' WHERE pinNumber='$pin'") or die ($db->error);
+				$db->query("UPDATE pinRevision$pi_rev SET pinEnabled='$pinEnabled', pinDescription='$pinDescription' WHERE pinNumber='$pin'") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinDescriptionUpdated');
 		} 
@@ -138,10 +137,10 @@ else { // Logged in.
 			$pin = $db->real_escape_string($_POST['pin']);
 			if ($action == "turnOn") {
 				$setting = "1";
-				$db->query("UPDATE pinStatus SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
+				$db->query("UPDATE pinRevision$pi_rev SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
 			} else If ($action == "turnOff") {
 				$setting = "0";
-				$db->query("UPDATE pinStatus SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
+				$db->query("UPDATE pinRevision$pi_rev SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinUpdated');
 		}

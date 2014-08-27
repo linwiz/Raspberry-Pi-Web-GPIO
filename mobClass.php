@@ -77,62 +77,57 @@ class mobClass {
 
 	// Generate page to edit pin descriptions.
 	public function fillEditPinForm() {
-		global $thisScript, $db;
-		$fillQuery = "SELECT pinNumber, pinStatus, pinEnabled FROM pinStatus";
+		global $thisScript, $db, $pi_rev;
+		$fillQuery = "SELECT pinNumber, pinDescription, pinEnabled FROM pinRevision$pi_rev";
 		$fillResult = $db->query($fillQuery) or die ($db->error);
-		$fillQuery2 = "SELECT pinNumber, pinDescription FROM pinDescription";
-		$fillResult2 = $db->query($fillQuery2) or die ($db->error);
 		$totalGPIOCount = $fillResult->num_rows;
 		$currentGPIOCount = 0;
 		while ($currentGPIOCount < $totalGPIOCount) {
 			$pinRow = $fillResult->fetch_assoc();
-			$descRow = $fillResult2->fetch_assoc();
 			$pinEnabled = $pinRow['pinEnabled'];
 			$pinNumber = $pinRow['pinNumber'];
-			$pinDescription = $descRow['pinDescription'];
-			if ($pinEnabled == 1) {
-				$pinChecked = 'checked="checked" ';
+			$pinDescription = $pinRow['pinDescription'];
+			if ($pinEnabled != 2) {
+				if ($pinEnabled == 1) {
+					$pinChecked = 'checked="checked" ';
+				}
+				else {
+					$pinChecked = "";
+				}
+				print '
+								<li>
+									<label>
+										Pin ' . $pinNumber . '
+										<input type="text" name="pinDescription' . $pinNumber . '" value="' . $pinDescription . '" />
+									</label>
+								</li>
+								<li>
+									<label>
+										 Enable Pin ' . $pinNumber . '
+										<input type="checkbox" name="pinEnabled' . $pinNumber . '" ' . $pinChecked . ' />
+									</label>
+								</li>' . "\r\n";
 			}
-			else {
-				$pinChecked = "";
-			}
-			print '
-							<li>
-								<label>
-									Pin ' . $pinNumber . '
-									<input type="text" name="pinDescription' . $pinNumber . '" value="' . $pinDescription . '" />
-								</label>
-							</li>
-							<li>
-								<label>
-									 Enable Pin ' . $pinNumber . '
-									<input type="checkbox" name="pinEnabled' . $pinNumber . '" ' . $pinChecked . ' />
-								</label>
-							</li>' . "\r\n";
 			$currentGPIOCount ++;
 		}
 		print '							<input type="hidden" name="action" value="update" />
 							<input type="submit" style="margin-left: -1000px" />' . "\r\n";
 		$fillResult->free();
-		$fillResult2->free();
 	}
 
 	// Generate main form to toggle pin status.
 	public function fillToggleForm() {
-		global $thisScript, $db;
-		$fillQuery = "SELECT pinNumber, pinStatus, pinEnabled FROM pinStatus";
+		global $thisScript, $db, $pi_rev;
+		$fillQuery = "SELECT pinNumber, pinDescription, pinStatus, pinEnabled FROM pinRevision$pi_rev";
 		$fillResult = $db->query($fillQuery) or die ($db->error);
-		$fillQuery2 = "SELECT pinNumber, pinDescription FROM pinDescription";
-		$fillResult2 = $db->query($fillQuery2) or die ($db->error);
 		$totalGPIOCount = $fillResult->num_rows;
 		$currentGPIOCount = 0;
 		while ($currentGPIOCount < $totalGPIOCount) {
 			$pinRow = $fillResult->fetch_assoc();
-			$descRow = $fillResult2->fetch_assoc();
 			$pinEnabled = $pinRow['pinEnabled'];
 			$pinNumber = $pinRow['pinNumber'];
 			$pinStatus = $pinRow['pinStatus'];
-			$pinDescription = $descRow['pinDescription'];
+			$pinDescription = $pinRow['pinDescription'];
 			If ($pinStatus == "0") {
 				$action = "turnOn";
 				$checked = '';
@@ -156,14 +151,13 @@ class mobClass {
 			$currentGPIOCount ++;
 		}
 		$fillResult->free();
-		$fillResult2->free();
 	}
 	
 	// Generate array with pin numbers.
 	public function arrayPins() {
 		$newArray = array();
-		global $thisScript, $db;
-		$fillQuery = "SELECT pinNumber FROM pinStatus ORDER BY pinID ASC";
+		global $thisScript, $db, $pi_rev;
+		$fillQuery = "SELECT pinNumber FROM pinRevision$pi_rev ORDER BY pinID ASC";
 		$fillResult = $db->query($fillQuery) or die ($db->error);
 		while (($pinRow =  $fillResult->fetch_assoc())) {
 			$newArray[] = $pinRow['pinNumber'];
