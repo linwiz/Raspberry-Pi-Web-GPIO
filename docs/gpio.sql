@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 27, 2014 at 12:45 PM
+-- Generation Time: Aug 27, 2014 at 03:45 PM
 -- Server version: 5.5.38-0+wheezy1
 -- PHP Version: 5.4.4-14+deb7u14
 
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `pinRevision3` (
   `pinDirection` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'out',
   `pinStatus` varchar(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `pinEnabled` varchar(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `pinRevision3`
@@ -128,7 +128,16 @@ INSERT INTO `pinRevision3` (`pinID`, `pinNumber`, `pinDescription`, `pinDirectio
 (14, '22', 'Pin 22', 'out', '0', '1'),
 (15, '23', 'Pin 23', 'out', '0', '1'),
 (16, '24', 'Pin 24', 'out', '0', '1'),
-(17, '25', 'Pin 25', 'out', '0', '1');
+(17, '25', 'Pin 25', 'out', '0', '1'),
+(18, '5', 'Pin 5', 'out', '0', '1'),
+(19, '6', 'Pin 6', 'out', '0', '1'),
+(20, '12', 'Pin 12', 'out', '0', '1'),
+(21, '13', 'Pin 13', 'out', '0', '1'),
+(22, '16', 'Pin 16', 'out', '0', '1'),
+(23, '19', 'Pin 19', 'out', '0', '1'),
+(24, '20', 'Pin 20', 'out', '0', '1'),
+(25, '21', 'Pin 21', 'out', '0', '1'),
+(26, '26', 'Pin 26', 'out', '0', '1');
 
 -- --------------------------------------------------------
 
@@ -195,7 +204,7 @@ MODIFY `pinID` int(2) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 -- AUTO_INCREMENT for table `pinRevision3`
 --
 ALTER TABLE `pinRevision3`
-MODIFY `pinID` int(2) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+MODIFY `pinID` int(2) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `users`
 --
