@@ -39,6 +39,10 @@ $mobClass = new mobClass;
 // Password hashing functions.
 require_once('passwordHash.php');
 
+if ($pi_rev == '') {
+	die("Please run setup.py or configure the revision number in the config file.");
+}
+
 if (isset($_GET['message'])) {
 	$messageCode = $db->real_escape_string($_GET['message']);
 }

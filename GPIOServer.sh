@@ -10,39 +10,42 @@
 ###################################
 #####  EDIT THESE BEFORE USE  #####
 ###################################
+mysqlhostname="localhost"
 mysqlusername="user"
 mysqlpassword="pass"
+mysqldatabase="gpio"
 
 # Set  Refresh.
 waitTime=1
+
+# Retrieve revision information.
+revision=`python /var/www/gpio/revision.py`
 
 #############################################################################################################################
 ################################################### DO NOT EDIT BELOW THIS LINE ##############################################
 ##############################################################################################################################
 
-# Retrieve revision information.
-revision=`python revision.py`
 
 # Retreive all pins.
-pins=`mysql -B --disable-column-names --user=$mysqlusername --password=$mysqlpassword gpio -e"SELECT pinNumber FROM pinRevision$revision"`
+pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumber FROM pinRevision$revision"`
 
 # Start Loop.
 while true; do
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
-			enabled[$PIN]=`mysql -B --disable-column-names --user=$mysqlusername --password=$mysqlpassword gpio -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumber='$PIN'"`
+			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumber='$PIN'"`
 			if [ "${enabled[$PIN]}" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/export
-					echo "Enabled $PIN"
+					#echo "Enabled $PIN"
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/unexport
-					echo "Disabled $PIN"
+					#echo "Disabled $PIN"
 				fi
 			fi
 
@@ -50,22 +53,22 @@ while true; do
 			if [ -d "/sys/class/gpio/gpio$PIN" ]; then
 
 				# Read Pin Directions.
-				direction[$PIN]=`mysql -B --disable-column-names --user=$mysqlusername --password=$mysqlpassword gpio -e"SELECT pinDirection FROM pinRevision$revision WHERE pinNumber='$PIN'"`
+				direction[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinDirection FROM pinRevision$revision WHERE pinNumber='$PIN'"`
 				direction2=`cat /sys/class/gpio/gpio$PIN/direction`
 
 				# Read Pin Status'.
-				status[$PIN]=`mysql -B --disable-column-names --user=$mysqlusername --password=$mysqlpassword gpio -e "SELECT pinStatus FROM pinRevision$revision WHERE pinNumber='$PIN'"`
+				status[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e "SELECT pinStatus FROM pinRevision$revision WHERE pinNumber='$PIN'"`
 				status2=`cat /sys/class/gpio/gpio$PIN/value`
 
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
-					echo direction[$PIN] > /sys/class/gpio/gpio$PIN/direction
-					echo "$PIN : ${direction[$PIN]}"
+					echo ${direction[$PIN]} > /sys/class/gpio/gpio$PIN/direction
+					#echo "$PIN : ${direction[$PIN]}"
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
 					echo ${status[$PIN]} > /sys/class/gpio/gpio$PIN/value
-					echo "$PIN : ${status[$PIN]}"
+					#echo "$PIN : ${status[$PIN]}"
 				fi
 			fi
 	done
