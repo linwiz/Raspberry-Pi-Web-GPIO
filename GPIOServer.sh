@@ -1,7 +1,4 @@
 #!/bin/bash
-if [ ! -f "GPIOServer.log" ]; then
-	touch "GPIOServer.log"
-fi
 {
 # Initial Script created by Daniel Curzon (http://www.instructables.com/member/drcurzon).
 # Initial version created 10th June 2012.
@@ -19,17 +16,26 @@ mysqlusername="user"
 mysqlpassword="pass"
 mysqldatabase="gpio"
 
+# Enable logging in /var/log/GPIOServer.log
+# TODO : Doesn't log errors
+logging=TRUE
+
 # Set  Refresh.
 waitTime=1
 
-# Retrieve revision information.
-revision=`python /var/www/gpio/revision.py`
+# Script directory
+dir='/var/www/gpio'
 
 #############################################################################################################################
 ################################################### DO NOT EDIT BELOW THIS LINE ##############################################
 ##############################################################################################################################
 
+# Retrieve revision information.
+rev_cmd="python $dir/revision.py"
+revision=`$rev_cmd`
+
 echo "Starting GPIOServer.sh"
+trap "echo Stopping GPIOServer.sh" EXIT
 
 # Retreive all pins.
 pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumber FROM pinRevision$revision"`
@@ -44,13 +50,13 @@ while true; do
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/export
-					#echo "Enabled $PIN"
+					if [ "$logging" ]; then echo "Enabled $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/unexport
-					#echo "Disabled $PIN"
+					if [ "$logging" ]; then echo "Disabled $PIN"; fi
 				fi
 			fi
 
@@ -68,12 +74,12 @@ while true; do
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
 					echo ${direction[$PIN]} > /sys/class/gpio/gpio$PIN/direction
-					#echo "$PIN : ${direction[$PIN]}"
+					if [ "$logging" ]; then echo "$PIN changed: ${direction[$PIN]}"; fi
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
 					echo ${status[$PIN]} > /sys/class/gpio/gpio$PIN/value
-					#echo "$PIN : ${status[$PIN]}"
+					if [ "$logging" ]; then echo "$PIN changed: ${status[$PIN]}"; fi
 				fi
 			fi
 	done
@@ -82,4 +88,4 @@ while true; do
 	# Complete Loop.
 	sleep $waitTime
 done
-} >> GPIOServer.log
+} >> /var/log/GPIOServer.log

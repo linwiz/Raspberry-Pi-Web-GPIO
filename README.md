@@ -71,11 +71,14 @@ password: `rpi`
 
 Enabling GPIOServer.sh on boot:
 
-copy the init.d/gpioserver to your system's init.d directory, chmod it to allow execution and enable it to run on startup:
+Edit the file and make sure the TWO paths to GPIOserver.sh are correct.
+
+Copy the init.d/gpioserver to your system's init.d directory.
+chmod it to allow execution and enable it to run on startup:
 
 ```
 sudo cp init.d/gpioserver /etc/init.d
-chmod +x /etc/init.d/gpioserver
+sudo chmod +x /etc/init.d/gpioserver
 sudo update-rc.d gpioserver defaults
 ```
 

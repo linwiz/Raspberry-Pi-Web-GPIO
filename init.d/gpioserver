@@ -8,21 +8,48 @@
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Example initscript
-# Description:       This service is used to manage a servo
+# Description:       This service is used to manage GPIOServer.sh
 ### END INIT INFO
 
+set -e
+
+. /lib/lsb/init-functions
 
 case "$1" in 
     start)
-        echo "Starting gpioserver"
-        /var/www/gpio/GPIOServer.sh &
+		log_daemon_msg "Starting GPIO Server" "GPIOServer.sh" || true
+		/var/www/gpio/GPIOServer.sh &
+		if pgrep GPIOServer.sh >/dev/null 2>&1
+		then
+			log_end_msg 0 || true
+		else
+			log_end_msg 1 || true
+		fi
         ;;
     stop)
-        echo "Stopping gpioserver"
-        killall GPIOServer.sh
+		killall GPIOServer.sh && sleep 2
+		if pgrep GPIOServer.sh >/dev/null 2>&1
+		then
+			echo "Stopping GPIO Server: FAIL"
+		else
+			echo "Stopping GPIO Server: Stopped"
+		fi
         ;;
+    restart)
+		echo "Restarting GPIOServer.sh"
+		killall GPIOServer.sh
+		/var/www/gpio/GPIOServer.sh &
+        ;;
+	status)
+		if pgrep GPIOServer.sh >/dev/null 2>&1
+		then
+			echo "GPIO Server status: Started"
+		else
+			echo "GPIO Server status: Stopped"
+		fi
+		;;
     *)
-        echo "Usage: /etc/init.d/gpioserver start|stop"
+	log_action_msg "Usage: /etc/init.d/gpioserver {start|stop|restart|status}" || true
         exit 1
         ;;
 esac
