@@ -29,7 +29,16 @@ Import docs/gpio.sql into MySQL.
 
 Create user for database `gpio`.
 
-Set MySQL username and password in `GPIOServer.sh`
+Edit GPIOServer.sh:
+
+Set MySQL connection information in `GPIOServer.sh`
+
+Verify the following directory is correct
+
+revision=`python /var/www/gpio/revision.py`
+
+
+Edit config.php
 
 Set MySQL connection information in `config.php`
 
@@ -57,6 +66,18 @@ Default login information:
 username: `admin`
 
 password: `rpi`
+
+
+
+Enabling GPIOServer.sh on boot:
+
+copy the init.d/gpioserver to your system's init.d directory, chmod it to allow execution and enable it to run on startup:
+
+```
+sudo cp init.d/gpioserver /etc/init.d
+chmod +x /etc/init.d/gpioserver
+sudo update-rc.d gpioserver defaults
+```
 
 -----------
 
