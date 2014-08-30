@@ -1,4 +1,8 @@
 #!/bin/bash
+if [ ! -f "GPIOServer.log" ]; then
+	touch "GPIOServer.log"
+fi
+{
 # Initial Script created by Daniel Curzon (http://www.instructables.com/member/drcurzon).
 # Initial version created 10th June 2012.
 # Initial Version: 1.0.
@@ -25,6 +29,7 @@ revision=`python /var/www/gpio/revision.py`
 ################################################### DO NOT EDIT BELOW THIS LINE ##############################################
 ##############################################################################################################################
 
+echo "Starting GPIOServer.sh"
 
 # Retreive all pins.
 pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumber FROM pinRevision$revision"`
@@ -77,3 +82,4 @@ while true; do
 	# Complete Loop.
 	sleep $waitTime
 done
+} >> GPIOServer.log
