@@ -13,5 +13,5 @@ $db = new mysqli($MySQLi_Host, $MySQLi_User, $MySQLi_Password, $MySQLi_DataBase)
 // Enter your revision if you know it, OR
 // leave this line default and run setup.py
 // eg; python setup.py
-$pi_rev = '';
+$pi_rev = '2';
 ?>

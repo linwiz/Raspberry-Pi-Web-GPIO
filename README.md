@@ -22,6 +22,10 @@ See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
   </li>
 </ul>
 
+Installing:
+
+Copy all files into your web directory.
+
 
 Configuring:
 
