@@ -1,0 +1,12 @@
+<Files "GPIOServer.sh">
+Order Allow,Deny
+Deny from all
+</Files>
+<Files "revision.py">
+Order Allow,Deny
+Deny from all
+</Files>
+<Files "setup.py">
+Order Allow,Deny
+Deny from all
+</Files>
