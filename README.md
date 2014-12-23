@@ -47,6 +47,20 @@ Edit config.php
 Set MySQL connection information in `config.php`
 
 
+Run the setup script:
+
+Make sure the file has execute permissions.
+
+```
+chmod +x setup.py
+```
+
+Run the script, It detects the Raspberry Pi's board revision and makes changes to config.php
+
+```
+./setup.py
+```
+
 Usage:
 
 Execute `GPIOServer.sh`:
