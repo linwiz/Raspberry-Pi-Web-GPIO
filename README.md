@@ -44,8 +44,8 @@ Run the script, It detects the Raspberry Pi's board revision and makes changes t
 ./setup.py
 ```
 
-## Usage:
-### Execute `GPIOServer.sh`:
+## Usage
+### Execute `GPIOServer.sh`
 Make sure the file has execute permissions.
 ```
 chmod +x GPIOServer.sh
@@ -56,7 +56,7 @@ Run the script, It retrieves pin status from the database and turns pins on or o
 ```
 Load the script in your browser/mobile device.
 
-#### Default login information:
+#### Default login information
 * username: `admin`
 * password: `rpi`
 
@@ -65,7 +65,7 @@ Edit the init.d/gpioserver file and make sure the TWO paths to GPIOserver.sh are
 
 Copy the init.d/gpioserver to your system's init.d directory.
 
-chmod it to allow execution and enable it to run on startup:
+chmod it to allow execution and enable it to run on startup.
 ```
 sudo cp init.d/gpioserver /etc/init.d
 sudo chmod +x /etc/init.d/gpioserver
@@ -74,7 +74,7 @@ sudo update-rc.d gpioserver defaults
 
 ## Credit
 * Original idea and code
- + Credit goes to: Daniel Curzon (http://www.instructables.com/id/Web-Control-of-Raspberry-Pi-GPIO).
+ + Credit goes to Daniel Curzon (http://www.instructables.com/id/Web-Control-of-Raspberry-Pi-GPIO).
  + GPIOServer.sh Script created by Daniel Curzon (https://code.google.com/p/raspberrypi-gpio).
 
 	
