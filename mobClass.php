@@ -78,14 +78,14 @@ class mobClass {
 	// Generate page to edit pin descriptions.
 	public function fillEditPinForm() {
 		global $thisScript, $db, $pi_rev;
-		$fillQuery = "SELECT pinNumber, pinDescription, pinEnabled FROM pinRevision$pi_rev";
+		$fillQuery = "SELECT pinNumberBCM, pinDescription, pinEnabled FROM pinRevision$pi_rev";
 		$fillResult = $db->query($fillQuery) or die ($db->error);
 		$totalGPIOCount = $fillResult->num_rows;
 		$currentGPIOCount = 0;
 		while ($currentGPIOCount < $totalGPIOCount) {
 			$pinRow = $fillResult->fetch_assoc();
 			$pinEnabled = $pinRow['pinEnabled'];
-			$pinNumber = $pinRow['pinNumber'];
+			$pinNumber = $pinRow['pinNumberBCM'];
 			$pinDescription = $pinRow['pinDescription'];
 			if ($pinEnabled != 2) {
 				if ($pinEnabled == 1) {
@@ -118,14 +118,14 @@ class mobClass {
 	// Generate main form to toggle pin status.
 	public function fillToggleForm() {
 		global $thisScript, $db, $pi_rev;
-		$fillQuery = "SELECT pinNumber, pinDescription, pinStatus, pinEnabled FROM pinRevision$pi_rev";
+		$fillQuery = "SELECT pinNumberBCM, pinDescription, pinStatus, pinEnabled FROM pinRevision$pi_rev";
 		$fillResult = $db->query($fillQuery) or die ($db->error);
 		$totalGPIOCount = $fillResult->num_rows;
 		$currentGPIOCount = 0;
 		while ($currentGPIOCount < $totalGPIOCount) {
 			$pinRow = $fillResult->fetch_assoc();
 			$pinEnabled = $pinRow['pinEnabled'];
-			$pinNumber = $pinRow['pinNumber'];
+			$pinNumber = $pinRow['pinNumberBCM'];
 			$pinStatus = $pinRow['pinStatus'];
 			$pinDescription = $pinRow['pinDescription'];
 			If ($pinStatus == "0") {
@@ -152,15 +152,15 @@ class mobClass {
 		}
 		$fillResult->free();
 	}
-	
+
 	// Generate array with pin numbers.
 	public function arrayPins() {
 		$newArray = array();
 		global $thisScript, $db, $pi_rev;
-		$fillQuery = "SELECT pinNumber FROM pinRevision$pi_rev ORDER BY pinID ASC";
+		$fillQuery = "SELECT pinNumberBCM FROM pinRevision$pi_rev ORDER BY pinID ASC";
 		$fillResult = $db->query($fillQuery) or die ($db->error);
 		while (($pinRow =  $fillResult->fetch_assoc())) {
-			$newArray[] = $pinRow['pinNumber'];
+			$newArray[] = $pinRow['pinNumberBCM'];
 		}
 		$fillResult->free();
 		return $newArray;

@@ -38,24 +38,24 @@ echo "Starting GPIOServer.sh"
 trap "echo Stopping GPIOServer.sh" EXIT
 
 # Retreive all pins.
-pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumber FROM pinRevision$revision"`
+pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumberBCM FROM pinRevision$revision"`
 
 # Start Loop.
 while true; do
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
-			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumber='$PIN'"`
+			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			if [ "${enabled[$PIN]}" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
-					echo $PIN > /sys/class/gpio/export
+					gpio export $PIN out
 					if [ "$logging" ]; then echo "Enabled $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
-					echo $PIN > /sys/class/gpio/unexport
+					gpio unexport $PIN
 					if [ "$logging" ]; then echo "Disabled $PIN"; fi
 				fi
 			fi
@@ -64,21 +64,21 @@ while true; do
 			if [ -d "/sys/class/gpio/gpio$PIN" ]; then
 
 				# Read Pin Directions.
-				direction[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinDirection FROM pinRevision$revision WHERE pinNumber='$PIN'"`
+				direction[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 				direction2=`cat /sys/class/gpio/gpio$PIN/direction`
 
 				# Read Pin Status'.
-				status[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e "SELECT pinStatus FROM pinRevision$revision WHERE pinNumber='$PIN'"`
-				status2=`cat /sys/class/gpio/gpio$PIN/value`
+				status[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e "SELECT pinStatus FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
+				status2=`gpio -g read $PIN`
 
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
-					echo ${direction[$PIN]} > /sys/class/gpio/gpio$PIN/direction
+					gpio -g mode $PIN ${direction[$PIN]}
 					if [ "$logging" ]; then echo "$PIN changed: ${direction[$PIN]}"; fi
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
-					echo ${status[$PIN]} > /sys/class/gpio/gpio$PIN/value
+					gpio -g write $PIN ${status[$PIN]}
 					if [ "$logging" ]; then echo "$PIN changed: ${status[$PIN]}"; fi
 				fi
 			fi
