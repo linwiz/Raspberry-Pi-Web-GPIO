@@ -18,6 +18,7 @@ See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
     <ul>
     <li>Tested on 5.4.4</li>
     <li>mcrypt library</li>
+    <li><a href="https://github.com/DomBlack/php-scrypt">scrypt module</a></li>
     </ul>
   </li>
 </ul>
