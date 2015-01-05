@@ -35,9 +35,9 @@ require_once('config.php');
 // Mobile class functions.
 require_once('mobClass.php');
 $mobClass = new mobClass;
- 
+
 // Password hashing functions.
-require_once('passwordHash.php');
+require_once('scrypt.php');
 
 if ($pi_rev == '') {
 	die("Please run setup.py or configure the revision number in the config file.");
@@ -119,12 +119,12 @@ else { // Logged in.
 			}
 			$resetData = $resetResult->fetch_assoc();
 			$databasePassword = $resetData['password'];
-			if (validate_password($currentPassword, $databasePassword) === FALSE) {
+			if (Password::check($currentPassword, $databasePassword) === FALSE) {
 				header('Location: ' . $thisScript . '?message=incorrectPassword#drawer-settings');
 				die();
 			}
 			$resetResult->free();
-			$newHash = create_hash($newPassword1);
+			$newHash = Password::hash($newPassword1);
 			$db->query("UPDATE users SET password='$newHash' WHERE username='$username'") or die ($db->error);
 			header('location: ' . $thisScript . '?message=passwordChanged');
 		}
@@ -148,7 +148,7 @@ else { // Logged in.
 			}
 			header('Location: ' . $thisScript . '?message=pinUpdated');
 		}
-		
+
 		else {
 			header('Location: ' . $thisScript);
 		}

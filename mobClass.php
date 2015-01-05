@@ -25,7 +25,7 @@ class mobClass {
 			return 'invalidUsername';
 		}
 		$loginData = $loginResult->fetch_assoc();
-		If (validate_password($password, $loginData['password']) === FALSE) {
+		If (Password::check($password, $loginData['password']) === FALSE) {
 			return 'invalidPassword';
 		} else {
 			session_regenerate_id();
@@ -152,7 +152,7 @@ class mobClass {
 		}
 		$fillResult->free();
 	}
-	
+
 	// Generate array with pin numbers.
 	public function arrayPins() {
 		$newArray = array();
