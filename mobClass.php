@@ -26,7 +26,8 @@ class mobClass {
 		}
 		$loginData = $loginResult->fetch_assoc();
 		If (Password::check($password, $loginData['password']) === FALSE) {
-			return 'invalidPassword';
+			return $password." ! ".$loginData['password']." ! ".Password::check($password, $loginData['password'])." ! ".Password::hash($password);
+//			return 'invalidPassword';
 		} else {
 			session_regenerate_id();
 			$_SESSION['username'] = $username;
@@ -209,7 +210,7 @@ class mobClass {
 			$type = "error";
 		}
 		else {
-			return '';
+			return $code;
 		}
 return '			<li>
 				<div class="k-block k-' . $type . '-colored" data-role="listview"><a href="' . $thisScript . '" data-icon="closemessage">' . $message . '</a></div>

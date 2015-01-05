@@ -1,4 +1,5 @@
 <?php
+error_reporting(-1);
 // Please update the MySQLi host, username, password and database in config.php
 
 // Default login: admin
@@ -95,7 +96,7 @@ else { // Logged in.
 				$db->query("UPDATE pinRevision$pi_rev SET pinEnabled='$pinEnabled', pinDescription='$pinDescription' WHERE pinNumber='$pin'") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinDescriptionUpdated');
-		} 
+		}
 
 		// Change Password.
 		else if ($action == "setPassword") {
