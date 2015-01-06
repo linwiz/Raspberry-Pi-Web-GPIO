@@ -8,6 +8,7 @@ See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
 
 ## Requires
 * [WiringPi](http://wiringpi.com)
+* [scrypt](https://github.com/DomBlack/php-scrypt)
 * MySQL
  + Tested on 5.5.38
  + mysqli library
