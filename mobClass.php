@@ -26,8 +26,7 @@ class mobClass {
 		}
 		$loginData = $loginResult->fetch_assoc();
 		If (Password::check($password, $loginData['password']) === FALSE) {
-			return $password." ! ".$loginData['password']." ! ".Password::check($password, $loginData['password'])." ! ".Password::hash($password);
-//			return 'invalidPassword';
+			return 'invalidPassword';
 		} else {
 			session_regenerate_id();
 			$_SESSION['username'] = $username;
