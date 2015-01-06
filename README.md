@@ -7,6 +7,7 @@ or desktop browser, but this hasn't been tested.
 See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
 
 ## Requires
+* [WiringPi](http://wiringpi.com)
 * MySQL
  + Tested on 5.5.38
  + mysqli library

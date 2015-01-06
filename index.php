@@ -93,7 +93,7 @@ else { // Logged in.
 				else {
 					$pinEnabled = 0;
 				}
-				$db->query("UPDATE pinRevision$pi_rev SET pinEnabled='$pinEnabled', pinDescription='$pinDescription' WHERE pinNumber='$pin'") or die ($db->error);
+				$db->query("UPDATE pinRevision$pi_rev SET pinEnabled='$pinEnabled', pinDescription='$pinDescription' WHERE pinNumberBCM='$pin'") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinDescriptionUpdated');
 		}
@@ -142,10 +142,10 @@ else { // Logged in.
 			$pin = $db->real_escape_string($_POST['pin']);
 			if ($action == "turnOn") {
 				$setting = "1";
-				$db->query("UPDATE pinRevision$pi_rev SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
+				$db->query("UPDATE pinRevision$pi_rev SET pinStatus='$setting' WHERE pinNumberBCM='$pin';") or die ($db->error);
 			} else If ($action == "turnOff") {
 				$setting = "0";
-				$db->query("UPDATE pinRevision$pi_rev SET pinStatus='$setting' WHERE pinNumber='$pin';") or die ($db->error);
+				$db->query("UPDATE pinRevision$pi_rev SET pinStatus='$setting' WHERE pinNumberBCM='$pin';") or die ($db->error);
 			}
 			header('Location: ' . $thisScript . '?message=pinUpdated');
 		}
