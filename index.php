@@ -1,5 +1,4 @@
 <?php
-error_reporting(-1);
 // Please update the MySQLi host, username, password and database in config.php
 
 // Default login: admin
