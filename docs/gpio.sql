@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `timer` (
 CREATE TABLE IF NOT EXISTS `users` (
   `userID` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(28) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(87) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
@@ -184,5 +184,4 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`userID`, `username`, `password`) VALUES
-(1, 'admin', 'sha256:1000:/Ec19+8Eal3Pwfc2uyscua+HQ3FGEpcp:Hpk4vO5V5P5a9rEpLgK');
-
+(1, 'admin', '16384$8$1$mpDAFcxNVvM=$f4341ac30b57cd34e647b210317d71e38a65d9e15203232a7a31a57529ba7dbc');
