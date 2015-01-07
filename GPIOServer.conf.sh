@@ -6,7 +6,7 @@ mysqlusername="user"
 mysqlpassword="pass"
 mysqldatabase="gpio"
 
-# Enable logging in /var/log/GPIOServer.log
+# Enable logging in MySQL
 # TODO : Doesn't log errors
 logging="TRUE"
 
