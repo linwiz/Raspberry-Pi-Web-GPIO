@@ -4,14 +4,14 @@
 # Initial version created 10th June 2012.
 # Initial Version: 1.0.
 
-# Heavily modified script by MTec007.
-# August 31st 2014.
+# Heavily modified script by linwiz.
+# January 7th 2015
 
-#set working directory
+# Set working directory.
 dir="$(dirname "$0")"
 
-#read config file (relative)
-. "$dir/GPIOServer.conf.sh"
+# Read config file (relative).
+source "$dir/GPIOServer.conf.sh"
 
 # Retrieve revision information.
 rev_cmd="python $dir/revision.py"
@@ -25,13 +25,10 @@ pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusernam
 
 # Start Loop.
 while true; do
-
-
-
 	for PIN in $pins ;
 		do
 			NOW=$(date +"%Y-%m-%d %T")
-			
+
 			# Enable or Disable pins accordingly.
 			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			if [ "${enabled[$PIN]}" == "1" ]; then
@@ -71,7 +68,6 @@ while true; do
 				fi
 			fi
 	done
-
 
 	# Complete Loop.
 	sleep $waitTime

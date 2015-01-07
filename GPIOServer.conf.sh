@@ -1,5 +1,5 @@
 ##############################################
-#####  GPIOServer.sh configuration file  #####
+#####  GPIOServer    Configuration file  #####
 ##############################################
 mysqlhostname="localhost"
 mysqlusername="user"
@@ -8,12 +8,7 @@ mysqldatabase="gpio"
 
 # Enable logging in /var/log/GPIOServer.log
 # TODO : Doesn't log errors
-logging=TRUE
+logging="TRUE"
 
 # Set  Refresh.
 waitTime=1
-
-# Script directory
-# Paku: dir is assumed to be the same (working) directory now.
-#dir='/var/www/gpio'
-

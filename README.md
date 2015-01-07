@@ -20,28 +20,21 @@ See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
 Copy all files into your web directory.
 
 ## Configuring
-Import docs/gpio.sql into MySQL.
+Create MySQL database `gpio`.
 
-Create user for database `gpio`.
+Import docs/gpio.sql into MySQL database `gpio`.
 
-### Edit GPIOServer.sh
-Set MySQL connection information in `GPIOServer.sh`
+Create user for MySQL database `gpio`.
 
-Verify the following directory is correct
-```
-revision=`python /var/www/gpio/revision.py`
-```
-
-### Edit config.php
-Set MySQL connection information in `config.php`
-
+### Edit GPIOServer.conf.sh
+Set MySQL connection information in `GPIOServer.conf.sh`
 
 ### Run the setup script
 Make sure the file has execute permissions.
 ```
 chmod +x setup.py
 ```
-Run the script, It detects the Raspberry Pi's board revision and makes changes to config.php
+Run the script, It detects the Raspberry Pi's board revision and makes changes to mysqli.php
 ```
 ./setup.py
 ```

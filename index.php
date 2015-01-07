@@ -1,5 +1,8 @@
 <?php
-// Please update the MySQLi host, username, password and database in config.php
+// Please run setup.py
+// OR update the MySQLi host, username,
+// password, database and Pi revision
+// in GPIOServer.conf.sh
 
 // Default login: admin
 // Default password: rpi
@@ -30,7 +33,7 @@ $break = Explode('/', $_SERVER["SCRIPT_NAME"]);
 $thisScript = $break[count($break) - 1];
 
 // MySQLi Connection.
-require_once('config.php');
+require_once('mysqli.php');
 
 // Mobile class functions.
 require_once('mobClass.php');
@@ -39,8 +42,8 @@ $mobClass = new mobClass;
 // Password hashing functions.
 require_once('scrypt.php');
 
-if ($pi_rev == '') {
-	die("Please run setup.py or configure the revision number in the config file.");
+if ($pi_rev == '' || $MySQLi_Host == '' || $MySQLi_User == '' || $MySQLi_Password == '' || $MySQLi_DataBase == '') {
+	die("Please run setup.py or configure the values in the GPIOServer.conf.sh file.");
 }
 
 if (isset($_GET['message'])) {
