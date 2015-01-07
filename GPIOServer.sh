@@ -26,10 +26,12 @@ pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusernam
 # Start Loop.
 while true; do
 
-	NOW=$(date +"%Y-%m-%d %T")
+
 
 	for PIN in $pins ;
 		do
+			NOW=$(date +"%Y-%m-%d %T")
+			
 			# Enable or Disable pins accordingly.
 			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			if [ "${enabled[$PIN]}" == "1" ]; then
