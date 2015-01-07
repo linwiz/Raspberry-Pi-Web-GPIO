@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 07, 2015 at 05:15 PM
+-- Generation Time: Jan 07, 2015 at 05:18 PM
 -- Server version: 5.5.40
 -- PHP Version: 5.4.36-0+deb7u1
 
@@ -176,10 +176,10 @@ INSERT INTO `pinRevision3` (`pinID`, `pinNumberBCM`, `pinNumberWPi`, `pinDescrip
 DROP TABLE IF EXISTS `timer`;
 CREATE TABLE IF NOT EXISTS `timer` (
   `pinID` int(2) NOT NULL AUTO_INCREMENT,
-  `pinNumber` varchar(2) CHARACTER SET latin1 NOT NULL,
+  `pinNumber` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
   `timerEnabled` int(1) NOT NULL DEFAULT '0',
-  `timerOn` text CHARACTER SET latin1 NOT NULL,
-  `timerOff` text CHARACTER SET latin1 NOT NULL,
+  `timerOn` text COLLATE utf8_unicode_ci NOT NULL,
+  `timerOff` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`pinID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
