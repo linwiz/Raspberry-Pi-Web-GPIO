@@ -8,9 +8,11 @@
 # August 31st 2014.
 
 
-#read config file
+#read config file (relative)
 
-source GPIO.conf
+my_dir="$(dirname "$0")"
+
+"$my_dir/GPIOServer.conf.sh"
 
 # Retrieve revision information.
 rev_cmd="python $dir/revision.py"
