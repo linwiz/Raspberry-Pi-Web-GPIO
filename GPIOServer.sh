@@ -17,15 +17,15 @@ dir="$(dirname "$0")"
 rev_cmd="python $dir/revision.py"
 revision=`$rev_cmd`
 
-echo "'date +"%m-%d-%Y %T"' Starting GPIOServer.sh"
-trap "echo Stopping GPIOServer.sh" EXIT
+echo "$(date +"%Y-%m-%d %T") Starting GPIO Server"
+trap "echo Stopping GPIO Server" EXIT
 
 # Retreive all pins.
 pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumberBCM FROM pinRevision$revision"`
 
 # Start Loop.
 while true; do
-	NOW='date +"%m-%d-%Y %T"'
+	NOW=$(date +"%Y-%m-%d %T")
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
@@ -34,13 +34,13 @@ while true; do
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					gpio export $PIN out
-					if [ "$logging" ]; then echo "$NOW: Enabled $PIN"; fi
+					if [ "$logging" ]; then echo "$NOW Enabled $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					gpio unexport $PIN
-					if [ "$logging" ]; then echo "$NOW: Disabled $PIN"; fi
+					if [ "$logging" ]; then echo "$NOW Disabled $PIN"; fi
 				fi
 			fi
 
@@ -58,12 +58,12 @@ while true; do
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
 					gpio -g mode $PIN ${direction[$PIN]}
-					if [ "$logging" ]; then echo "$NOW: $PIN changed: ${direction[$PIN]}"; fi
+					if [ "$logging" ]; then echo "$NOW $PIN changed: ${direction[$PIN]}"; fi
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
 					gpio -g write $PIN ${status[$PIN]}
-					if [ "$logging" ]; then echo "$NOW: $PIN changed: ${status[$PIN]}"; fi
+					if [ "$logging" ]; then echo "$NOW $PIN changed: ${status[$PIN]}"; fi
 				fi
 			fi
 	done
