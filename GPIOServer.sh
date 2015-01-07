@@ -10,9 +10,9 @@
 
 #read config file (relative)
 
-my_dir="$(dirname "$0")"
+dir="$(dirname "$0")"
 
-"$my_dir/GPIOServer.conf.sh"
+source "$dir/GPIOServer.conf.sh"
 
 # Retrieve revision information.
 rev_cmd="python $dir/revision.py"

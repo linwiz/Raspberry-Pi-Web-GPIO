@@ -14,5 +14,6 @@ logging=TRUE
 waitTime=1
 
 # Script directory
-dir='/var/www/gpio'
+# Paku: dir is assumed to be the same directory now.
+#dir='/var/www/gpio'
 
