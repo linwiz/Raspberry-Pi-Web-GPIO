@@ -8,27 +8,9 @@
 # August 31st 2014.
 
 
-###################################
-#####  EDIT THESE BEFORE USE  #####
-###################################
-mysqlhostname="localhost"
-mysqlusername="user"
-mysqlpassword="pass"
-mysqldatabase="gpio"
+#read config file
 
-# Enable logging in /var/log/GPIOServer.log
-# TODO : Doesn't log errors
-logging=TRUE
-
-# Set  Refresh.
-waitTime=1
-
-# Script directory
-dir='/var/www/gpio'
-
-#############################################################################################################################
-################################################### DO NOT EDIT BELOW THIS LINE ##############################################
-##############################################################################################################################
+source GPIO.conf
 
 # Retrieve revision information.
 rev_cmd="python $dir/revision.py"
