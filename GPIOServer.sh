@@ -17,7 +17,7 @@ dir="$(dirname "$0")"
 rev_cmd="python $dir/revision.py"
 revision=`$rev_cmd`
 
-echo "Starting GPIOServer.sh"
+echo "'date +"%m-%d-%Y %T"' Starting GPIOServer.sh"
 trap "echo Stopping GPIOServer.sh" EXIT
 
 # Retreive all pins.
