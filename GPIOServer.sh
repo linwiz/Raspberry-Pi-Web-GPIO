@@ -17,7 +17,7 @@ dir="$(dirname "$0")"
 rev_cmd="python $dir/revision.py"
 revision=`$rev_cmd`
 
-echo "$(date +"%m-%d-%Y %T") Starting GPIOServer.sh"
+echo "'date +"%m-%d-%Y %T"' Starting GPIOServer.sh"
 trap "echo Stopping GPIOServer.sh" EXIT
 
 # Retreive all pins.
@@ -25,7 +25,7 @@ pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusernam
 
 # Start Loop.
 while true; do
-	NOW=$(date +"%m-%d-%Y %T")
+	NOW='date +"%m-%d-%Y %T"'
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
