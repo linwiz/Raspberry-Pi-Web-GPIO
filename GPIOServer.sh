@@ -7,12 +7,11 @@
 # Heavily modified script by MTec007.
 # August 31st 2014.
 
-
-#read config file (relative)
-
+#set working directory
 dir="$(dirname "$0")"
 
-source "$dir/GPIOServer.conf.sh"
+#read config file (relative)
+. "$dir/GPIOServer.conf.sh"
 
 # Retrieve revision information.
 rev_cmd="python $dir/revision.py"
