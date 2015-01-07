@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 07, 2015 at 04:48 PM
+-- Generation Time: Jan 07, 2015 at 05:15 PM
 -- Server version: 5.5.40
 -- PHP Version: 5.4.36-0+deb7u1
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -176,12 +176,12 @@ INSERT INTO `pinRevision3` (`pinID`, `pinNumberBCM`, `pinNumberWPi`, `pinDescrip
 DROP TABLE IF EXISTS `timer`;
 CREATE TABLE IF NOT EXISTS `timer` (
   `pinID` int(2) NOT NULL AUTO_INCREMENT,
-  `pinNumber` varchar(2) NOT NULL,
+  `pinNumber` varchar(2) CHARACTER SET latin1 NOT NULL,
   `timerEnabled` int(1) NOT NULL DEFAULT '0',
-  `timerOn` text NOT NULL,
-  `timerOff` text NOT NULL,
+  `timerOn` text CHARACTER SET latin1 NOT NULL,
+  `timerOff` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`pinID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(87) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `users`
