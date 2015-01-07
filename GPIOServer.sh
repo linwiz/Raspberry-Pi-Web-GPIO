@@ -7,56 +7,44 @@
 # Heavily modified script by MTec007.
 # August 31st 2014.
 
+#set working directory
+dir="$(dirname "$0")"
 
-###################################
-#####  EDIT THESE BEFORE USE  #####
-###################################
-mysqlhostname="localhost"
-mysqlusername="user"
-mysqlpassword="pass"
-mysqldatabase="gpio"
-
-# Enable logging in /var/log/GPIOServer.log
-# TODO : Doesn't log errors
-logging=TRUE
-
-# Set  Refresh.
-waitTime=1
-
-# Script directory
-dir='/var/www/gpio'
-
-#############################################################################################################################
-################################################### DO NOT EDIT BELOW THIS LINE ##############################################
-##############################################################################################################################
+#read config file (relative)
+. "$dir/GPIOServer.conf.sh"
 
 # Retrieve revision information.
 rev_cmd="python $dir/revision.py"
 revision=`$rev_cmd`
 
-echo "Starting GPIOServer.sh"
-trap "echo Stopping GPIOServer.sh" EXIT
+echo "$(date +"%Y-%m-%d %T") Starting GPIO Server"
+trap "echo Stopping GPIO Server" EXIT
 
 # Retreive all pins.
 pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumberBCM FROM pinRevision$revision"`
 
 # Start Loop.
 while true; do
+
+
+
 	for PIN in $pins ;
 		do
+			NOW=$(date +"%Y-%m-%d %T")
+			
 			# Enable or Disable pins accordingly.
 			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			if [ "${enabled[$PIN]}" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					gpio export $PIN out
-					if [ "$logging" ]; then echo "Enabled $PIN"; fi
+					if [ "$logging" ]; then echo "$NOW Enabled $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					gpio unexport $PIN
-					if [ "$logging" ]; then echo "Disabled $PIN"; fi
+					if [ "$logging" ]; then echo "$NOW Disabled $PIN"; fi
 				fi
 			fi
 
@@ -74,12 +62,12 @@ while true; do
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
 					gpio -g mode $PIN ${direction[$PIN]}
-					if [ "$logging" ]; then echo "$PIN changed: ${direction[$PIN]}"; fi
+					if [ "$logging" ]; then echo "$NOW $PIN changed: ${direction[$PIN]}"; fi
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
 					gpio -g write $PIN ${status[$PIN]}
-					if [ "$logging" ]; then echo "$PIN changed: ${status[$PIN]}"; fi
+					if [ "$logging" ]; then echo "$NOW $PIN changed: ${status[$PIN]}"; fi
 				fi
 			fi
 	done
