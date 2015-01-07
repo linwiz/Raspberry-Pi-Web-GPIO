@@ -17,15 +17,24 @@ dir="$(dirname "$0")"
 rev_cmd="python $dir/revision.py"
 revision=`$rev_cmd`
 
+<<<<<<< HEAD
 echo "$(date +"%Y-%m-%d %T") Starting GPIO Server"
 trap "echo Stopping GPIO Server" EXIT
+=======
+echo "$(date +"%m-%d-%Y %T") Starting GPIOServer.sh"
+trap "echo Stopping GPIOServer.sh" EXIT
+>>>>>>> 0e97c755d9143238925a641eaae04798c4f851f6
 
 # Retreive all pins.
 pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumberBCM FROM pinRevision$revision"`
 
 # Start Loop.
 while true; do
+<<<<<<< HEAD
 	NOW=$(date +"%Y-%m-%d %T")
+=======
+	NOW=$(date +"%m-%d-%Y %T")
+>>>>>>> 0e97c755d9143238925a641eaae04798c4f851f6
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
