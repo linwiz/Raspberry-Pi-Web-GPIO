@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 05, 2015 at 02:38 PM
+-- Generation Time: Jan 07, 2015 at 04:48 PM
 -- Server version: 5.5.40
 -- PHP Version: 5.4.36-0+deb7u1
 
@@ -17,9 +17,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `data` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pinRevision1`
 --
 
+DROP TABLE IF EXISTS `pinRevision1`;
 CREATE TABLE IF NOT EXISTS `pinRevision1` (
   `pinID` int(2) NOT NULL AUTO_INCREMENT,
   `pinNumberBCM` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
@@ -61,6 +76,7 @@ INSERT INTO `pinRevision1` (`pinID`, `pinNumberBCM`, `pinNumberWPi`, `pinDescrip
 -- Table structure for table `pinRevision2`
 --
 
+DROP TABLE IF EXISTS `pinRevision2`;
 CREATE TABLE IF NOT EXISTS `pinRevision2` (
   `pinID` int(2) NOT NULL AUTO_INCREMENT,
   `pinNumberBCM` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
@@ -106,6 +122,7 @@ INSERT INTO `pinRevision2` (`pinID`, `pinNumberBCM`, `pinNumberWPi`, `pinDescrip
 -- Table structure for table `pinRevision3`
 --
 
+DROP TABLE IF EXISTS `pinRevision3`;
 CREATE TABLE IF NOT EXISTS `pinRevision3` (
   `pinID` int(2) NOT NULL AUTO_INCREMENT,
   `pinNumberBCM` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
@@ -156,6 +173,7 @@ INSERT INTO `pinRevision3` (`pinID`, `pinNumberBCM`, `pinNumberWPi`, `pinDescrip
 -- Table structure for table `timer`
 --
 
+DROP TABLE IF EXISTS `timer`;
 CREATE TABLE IF NOT EXISTS `timer` (
   `pinID` int(2) NOT NULL AUTO_INCREMENT,
   `pinNumber` varchar(2) NOT NULL,
@@ -171,13 +189,14 @@ CREATE TABLE IF NOT EXISTS `timer` (
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(2) NOT NULL AUTO_INCREMENT,
   `username` varchar(28) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(87) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
@@ -185,3 +204,4 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`userID`, `username`, `password`) VALUES
 (1, 'admin', '16384$8$1$mpDAFcxNVvM=$f4341ac30b57cd34e647b210317d71e38a65d9e15203232a7a31a57529ba7dbc');
+

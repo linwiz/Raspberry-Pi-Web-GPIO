@@ -17,8 +17,13 @@ source "$dir/GPIOServer.conf.sh"
 rev_cmd="python $dir/revision.py"
 revision=`$rev_cmd`
 
-echo "$(date +"%Y-%m-%d %T") Starting GPIO Server"
-trap "echo Stopping GPIO Server" EXIT
+addLogItem() {
+    logdatas="$1 $2 $3"
+    echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | mysql --host=$mysqlhostname --user=$mysqlusername --password=$mysqlpassword $mysqldatabase;
+}
+
+addLogItem "Starting GPIO Server"
+trap "addLogItem Stopping GPIO Server" EXIT
 
 # Retreive all pins.
 pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumberBCM FROM pinRevision$revision"`
@@ -27,21 +32,19 @@ pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusernam
 while true; do
 	for PIN in $pins ;
 		do
-			NOW=$(date +"%Y-%m-%d %T")
-
 			# Enable or Disable pins accordingly.
 			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			if [ "${enabled[$PIN]}" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					gpio export $PIN out
-					if [ "$logging" ]; then echo "$NOW Enabled $PIN"; fi
+					if [ "$logging" ]; then addLogItem "Enabled Pin $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					gpio unexport $PIN
-					if [ "$logging" ]; then echo "$NOW Disabled $PIN"; fi
+					if [ "$logging" ]; then addLogItem "Disabled Pin $PIN"; fi
 				fi
 			fi
 
@@ -59,12 +62,12 @@ while true; do
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
 					gpio -g mode $PIN ${direction[$PIN]}
-					if [ "$logging" ]; then echo "$NOW $PIN changed: ${direction[$PIN]}"; fi
+					if [ "$logging" ]; then addLogItem "Pin $PIN changed to: ${direction[$PIN]}"; fi
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
 					gpio -g write $PIN ${status[$PIN]}
-					if [ "$logging" ]; then echo "$NOW $PIN changed: ${status[$PIN]}"; fi
+					if [ "$logging" ]; then addLogItem "Pin $PIN changed to: ${status[$PIN]}"; fi
 				fi
 			fi
 	done
@@ -72,4 +75,4 @@ while true; do
 	# Complete Loop.
 	sleep $waitTime
 done
-} >> /var/log/GPIOServer.log
+}
