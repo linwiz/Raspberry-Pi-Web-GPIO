@@ -153,6 +153,24 @@ class mobClass {
 		$fillResult->free();
 	}
 
+	// Generate log form.
+	public function fillLogForm() {
+		global $thisScript, $db, $pi_rev;
+		$fillQuery = "SELECT id, time, data FROM log ORDER BY time DESC";
+		$fillResult = $db->query($fillQuery) or die ($db->error);
+		$totalLogCount = $fillResult->num_rows;
+		$currentLogCount = 0;
+		while ($currentLogCount < $totalLogCount) {
+			$logRow = $fillResult->fetch_assoc();
+			$logID = $logRow['id'];
+			$logTime = $logRow['time'];
+			$logData = $logRow['data'];
+			print "			<li>" . $logTime . " " . $logData . "</li>\r\n";
+			$currentLogCount ++;
+		}
+		$fillResult->free();
+	}
+
 	// Generate array with pin numbers.
 	public function arrayPins() {
 		$newArray = array();
@@ -184,6 +202,10 @@ class mobClass {
 			$message = "Pin Description Updated Successfullly.";
 			$type = "success";
 		}
+		else if ($code == "logCleared") {
+			$message = "Log Cleared.";
+			$type = "success";
+		}
 		else if ($code == "passwordsDoNotMatch") {
 			$message = "New passwords do not match.";
 			$type = "error";
@@ -212,7 +234,11 @@ class mobClass {
 			return $code;
 		}
 return '			<li>
-				<div class="k-block k-' . $type . '-colored" data-role="listview"><a href="' . $thisScript . '" data-icon="closemessage">' . $message . '</a></div>
+				<div class="k-block k-' . $type . '-colored" data-role="listview">
+					<form id="formClearMessage" action="' . $thisScript . '" method="post">
+						<input type="submit" value=" x ' . $message . '" />
+					</form>
+				</div>
 			</li>' . "\r\n";
 	}
 }

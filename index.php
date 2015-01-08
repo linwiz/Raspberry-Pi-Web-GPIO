@@ -106,24 +106,24 @@ else { // Logged in.
 			$newPassword1 = $db->real_escape_string($_POST['password1']);
 			$newPassword2 = $db->real_escape_string($_POST['password2']);
 			If ($newPassword1 != $newPassword2) {
-				header('Location: ' . $thisScript . '?message=passwordsDoNotMatch#drawer-settings');
+				header('Location: ' . $thisScript . '?message=passwordsDoNotMatch#drawer-password');
 				die();
 			}
 			If (strlen($newPassword1) < 1 || strlen($newPassword1) > 256) {
-				header('location: ' . $thisScript . '?message=passwordLength#drawer-settings');
+				header('location: ' . $thisScript . '?message=passwordLength#drawer-password');
 				die();
 			}
 
 			$resetQuery = "SELECT username, password FROM users WHERE username = '$username';";
 			$resetResult = $db->query($resetQuery) or die ($db->error);
 			If ($resetResult->num_rows < 1) {
-				header('location: ' . $thisScript . '?message=incorrectUser#drawer-settings');
+				header('location: ' . $thisScript . '?message=incorrectUser#drawer-password');
 				die();
 			}
 			$resetData = $resetResult->fetch_assoc();
 			$databasePassword = $resetData['password'];
 			if (Password::check($currentPassword, $databasePassword) === FALSE) {
-				header('Location: ' . $thisScript . '?message=incorrectPassword#drawer-settings');
+				header('Location: ' . $thisScript . '?message=incorrectPassword#drawer-password');
 				die();
 			}
 			$resetResult->free();
@@ -152,6 +152,12 @@ else { // Logged in.
 			header('Location: ' . $thisScript . '?message=pinUpdated');
 		}
 
+		// Clear lgo.
+		else if ($action == "clearlog") {
+			$db->query("TRUNCATE TABLE log;") or die ($db->error);
+			header('Location: ' . $thisScript . '?message=logCleared');
+		}
+
 		else {
 			header('Location: ' . $thisScript);
 		}
@@ -167,14 +173,14 @@ else { // Logged in.
 	</div>
 
 <?php
-	// Generate Settings page.
+	// Generate Password page.
 	$passwordArray = array(
 		array("Current Password", "password", "password0", ""),
 		array("New Password", "password", "password1", ""),
 		array("New Password", "password", "password2", ""),
 		array("", "hidden", "action", "setPassword")
 	);
-	print $mobClass->newDrawer('settings', 'Settings', 'Change Password', TRUE, $passwordArray, $messageCode);
+	print $mobClass->newDrawer('password', 'Password', 'Change Password', TRUE, $passwordArray, $messageCode);
 
 	// Generate Logout page.
 	$my_array = array(
@@ -186,9 +192,9 @@ else { // Logged in.
 
 	<div data-role="view" id="drawer-edit" data-layout="drawer-layout" data-title="Edit Pin Description">
 		<ul data-role="listview" class="inboxList">
-<?php							print $mobClass->newMessage($messageCode); ?>
 			<form id="formEdit" action="<?php print $thisScript; ?>" method="post">
 				<ul data-role="listview" data-style="inset" data-type="group">
+<?php							print $mobClass->newMessage($messageCode); ?>
 					<li>Edit
 						<ul>
 							<?php $mobClass->fillEditPinForm(); ?>
@@ -199,30 +205,39 @@ else { // Logged in.
 		</ul>
 	</div>
 
-	<div data-role="drawer" id="my-drawer" style="width: 270px" data-views="['drawer-home', 'drawer-login', 'drawer-edit', 'drawer-logout', 'drawer-settings']">
+	<div data-role="view" id="drawer-log" data-layout="drawer-layout" data-title="Log">
+		<ul data-role="listview" class="inboxList">
+			<ul data-role="listview" data-style="inset" data-type="group">
+				<li>
+					<ul>
+<?php						print $mobClass->newMessage($messageCode); ?>
+						<li><form id="formLog" action="<?php print $thisScript; ?>" method="post"><input type="hidden" name="action" value="clearlog" /><input type="submit" value="Clear Log" /></form></li>
+						<?php $mobClass->fillLogForm(); ?>
+					</ul>
+				</li>
+			</ul>
+		</ul>
+	</div>
+
+	<div data-role="drawer" id="my-drawer" style="width: 270px" data-views="['drawer-home', 'drawer-login', 'drawer-edit', 'drawer-logout', 'drawer-password', 'drawer-log']">
 		<ul data-role="listview" data-type="group">
 <?php
  if ($mobClass->loggedIn($username, $userID)) {
 print '			<li>menu
 				<ul>
 					<li data-icon="inbox"><a href="#drawer-home" data-transition="none">GPIO</a></li>
+					<li data-icon="inbox"><a href="#drawer-log" data-transition="none">Log</a></li>
 				</ul>
 			</li>
 			<li>Account
 				<ul>
-					<li data-icon="settings"><a href="#drawer-settings" data-transition="none">Settings</a></li>
+					<li data-icon="settings"><a href="#drawer-password" data-transition="none">Password</a></li>
 					<li data-icon="off"><a href="#drawer-logout" data-transition="none">Log Out</a></li>' . "\r\n";
 }
 else {
 print '
-			<li>menu
-				<ul>
-					<li data-icon="inbox">GPIO</li>
-				</ul>
-			</li>
 			<li>Account
 				<ul>
-					<li data-icon="settings">Settings</li>
 					<li data-icon="off"><a href="#drawer-login" data-transition="none">Log In</a></li>' . "\r\n";
 }
 ?>
