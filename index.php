@@ -153,7 +153,7 @@ else { // Logged in.
 		}
 
 		// Clear lgo.
-		else if ($action == "clearlog") {
+		else if ($action == "Clear") {
 			$db->query("TRUNCATE TABLE log;") or die ($db->error);
 			header('Location: ' . $thisScript . '?message=logCleared');
 		}
@@ -211,7 +211,7 @@ else { // Logged in.
 				<li>
 					<ul>
 <?php						print $mobClass->newMessage($messageCode); ?>
-						<li><form id="formLog" action="<?php print $thisScript; ?>" method="post"><input type="hidden" name="action" value="clearlog" /><input type="submit" value="Clear Log" /></form></li>
+						<li><form id="formLog" action="<?php print $thisScript; ?>#drawer-log" method="post"><input type="submit" name="action" value="Clear" /><input type="submit" name="action" value="Refresh" /></form></li>
 						<?php $mobClass->fillLogForm(); ?>
 					</ul>
 				</li>
