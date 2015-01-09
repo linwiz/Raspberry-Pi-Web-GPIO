@@ -61,13 +61,33 @@ while true; do
 
 				# Change Pin Status'.
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
-					gpio -g mode $PIN ${direction[$PIN]}
-					if [ "$logging" ]; then addLogItem "Pin $PIN changed to: ${direction[$PIN]}"; fi
+					if [ -n $PIN ]; then
+						if [ -n ${direction[$PIN]} ]; then
+							gpio -g write $PIN ${direction[$PIN]}
+							if [ "$logging" ]; then
+								addLogItem "Pin $PIN direction to: ${direction[$PIN]}"
+							fi
+						elif [ -z ${direction[$PIN]} ]; then
+							addLogItem "PIN direction zero"
+						fi
+					elif [ -z $PIN ]; then
+						addLogItem "PIN value zero"
+					fi
 				fi
 
 				if [ "${status[$PIN]}" != "$status2" ]; then
-					gpio -g write $PIN ${status[$PIN]}
-					if [ "$logging" ]; then addLogItem "Pin $PIN changed to: ${status[$PIN]}"; fi
+					if [ -n $PIN ]; then
+						if [ -n ${status[$PIN]} ]; then
+							gpio -g write $PIN ${status[$PIN]}
+							if [ "$logging" ]; then
+								 addLogItem "Pin $PIN changed to: ${status[$PIN]}"
+							fi
+						elif [ -z ${status[$PIN]} ]; then
+							addLogItem "PIN status zero"
+						fi
+					elif [ -z $PIN ]; then
+						addLogItem "PIN value zero"
+					fi
 				fi
 			fi
 	done

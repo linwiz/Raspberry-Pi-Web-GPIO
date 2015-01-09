@@ -13,9 +13,9 @@
 
 set -e
 
-. /lib/lsb/init-functions
+source /lib/lsb/init-functions
 
-case "$1" in 
+case "$1" in
     start)
 		log_daemon_msg "Starting GPIO Server" "GPIOServer.sh" || true
 		/var/www/gpio/GPIOServer.sh &
