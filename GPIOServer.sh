@@ -25,15 +25,17 @@ addLogItem() {
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
 
+mysqlquery="mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase"
+
 # Retreive all pins.
-pins=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinNumberBCM FROM pinRevision$revision"`
+pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision" | $mysqlquery`
 
 # Start Loop.
 while true; do
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
-			enabled[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
+			enabled[$PIN]=`echo "SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
 			if [ "${enabled[$PIN]}" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
@@ -52,11 +54,11 @@ while true; do
 			if [ -d "/sys/class/gpio/gpio$PIN" ]; then
 
 				# Read Pin Directions.
-				direction[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e"SELECT pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
+				direction[$PIN]=`echo "SELECT pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
 				direction2=`cat /sys/class/gpio/gpio$PIN/direction`
 
 				# Read Pin Status'.
-				status[$PIN]=`mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase -e "SELECT pinStatus FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
+				status[$PIN]=`echo "SELECT pinStatus FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
 				status2=`gpio -g read $PIN`
 
 				# Change Pin Status'.
