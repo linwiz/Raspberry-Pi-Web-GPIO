@@ -6,7 +6,8 @@
 </head>
 
 <body>
-<script language="javascript" type="text/javascript" src="./js/scripts.js"></script>
+	<script language="javascript" type="text/javascript"
+		src="./js/scripts.js"></script>
 
 	<div id="header">
 		<h1>GPIO by Web & SMS</h1>
@@ -29,7 +30,9 @@
 		</table>
 	</div>
 
-	<div id="section"><h1>Welcome ...</h1></div>
+	<div id="section">
+		<h1>Welcome ...</h1>
+	</div>
 
 
 	<div id="footer">
