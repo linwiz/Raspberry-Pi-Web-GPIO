@@ -1,6 +1,6 @@
 <?php
 
-require_once 'mysqli.php';
+require_once('mobClass.php');
 
 //set up calling params
 

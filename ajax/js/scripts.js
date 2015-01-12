@@ -38,6 +38,9 @@ function changeSection(secID){
     };
 
     switch(secID) {
+    case 0:
+        ajaxRequest.open("GET", "login.php", true);        
+        break;
     case 1:
         ajaxRequest.open("GET", "pins.php?sort=pinNumberBCM%2B0", true);        
         break;
@@ -87,6 +90,3 @@ function showPins(sort,pinID,field){
     ajaxRequest.open("GET", "get_pins.php" + queryString, true);
     ajaxRequest.send(null); 
 }
-
-
-

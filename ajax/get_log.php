@@ -1,6 +1,5 @@
 <?php
-
-require_once 'mysqli.php';
+require_once('mobClass.php');
 
 $id1 = $_GET['id1'];
 $id2 = $_GET['id2'];
