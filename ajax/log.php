@@ -2,6 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Log</title>
+
+
 <body>
 	<a href="#" onclick="showLog()">Refresh</a>
 	<form name='myForm'>

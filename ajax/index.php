@@ -5,8 +5,7 @@
 </head>
 
 <body>
-	<script type="text/javascript"
-		src="./js/scripts.js"></script>
+	<script type="text/javascript" src="./js/scripts.js"></script>
 
 	<div id="header">
 		<h1>GPIO by Web or SMS</h1>

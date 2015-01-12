@@ -29,6 +29,8 @@ if (!$qry_result) {
 print "<a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">Refresh</a>";
 
 
+
+
 //Build Result String
 //Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers !!!
 $display_string = "<table>";
@@ -51,33 +53,33 @@ while($row = mysqli_fetch_array($qry_result)){
 	$display_string .= "<td>".$row['pinDescription']."</td>";
 	$display_string .= "<td>".$row['pinDirection']."</td>";
 
-	
+
 	// On/Off
 	$display_string .= "<td><a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">";
 	//$display_string .= "<td><a href=\"#\" onclick=\"showPins('".$sort."')\">";
-	
+
 	switch ($row['pinStatus']){
-	case 1 :	$display_string .= $on;
+		case 1 :	$display_string .= $on;
 		break;
-	case 0 :	$display_string .= $off;
+		case 0 :	$display_string .= $off;
 		break;
-	default:	$display_string .= $unknown;				
+		default:	$display_string .= $unknown;
 
 	}
-	
+
 	$display_string .= "</a></td>";
-		
-	
+
+
 	// Enabled
 	switch ($row['pinEnabled']){
-	case 1 :	$display_string .= "<td>$on</td>";
+		case 1 :	$display_string .= "<td>$on</td>";
 		break;
-	case 0 :	$display_string .= "<td>$off</td>";
+		case 0 :	$display_string .= "<td>$off</td>";
 		break;
-	default:	$display_string .= "<td>$unknown</td>";				
+		default:	$display_string .= "<td>$unknown</td>";
 
 	}
-	
+
 
 	$display_string .= "</tr>";
 
