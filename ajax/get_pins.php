@@ -2,26 +2,62 @@
 
 require_once 'dbi.php';
 
-$sort = $_GET['sort'];
-//default sort
-if (empty($sort)) {
-	$sort = " pinNumberBCM+0 ";
-}
+//set up calling params
+
+/*
+ print '<pre>';
+print_r($_GET);
+if($_GET["id"] === "") echo "id is an empty string\n";
+if($_GET["id"] === false) echo "id is false\n";
+if($_GET["id"] === null) echo "id is null\n";
+if(isset($_GET["id"])) echo "id is set\n";
+if(!empty($_GET["id"])) echo "id is not empty\n";
+print '</pre>';
+*/
+
+$sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 		? $_GET['sort'] 	: "pinNumberBCM+0";
+$id 	= isset($_GET['id'])  	&& ($_GET['id']!= 'undefined') 		? $_GET['id'] 		: 0;
+$field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['field'] 	: 'none';
+
+//set up state "icons"
 
 $on =  '[X]';
 $off = '[_]';
 $unknown = '[?]';
 
+//escape params
 $sort = $mysqli->real_escape_string($sort);
+$id = $mysqli->real_escape_string($id);
+$field = $mysqli->real_escape_string($field);
 
-$query = "SELECT * FROM pinRevision3 WHERE pinID > 0 ";
+
+//update state and enabled fields as needed
+
+if ($id>0)
+{
+
+	$query_update = "UPDATE ".$boardTbl." SET ".$field."= NOT ".$field." WHERE pinID =".$id.";";
+
+	$qry_result= $mysqli->query($query_update);
+
+	if (!$qry_result) {
+		$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
+		$message .= '<pre>Whole query: ' . $query_update ."</pre>";
+		die($message);
+	}
+
+}
+
+
+//select rows
+$query = "SELECT * FROM ".$boardTbl." WHERE pinID > 0 ";
 $query .= "ORDER BY ".$sort." ASC";
 
 $qry_result= $mysqli->query($query);
 
 if (!$qry_result) {
-	$message  = '<p>Invalid query: ' . $mysqli->error . "</p>";
-	$message .= '<p>Whole query: ' . $query ."</p>";
+	$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
+	$message .= '<pre>Whole query: ' . $query ."</pre>";
 	die($message);
 }
 
@@ -35,13 +71,13 @@ print "<a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">Refresh</a>";
 //Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers !!!
 $display_string = "<table>";
 $display_string .= "<tr>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0')\">pinID</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0')\">BCM#</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0')\">WPi#</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription')\">Description</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection')\">Direction</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0')\">Status</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0')\">Enabled</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>";
+$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
 $display_string .= "</tr>";
 
 // Insert a new row in the table for each person returned
@@ -55,8 +91,13 @@ while($row = mysqli_fetch_array($qry_result)){
 
 
 	// On/Off
-	$display_string .= "<td><a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">";
-	//$display_string .= "<td><a href=\"#\" onclick=\"showPins('".$sort."')\">";
+	$display_string .= "<td><a href=\"#\" onclick=\"showPins('"
+			.urlencode($sort)
+			."',"
+					.$row['pinID']
+					.",'pinStatus'"
+							.")\">";
+
 
 	switch ($row['pinStatus']){
 		case 1 :	$display_string .= $on;
@@ -69,16 +110,25 @@ while($row = mysqli_fetch_array($qry_result)){
 
 	$display_string .= "</a></td>";
 
-
 	// Enabled
+
+	$display_string .= "<td><a href=\"#\" onclick=\"showPins('"
+			.urlencode($sort)
+			."',"
+					.$row['pinID']
+					.",'pinEnabled'"
+							.")\">";
+
 	switch ($row['pinEnabled']){
-		case 1 :	$display_string .= "<td>$on</td>";
+		case 1 :	$display_string .= "$on";
 		break;
-		case 0 :	$display_string .= "<td>$off</td>";
+		case 0 :	$display_string .= "$off";
 		break;
-		default:	$display_string .= "<td>$unknown</td>";
+		default:	$display_string .= "$unknown";
 
 	}
+
+	$display_string .= "</a></td>";
 
 
 	$display_string .= "</tr>";
@@ -89,6 +139,12 @@ $display_string .= "</table>";
 
 print $display_string;
 
-print "<p>Query: " . $query . "</p>";
+//debug output
+
+print '<pre>'.$sort.' '.$id.' '.$field.'</pre>';
+
+print '<pre>' . $query .'</pre>';
+
+print '<pre>' . $query_update .'</pre>';
 
 ?>

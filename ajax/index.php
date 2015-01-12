@@ -8,19 +8,22 @@
 	<script type="text/javascript" src="./js/scripts.js"></script>
 
 	<div id="header">
-		<h1>GPIO by Web or SMS</h1>
+		<h1>GPIO by Web or SMS v.0.1 (beta)</h1>
 	</div>
 
 	<div id="nav">
 		<table>
 			<tr>
-				<td><a href="#" onclick="changeSection(1)">PINs</a></td>
+				<td><a href="#" onclick="changeSection(1)">PINs</a>
+				</td>
 			</tr>
 			<tr>
-				<td><a href="#" onclick="changeSection(2)">Log</a></td>
+				<td><a href="#" onclick="changeSection(2)">Log</a>
+				</td>
 			</tr>
 			<tr>
-				<td><a href="#" onclick="changeSection(3)">Config</a></td>
+				<td><a href="#" onclick="changeSection(3)">Config</a>
+				</td>
 			</tr>
 		</table>
 	</div>

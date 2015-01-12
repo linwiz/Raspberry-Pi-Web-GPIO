@@ -1,5 +1,3 @@
-<!-- 
-
 //common ajaxRequest variable creation.
 function getAjaxRequest(){
 	
@@ -37,7 +35,7 @@ function changeSection(secID){
 	    var ajaxDisplay = document.getElementById('section');
 	    ajaxDisplay.innerHTML = ajaxRequest.responseText;
 	}
-    }
+    };
 
     switch(secID) {
     case 1:
@@ -65,7 +63,7 @@ function showLog(){
 	    var ajaxDisplay = document.getElementById('log');
 	    ajaxDisplay.innerHTML = ajaxRequest.responseText;
 	}
-    }
+    };
     var id1  = document.getElementById('id1').value;
     var id2 = document.getElementById('id2').value;
     var queryString = "?id1=" + id1 + "&id2=" + id2;
@@ -84,11 +82,11 @@ function showPins(sort,pinID,field){
 	    var ajaxDisplay = document.getElementById('pins');
 	    ajaxDisplay.innerHTML = ajaxRequest.responseText;
 	}
-    }
+    };
     var queryString = "?sort="+sort+ "&id=" + pinID+ "&field=" + field;
     ajaxRequest.open("GET", "get_pins.php" + queryString, true);
     ajaxRequest.send(null); 
 }
 
-//-->
+
 
