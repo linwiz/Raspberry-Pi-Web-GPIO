@@ -20,5 +20,4 @@ $pi_rev = '';	// Enter your Raspberry Pi revision number here.
 $logPaging=10; //lines per screen
 $debugMode=1;  //enable UI debug output
 
-$boardTbl = "pinRevision$pi_rev";
 ?>
