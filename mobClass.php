@@ -1,4 +1,10 @@
 <?php
+// MySQLi connection.
+require_once 'mysqli.php';
+
+// Password hashing functions.
+require_once('scrypt.php');
+
 // Custom PHP Class "mobClass"
 //  Nothing to edit here.
 
