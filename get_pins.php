@@ -15,7 +15,7 @@ if(!empty($_GET["id"])) echo "id is not empty\n";
 print '</pre>';
 */
 
-$sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 		? $_GET['sort'] 	: "pinNumberBCM+0";
+$sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 	? $_GET['sort'] 	: "pinNumberBCM+0";
 $id 	= isset($_GET['id'])  	&& ($_GET['id']!= 'undefined') 		? $_GET['id'] 		: 0;
 $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['field'] 	: 'none';
 
@@ -37,7 +37,7 @@ $query_update ="";
 if ($id>0)
 {
 
-	$query_update = "UPDATE pinRevision$pi_rev SET ".$field."= NOT ".$field." WHERE pinID =".$id.";";
+	$query_update = "UPDATE pinRevision".$pi_rev." SET ".$field."= NOT ".$field." WHERE pinID =".$id.";";
 
 	$qry_result= $mysqli->query($query_update);
 
