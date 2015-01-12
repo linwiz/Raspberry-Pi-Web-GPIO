@@ -20,11 +20,4 @@
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 		<nature>org.eclipse.php.core.PHPNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>php5.4</name>
-			<type>2</type>
-			<location>E:/PKU/model/soft/eclipse/configuration/org.eclipse.osgi/bundles/644/1/.cp/Resources/language/php5.4</location>
-		</link>
-	</linkedResources>
 </projectDescription>

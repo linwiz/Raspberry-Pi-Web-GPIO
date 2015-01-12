@@ -36,7 +36,7 @@ $field = $mysqli->real_escape_string($field);
 if ($id>0)
 {
 
-	$query_update = "UPDATE ".$boardTbl." SET ".$field."= NOT ".$field." WHERE pinID =".$id.";";
+	$query_update = "UPDATE pinRevision$pi_rev SET ".$field."= NOT ".$field." WHERE pinID =".$id.";";
 
 	$qry_result= $mysqli->query($query_update);
 
@@ -50,7 +50,7 @@ if ($id>0)
 
 
 //select rows
-$query = "SELECT * FROM ".$boardTbl." WHERE pinID > 0 ";
+$query = "SELECT * FROM pinRevision$pi_rev WHERE pinID > 0 ";
 $query .= "ORDER BY ".$sort." ASC";
 
 $qry_result= $mysqli->query($query);
@@ -126,4 +126,15 @@ while($row = mysqli_fetch_array($qry_result)){
 }
 $display_string .= "</table>";
 print $display_string;
+
+if ($debugMode) {	
+	//debug output	
+	print '<pre>'.$sort.' '.$id.' '.$field.'</pre>';
+	
+	print '<pre>' . $query .'</pre>';
+	
+	print '<pre>' . $query_update .'</pre>';		
+
+}
+
 ?>
