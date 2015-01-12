@@ -1,5 +1,6 @@
 <?php
-require_once('mobClass.php');
+
+require_once 'mysqli.php';
 
 $id1 = $_GET['id1'];
 $id2 = $_GET['id2'];
@@ -18,10 +19,20 @@ $query .= " ORDER BY time DESC";
 $qry_result= $mysqli->query($query);
 
 if (!$qry_result) {
-	$message  = '<p>Invalid query: ' . $mysqli->error . "</p>";
-	$message .= '<p>Whole query: ' . $query ."</p>";
+	$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
+	$message .= '<pre>Whole query: ' . $query ."</pre>";
 	die($message);
 }
+
+
+print "<a href=\"#\" onclick=\"showLog()\">Refresh</a>";
+
+print "<form name=\"myForm\">ID Range: ";
+print "<input type=\"text\" id=\"id1\" value=\"".$id1."\"onchange=\"showLog()\" size=\"5\" />";
+print "<input type=\"text\" id=\"id2\" value=\"".$id2."\"onchange=\"showLog()\" size=\"5\" /> <br />";
+
+print "</form>";
+
 
 //Build Result String
 $display_string = "<table>";
@@ -45,7 +56,10 @@ $display_string .= "</table>";
 
 print $display_string;
 
-/*
-print  '<p>Query: ' . $query . '</p>';
-*/
+if ($debugMode) {
+	//debug outpu
+	print '<pre>'.$id1.'<->'.$id2.'</pre>';
+
+	print '<pre>' . $query .'</pre>';
+}
 ?>
