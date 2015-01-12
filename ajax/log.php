@@ -7,8 +7,8 @@
 <body>
 	<a href="#" onclick="showLog()">Refresh</a>
 	<form name='myForm'>
-		ID Range: <input type='text' id='id1' onchange='showLog()' /> <input
-			type='text' id='id2' onchange='showLog()' /> <br />
+		ID Range: <input type='text' id='id1' onchange='showLog()' size='5' /> <input
+			type='text' id='id2' onchange='showLog()' size='5' /> <br />
 	</form>
 
 	<div id='log'>

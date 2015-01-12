@@ -1,6 +1,6 @@
 <?php
 
-require_once 'dbi.php';
+require_once 'mysqli.php';
 
 //set up calling params
 
@@ -66,16 +66,15 @@ print "<a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">Refresh</a>";
 
 
 
-
 //Build Result String
 //Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers !!!
 $display_string = "<table>";
 $display_string .= "<tr>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
+//$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
+//$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
 $display_string .= "</tr>";
@@ -83,68 +82,48 @@ $display_string .= "</tr>";
 // Insert a new row in the table for each person returned
 while($row = mysqli_fetch_array($qry_result)){
 	$display_string .= "<tr>";
-	$display_string .= "<td>".$row['pinID']."</td>";
+//	$display_string .= "<td>".$row['pinID']."</td>";
 	$display_string .= "<td>".$row['pinNumberBCM']."</td>";
 	$display_string .= "<td>".$row['pinNumberWPi']."</td>";
 	$display_string .= "<td>".$row['pinDescription']."</td>";
-	$display_string .= "<td>".$row['pinDirection']."</td>";
+//	$display_string .= "<td>".$row['pinDirection']."</td>";
 
 
 	// On/Off
-	$display_string .= "<td><a href=\"#\" onclick=\"showPins('"
-			.urlencode($sort)
-			."',"
-					.$row['pinID']
-					.",'pinStatus'"
-							.")\">";
-
-
-	switch ($row['pinStatus']){
-		case 1 :	$display_string .= $on;
-		break;
-		case 0 :	$display_string .= $off;
-		break;
-		default:	$display_string .= $unknown;
-
+	if ($row['pinEnabled'] == 1) {
+		$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus'" . ")\">";
+		switch ($row['pinStatus']){
+			case 1 :	$display_string .= $on;
+			break;
+			case 0 :	$display_string .= $off;
+			break;
+			default:	$display_string .= $unknown;
+		}
+		$display_string .= "</a></td>";
+	} else {
+		$display_string .= "<td>";
+		switch ($row['pinStatus']){
+			case 1 :	$display_string .= $on;
+			break;
+			case 0 :	$display_string .= $off;
+			break;
+			default:	$display_string .= $unknown;
+		}
+		$display_string .= "</td>";
 	}
 
-	$display_string .= "</a></td>";
-
 	// Enabled
-
-	$display_string .= "<td><a href=\"#\" onclick=\"showPins('"
-			.urlencode($sort)
-			."',"
-					.$row['pinID']
-					.",'pinEnabled'"
-							.")\">";
-
+	$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled'" . ")\">";
 	switch ($row['pinEnabled']){
 		case 1 :	$display_string .= "$on";
 		break;
 		case 0 :	$display_string .= "$off";
 		break;
 		default:	$display_string .= "$unknown";
-
 	}
-
 	$display_string .= "</a></td>";
-
-
 	$display_string .= "</tr>";
-
 }
-
 $display_string .= "</table>";
-
 print $display_string;
-
-//debug output
-
-print '<pre>'.$sort.' '.$id.' '.$field.'</pre>';
-
-print '<pre>' . $query .'</pre>';
-
-print '<pre>' . $query_update .'</pre>';
-
 ?>

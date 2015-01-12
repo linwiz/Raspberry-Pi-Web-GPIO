@@ -1,6 +1,6 @@
 <?php
 
-require_once 'dbi.php';
+require_once 'mysqli.php';
 
 $id1 = $_GET['id1'];
 $id2 = $_GET['id2'];
@@ -43,8 +43,10 @@ while($row = mysqli_fetch_array($qry_result)){
 }
 
 $display_string .= "</table>";
+
 print $display_string;
 
+/*
 print  '<p>Query: ' . $query . '</p>';
-
+*/
 ?>

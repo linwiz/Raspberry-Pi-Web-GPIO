@@ -3,21 +3,21 @@
 	color: white;
 	text-align: center;
 	padding: 5px;
+	width: 95%;
 }
 
 #nav {
 	line-height: 30px;
 	background-color: #eeeeee;
-	height: 300px;
-	width: 100px;
-	float: left;
+	text-align: center;
 	padding: 5px;
+	width: 95%;
 }
 
 #section {
-	width: 500px;
 	float: left;
-	padding: 10px;
+	padding: 5px;
+	width: 95%;
 }
 
 #footer {
@@ -25,5 +25,6 @@
 	color: white;
 	clear: both;
 	text-align: center;
+	width: 95%;
 	padding: 5px;
 }
