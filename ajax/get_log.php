@@ -56,7 +56,11 @@ $display_string .= "</table>";
 
 print $display_string;
 
-/*
-print  '<p>Query: ' . $query . '</p>';
-*/
+if ($debugMode) {	
+	//debug output	
+	print '<pre>'.$id1.'<->'.$id2.'</pre>';
+	
+	print '<pre>' . $query .'</pre>';	
+
+}
 ?>

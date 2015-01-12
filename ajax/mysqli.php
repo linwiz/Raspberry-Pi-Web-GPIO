@@ -14,12 +14,10 @@ $mysqli = new mysqli($MySQLi_Host, $MySQLi_User, $MySQLi_Password, $MySQLi_DataB
 // Enter your revision if you know it, OR
 // leave this line default and run setup.py.
 // eg; python setup.py OR ./setup.py
-$pi_rev = '2';	// Enter your Raspberry Pi revision number here.
-
-$boardTbl = "pinRevision$pi_rev";
+$pi_rev = '3';	// Enter your Raspberry Pi revision number here.
 
 //UI configuration
-$logPaging=10;
-$debugMode=1;
+$logPaging=10; //lines per screen
+$debugMode=1;  //enable UI debug output
 
 ?>

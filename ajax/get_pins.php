@@ -32,6 +32,7 @@ $field = $mysqli->real_escape_string($field);
 
 
 //update state and enabled fields as needed
+$query_update ="";
 
 if ($id>0)
 {
@@ -47,6 +48,8 @@ if ($id>0)
 	}
 
 }
+
+
 
 
 //select rows
