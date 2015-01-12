@@ -1,6 +1,6 @@
 <?php
 
-include 'dbi.php';
+require_once 'dbi.php';
 
 $id1 = $_GET['id1'];
 $id2 = $_GET['id2'];
@@ -19,8 +19,8 @@ $query .= " ORDER BY time DESC";
 $qry_result= $mysqli->query($query);
 
 if (!$qry_result) {
-	$message  = 'Invalid query: ' . $mysqli->error() . "\n";
-	$message .= 'Whole query: ' . $query;
+	$message  = '<p>Invalid query: ' . $mysqli->error . "</p>";
+	$message .= '<p>Whole query: ' . $query ."</p>";
 	die($message);
 }
 
@@ -35,16 +35,16 @@ $display_string .= "</tr>";
 // Insert a new row in the table for each person returned
 while($row = mysqli_fetch_array($qry_result)){
 	$display_string .= "<tr>";
-	$display_string .= "<td>$row[id]</td>";
-	$display_string .= "<td>$row[time]</td>";
-	$display_string .= "<td>$row[data]</td>";
+	$display_string .= "<td>".$row['id']."</td>";
+	$display_string .= "<td>".$row['time']."</td>";
+	$display_string .= "<td>".$row['data']."</td>";
 	$display_string .= "</tr>";
 
 }
 
 $display_string .= "</table>";
-echo $display_string;
+print $display_string;
 
-echo "<p>Query: " . $query . "</p>";
+print  '<p>Query: ' . $query . '</p>';
 
 ?>

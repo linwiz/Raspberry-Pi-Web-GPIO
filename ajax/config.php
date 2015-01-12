@@ -1,6 +1,6 @@
 <?php
 
-echo "<p>Config goes here</p>";
+print '<p>Config goes here</p>';
 
 ?>
 

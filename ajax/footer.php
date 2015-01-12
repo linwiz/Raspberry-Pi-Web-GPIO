@@ -1,5 +1,11 @@
 <?php
 
-echo "<p>Rasberry PI GPIO Web/SMS interface</p>";
+exec("pgrep GPIOServer.sh", $pids);
+
+print '<p>Rasberry PI GPIOService';
+if(empty($pids)) {
+	print ' ** NOT **';
+}
+print " runnig</p>";
 
 ?>
