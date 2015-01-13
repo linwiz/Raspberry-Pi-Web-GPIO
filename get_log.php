@@ -14,7 +14,7 @@ if(is_numeric($id1))
 if(is_numeric($id2))
 	$query .= " AND id <= $id2";
 //Execute query
-$query .= " ORDER BY time DESC";
+$query .= " ORDER BY date DESC";
 
 $qry_result= $mysqli->query($query);
 
