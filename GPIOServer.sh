@@ -28,25 +28,47 @@ trap "addLogItem Stopping GPIO Server" EXIT
 mysqlquery="mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase"
 
 # Retreive all pins.
-#paku but only if the pinNo is the numerical value
-pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM " | $mysqlquery`
+# paku - but only if the pinNumerBCM is the numerical value
+pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $mysqlquery`
+
+echo $pins
 
 # Start Loop.
 while true; do
 	for PIN in $pins ;
 		do
 			# Enable or Disable pins accordingly.
-			enabled[$PIN]=`echo "SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
+			enabled[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
+			
+			this_pin=${enabled[$PIN]}
+			
+			arr=($this_pin)
+
+			#pinID
+			echo ${arr[0]}									
+			#pinEnabled
+			echo ${arr[1]}
+			#pinStatus
+			echo ${arr[2]}
+			#pinDirection
+			echo ${arr[3]}
+			
+			
+			#from here we do not need more selects, all pin data are stored in the array
+			
+				# GPIO commands are disabled wirt comment as well as log output and sleep !!!	
+
+			
 			if [ "${enabled[$PIN]}" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
-					gpio export $PIN out
+					##gpio export $PIN out
 					if [ "$logging" ]; then addLogItem "Enabled Pin $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
-					gpio unexport $PIN
+					##gpio unexport $PIN
 					if [ "$logging" ]; then addLogItem "Disabled Pin $PIN"; fi
 				fi
 			fi
@@ -66,7 +88,7 @@ while true; do
 				if [ "${direction[$PIN]}" != "$direction2" ]; then
 					if [ -n $PIN ]; then
 						if [ -n ${direction[$PIN]} ]; then
-							gpio -g write $PIN ${direction[$PIN]}
+							##gpio -g write $PIN ${direction[$PIN]}
 							if [ "$logging" ]; then
 								addLogItem "Pin $PIN direction to: ${direction[$PIN]}"
 							fi
@@ -81,7 +103,7 @@ while true; do
 				if [ "${status[$PIN]}" != "$status2" ]; then
 					if [ -n $PIN ]; then
 						if [ -n ${status[$PIN]} ]; then
-							gpio -g write $PIN ${status[$PIN]}
+							##gpio -g write $PIN ${status[$PIN]}
 							if [ "$logging" ]; then
 								 addLogItem "Pin $PIN changed to: ${status[$PIN]}"
 							fi
@@ -97,6 +119,8 @@ while true; do
 	done
 
 	# Complete Loop.
-	sleep $waitTime
+	#sleep $waitTime
 done
-} >> /var/log/GPIOServer.log
+} 
+
+##>> /var/log/GPIOServer.log
