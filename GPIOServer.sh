@@ -113,7 +113,8 @@ while true; do
 					fi
 				fi
 			fi
-			sleep 0.2
+			#not needed any more
+			#sleep 0.2
 	done
 
 	# Complete Loop.
