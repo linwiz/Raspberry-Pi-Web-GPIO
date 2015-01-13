@@ -28,7 +28,8 @@ trap "addLogItem Stopping GPIO Server" EXIT
 mysqlquery="mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase"
 
 # Retreive all pins.
-pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision" | $mysqlquery`
+#paku but only if the pin# is the numberica value
+pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM " | $mysqlquery`
 
 # Start Loop.
 while true; do
