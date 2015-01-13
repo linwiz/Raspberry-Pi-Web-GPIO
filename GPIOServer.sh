@@ -27,40 +27,28 @@ trap "addLogItem Stopping GPIO Server" EXIT
 
 mysqlquery="mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase"
 
-# Retreive all pins.
-# but only if the pinNumerBCM is the numerical value (so PIN is not special perpose PIN)
+# Retreive all GPIO pins.
 pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $mysqlquery`
-
-#echo $pins
 
 # Start Loop.
 while true; do
 	for PIN in $pins ;
 		do
 
-			#Select current PIN details
+			# Select current PIN details.
 			currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
 
 			this_pin=${currPIN[$PIN]}
-			
 			currPIN=($this_pin)
 
-			#currPIN table structure:
-			
-			#pinID
-			#echo ${currPIN[0]}
-			
-			#pinEnabled
-			#echo ${currPIN[1]}
-			
-			#pinStatus
-			#echo ${currPIN[2]}
-			
-			#pinDirection
-			#echo ${currPIN[3]}
+			# Populate varbiables from query.
+			pinID=${currPIN[0]}
+			pinEnabled=${currPIN[1]}
+			pinStatus=${currPIN[2]}
+			pinDirection=${currPIN[3]}
 
 
-			if [ "${currPIN[1]}" == "1" ]; then
+			if [ "$pinEnabled" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/export
@@ -84,15 +72,15 @@ while true; do
 				status2=`gpio -g read $PIN`
 
 				# Change Pin Status'.
-				if [ "${currPIN[3]}" != "$direction2" ]; then
-					addLogItem "Pin $PIN direction to: ${currPIN[3]} ($direction2)"
+				if [ "$pinDirection" != "$direction2" ]; then
+					addLogItem "Pin $PIN direction to: $pinDirection ($direction2)"
 					if [ -n $PIN ]; then
-						if [ -n ${currPIN[3]} ]; then
-							gpio -g write $PIN ${currPIN[3]}
+						if [ -n $pinDirection ]; then
+							gpio -g write $PIN $pinDirection
 							if [ "$logging" ]; then
-								addLogItem "Pin $PIN direction to: ${currPIN[3]}"
+								addLogItem "Pin $PIN direction to: $pinDirection"
 							fi
-						elif [ -z ${currPIN[3]} ]; then
+						elif [ -z $pinDirection ]; then
 							addLogItem "PIN direction zero"
 						fi
 					elif [ -z $PIN ]; then
@@ -100,14 +88,14 @@ while true; do
 					fi
 				fi
 
-				if [ "${currPIN[2]}" != "$status2" ]; then
+				if [ "$pinStatus" != "$status2" ]; then
 					if [ -n $PIN ]; then
-						if [ -n ${currPIN[2]} ]; then
-							gpio -g write $PIN ${currPIN[2]}
+						if [ -n $pinStatus ]; then
+							gpio -g write $PIN $pinStatus
 							if [ "$logging" ]; then
-								 addLogItem "Pin $PIN changed to: ${currPIN[2]}"
+								 addLogItem "Pin $PIN changed to: $pinStatus"
 							fi
-						elif [ -z ${currPIN[2]} ]; then
+						elif [ -z $pinStatus ]; then
 							addLogItem "PIN status zero"
 						fi
 					elif [ -z $PIN ]; then
@@ -120,4 +108,5 @@ while true; do
 	# Complete Loop.
 	sleep $waitTime
 done
-} >> /var/log/GPIOServer.log
+}
+# >> /var/log/GPIOServer.log
