@@ -46,7 +46,7 @@ $display_string .= "</tr>";
 while($row = mysqli_fetch_array($qry_result)){
 	$display_string .= "<tr>";
 	$display_string .= "<td>".$row['id']."</td>";
-	$display_string .= "<td>".$row['time']."</td>";
+	$display_string .= "<td>".$row['date']."</td>";
 	$display_string .= "<td>".$row['data']."</td>";
 	$display_string .= "</tr>";
 
@@ -56,11 +56,11 @@ $display_string .= "</table>";
 
 print $display_string;
 
-if ($debugMode) {	
-	//debug output	
+if ($debugMode) {
+	//debug output
 	print '<pre>'.$id1.'<->'.$id2.'</pre>';
-	
-	print '<pre>' . $query .'</pre>';	
+
+	print '<pre>' . $query .'</pre>';
 
 }
 ?>
