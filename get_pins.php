@@ -73,11 +73,14 @@ print "<a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">Refresh</a>";
 //Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers !!!
 $display_string = "<table>";
 $display_string .= "<tr>";
-//$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
+if ($debugMode) {
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
+}
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>";
-//$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
+
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>";
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
 $display_string .= "</tr>";
@@ -85,11 +88,16 @@ $display_string .= "</tr>";
 // Insert a new row in the table for each person returned
 while($row = mysqli_fetch_array($qry_result)){
 	$display_string .= "<tr>";
-//	$display_string .= "<td>".$row['pinID']."</td>";
+	
+	if ($debugMode) {	
+		$display_string .= "<td>".$row['pinID']."</td>";
+		$display_string .= "<td>".$row['pinDirection']."</td>";
+	}
+	
 	$display_string .= "<td>".$row['pinNumberBCM']."</td>";
 	$display_string .= "<td>".$row['pinNumberWPi']."</td>";
 	$display_string .= "<td>".$row['pinDescription']."</td>";
-//	$display_string .= "<td>".$row['pinDirection']."</td>";
+
 
 
 	// On/Off
