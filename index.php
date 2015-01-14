@@ -9,7 +9,9 @@ if ($pi_rev == '' || $MySQLi_Host == '' || $MySQLi_User == '' || $MySQLi_Passwor
 <head>
 	<title>RPi Web GPIO</title>
 	<link rel="stylesheet" type="text/css" href="./styles/gpio.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1"/>
+	<meta name="viewport" content="width=150, initial-scale=1, maximum-scale=15, user-scalable=1"/>
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 	<link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png" />
