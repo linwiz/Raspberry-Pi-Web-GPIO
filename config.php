@@ -1,6 +1,16 @@
-<?php
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Pins</title>
+</head>
+<body>
 
-print '<p>Config goes here</p>';
+        <div id='pins'>
+                <?php
+                include 'get_disabled.php';
+                ?>
+        </div>
 
-?>
+</body>
+</html>
 
