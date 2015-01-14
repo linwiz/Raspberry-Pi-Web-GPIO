@@ -8,10 +8,9 @@ $updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undef
 $debugMode			= isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined') 	? $_GET['debugMode'] 	: 0;
 $showDisabledPins 	= isset($_GET['showDisabledPins'])  	&& ($_GET['showDisabledPins']!= 'undefined') 		? $_GET['showDisabledPins'] 		: 0;
 
-// Set up state "icons".
-$on =  '[X]';
-$off = '[_]';
-$unknown = '[?]';
+// Set up state icons.
+$on =  'images/checkbox_checked_icon.png';
+$off = 'images/checkbox_unchecked_icon.png';
 
 // Escape params.
 $updateConfig = $mysqli->real_escape_string($updateConfig);
@@ -55,13 +54,11 @@ $display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".($row['debugMode'
 
 switch ($row['debugMode']){
 	case 1 :
-		$display_string .= "$on";
+		$display_string .= "<img src=\"$on\" />";
 		break;
 	case 0 :
-		$display_string .= "$off";
+		$display_string .= "<img src=\"$off\" />";
 		break;
-	default:
-		$display_string .= "$unknown";
 }
 $display_string .= "</a></td>";
 $display_string .= "</tr>";
@@ -73,13 +70,11 @@ $display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".$row['debugMode']
 
 switch ($row['showDisabledPins']){
 	case 1 :
-		$display_string .= "$on";
+		$display_string .= "<img src=\"$on\" />";
 		break;
 	case 0 :
-		$display_string .= "$off";
+		$display_string .= "<img src=\"$off\" />";
 		break;
-	default:
-		$display_string .= "$unknown";
 }
 $display_string .= "</a></td>";
 $display_string .= "</tr>";

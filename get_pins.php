@@ -6,10 +6,9 @@ $sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 	? $_GET['sort']
 $id 	= isset($_GET['id'])  	&& ($_GET['id']!= 'undefined') 		? $_GET['id'] 		: 0;
 $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['field'] 	: 'none';
 
-// Set up state "icons".
-$on =  '[X]';
-$off = '[_]';
-$unknown = '[?]';
+// Set up state icons.
+$on =  'images/checkbox_checked_icon.png';
+$off = 'images/checkbox_unchecked_icon.png';
 
 // Escape params.
 $sort = $mysqli->real_escape_string($sort);
@@ -92,26 +91,21 @@ while($row = mysqli_fetch_array($qry_result)){
 		$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus'" . ")\">";
 		switch ($row['pinStatus']){
 			case 1 :
-			$display_string .= $on;
+			$display_string .= "<img src=\"$on\" />";
 			break;
 			case 0 :
-			$display_string .= $off;
+			$display_string .= "<img src=\"$off\" />";
 			break;
-			default:
-			$display_string .= $unknown;
 		}
 		$display_string .= "</a></td>";
 	} else {
 		$display_string .= "<td>";
 		switch ($row['pinStatus']){
-			case 1 :
-			$display_string .= $on;
-			break;
-			case 0 :
-			$display_string .= $off;
-			break;
-			default:
-			$display_string .= $unknown;
+	               	case 1 :
+       		        $display_string .= "<img src=\"$on\" />";
+                	break;
+        	        case 0 :
+	                $display_string .= "<img src=\"$off\" />";
 		}
 		$display_string .= "</td>";
 	}
@@ -119,14 +113,11 @@ while($row = mysqli_fetch_array($qry_result)){
 	// Enabled.
 	$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled'" . ")\">";
 	switch ($row['pinEnabled']){
-		case 1 :
-		$display_string .= "$on";
-		break;
-		case 0 :
-		$display_string .= "$off";
-		break;
-		default:
-		$display_string .= "$unknown";
+                case 1 :
+                $display_string .= "<img src=\"$on\" />";
+                break;
+                case 0 :
+                $display_string .= "<img src=\"$off\" />";
 	}
 	$display_string .= "</a></td>";
 	$display_string .= "</tr>";
