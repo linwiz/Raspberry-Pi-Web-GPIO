@@ -14,6 +14,25 @@ SET time_zone = "+00:00";
 -- Database: `gpio`
 --
 
+
+--
+-- Table structure for table `config`
+--
+
+CREATE TABLE IF NOT EXISTS `config` (
+  `debugMode` int(11) NOT NULL DEFAULT '0',
+  `showDisabledPins` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='System wide configuration table, one row a time.';
+
+--
+-- Dumping data for table `config`
+--
+
+INSERT INTO `config` (`debugMode`, `showDisabledPins`) VALUES
+(0, 0);
+
+
+
 -- --------------------------------------------------------
 
 --
