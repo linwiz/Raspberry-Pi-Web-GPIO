@@ -91,7 +91,7 @@ $display_string .= "</table>";
 print $display_string;
 
 // Debug output.
-if ($debugMode) {
+if ($row['debugMode'] == 1) {
 	print '<pre>Query params: ' . $updateConfig . ' ' . $debugMode . ' ' . $showDisabledPins . '</pre>';
 	print '<pre>DB    params: ' . $row['debugMode'] . ' ' . $row['showDisabledPins'] . '</pre>';
 	print '<pre>' . $query_update . '</pre>';
