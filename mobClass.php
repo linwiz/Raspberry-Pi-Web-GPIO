@@ -1,7 +1,11 @@
 <?php
 session_start();
-// MySQLi connection.
+// MySQLi connection & config
+// looks strange when the Globals are displayed twice but it seems it's sent before headers so 'once' is not working ...
+// So I disabled getting config here,  it should be checked out.
+//require_once 'set_config_vars.php';
 require_once 'mysqli.php';
+
 
 // Password hashing functions.
 require_once('scrypt.php');

@@ -1,4 +1,6 @@
 <?php
+// not sure it's important here now
+//require_once ('set_config_vars.php');
 require_once('mobClass.php');
 $mobClass = new mobClass;
 if ($pi_rev == '' || $MySQLi_Host == '' || $MySQLi_User == '' || $MySQLi_Password == '' || $MySQLi_DataBase == '') {

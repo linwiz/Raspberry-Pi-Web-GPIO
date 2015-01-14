@@ -1,7 +1,8 @@
 <?php
-require_once('mysqli.php');
+require_once ('set_config_vars.php');
 
 // Set up calling params.
+
 $sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 	? $_GET['sort'] 	: "pinNumberBCM+0";
 $id 	= isset($_GET['id'])  	&& ($_GET['id']!= 'undefined') 		? $_GET['id'] 		: 0;
 $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['field'] 	: 'none';
@@ -19,7 +20,7 @@ $field = $mysqli->real_escape_string($field);
 $query_update ="";
 if ($id>0) {
 	$query_update = "UPDATE pinRevision" . $pi_rev . " SET " . $field . "= NOT " . $field . " WHERE pinID =" . $id . ";";
-	$qry_result = $mysqli->query($query_update);
+	$qry_result= $mysqli->query($query_update);
 	if (!$qry_result) {
 		$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
 		$message .= '<pre>Whole query: ' . $query_update . "</pre>";
@@ -27,24 +28,14 @@ if ($id>0) {
 	}
 }
 
-// Get config setting for disabled pins.
-$queryConfig = "SELECT * FROM config WHERE configVersion = 1";
-$qry_resultConfig = $mysqli->query($queryConfig);
-if (!$qry_resultConfig) {
-        $message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
-        $message .= '<pre>Whole query: ' . $queryConfig . "</pre>";
-        die($message);
+// Select rows
+$query = "SELECT * FROM pinRevision$pi_rev WHERE pinID > 0 ";
+if ($showDisabledPins == 0) {
+	$query .= " AND pinEnabled='1' ";
 }
-$rowConfig = mysqli_fetch_array($qry_resultConfig);
+$query .= " ORDER BY " . $sort . " ASC ";
 
-// Select rows.
-$query = "SELECT * FROM pinRevision$pi_rev WHERE pinID > 0";
-if ($rowConfig['showDisabledPins'] == 0) {
-	$query .= " AND pinEnabled='1'";
-}
-$query .= " ORDER BY " . $sort . " ASC";
-
-$qry_result = $mysqli->query($query);
+$qry_result= $mysqli->query($query);
 
 if (!$qry_result) {
 	$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
@@ -101,10 +92,10 @@ while($row = mysqli_fetch_array($qry_result)){
 	} else {
 		$display_string .= "<td>";
 		switch ($row['pinStatus']){
-	               	case 1 :
+			case 1 :
        		        $display_string .= "<img src=\"$on\" />";
-                	break;
-        	        case 0 :
+			break;
+			case 0 :
 	                $display_string .= "<img src=\"$off\" />";
 		}
 		$display_string .= "</td>";
@@ -113,10 +104,10 @@ while($row = mysqli_fetch_array($qry_result)){
 	// Enabled.
 	$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled'" . ")\">";
 	switch ($row['pinEnabled']){
-                case 1 :
+		case 1 :
                 $display_string .= "<img src=\"$on\" />";
-                break;
-                case 0 :
+		break;
+		case 0 :
                 $display_string .= "<img src=\"$off\" />";
 	}
 	$display_string .= "</a></td>";

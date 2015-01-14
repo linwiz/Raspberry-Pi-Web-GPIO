@@ -16,7 +16,4 @@ $mysqli = new mysqli($MySQLi_Host, $MySQLi_User, $MySQLi_Password, $MySQLi_DataB
 // eg; python setup.py OR ./setup.py
 $pi_rev = '';	// Enter your Raspberry Pi revision number here.
 
-//UI configuration
-$logPaging=10; //lines per screen
-
 ?>
