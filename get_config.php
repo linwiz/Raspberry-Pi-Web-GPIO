@@ -1,22 +1,9 @@
 <?php
-
 require_once('mysqli.php');
 
 // Set up calling params.
 
-/*
- print '<pre>';
-print_r($_GET);
-if($_GET["id"] === "") echo "id is an empty string\n";
-if($_GET["id"] === false) echo "id is false\n";
-if($_GET["id"] === null) echo "id is null\n";
-if(isset($_GET["id"])) echo "id is set\n";
-if(!empty($_GET["id"])) echo "id is not empty\n";
-print '</pre>';
-*/
-
-
-//get params for update
+// Get params for update.
 $updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined') 	? $_GET['updateConfig'] 	: 0;
 $debugMode			= isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined') 	? $_GET['debugMode'] 	: 0;
 $showDisabledPins 	= isset($_GET['showDisabledPins'])  	&& ($_GET['showDisabledPins']!= 'undefined') 		? $_GET['showDisabledPins'] 		: 0;
@@ -55,16 +42,16 @@ if (!$qry_result) {
 	die($message);
 }
 
-//config table has only ONE row to return
+// Config table has only ONE row to return.
 $row = mysqli_fetch_array($qry_result);
 
 // Build Result String.
 $display_string = "<table>";
 
-//debugMode
+// Debug Mode.
 $display_string .= "<tr>";
-$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".($row['debugMode'] == 1 ? '0':'1').",".$row['showDisabledPins'].")\">Enable Debug Mode</a></td>";
-$display_string .= "<td>";
+$display_string .= "<td>Enable Debug Mode</td>";
+$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".($row['debugMode'] == 1 ? '0':'1').",".$row['showDisabledPins'].")\">";
 
 switch ($row['debugMode']){
 	case 1 :
@@ -76,15 +63,13 @@ switch ($row['debugMode']){
 	default:
 		$display_string .= "$unknown";
 }
-$display_string .= "</td>";
+$display_string .= "</a></td>";
 $display_string .= "</tr>";
 
-
-
-//showDisabledPins
+// Show Disabled Pins.
 $display_string .= "<tr>";
-$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".$row['debugMode'].",".($row['showDisabledPins'] == 1 ? '0':'1').")\">Show Disabled Pins</a></td>";
-$display_string .= "<td>";
+$display_string .= "<td>Show Disabled Pins</td>";
+$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".$row['debugMode'].",".($row['showDisabledPins'] == 1 ? '0':'1').")\">";
 
 switch ($row['showDisabledPins']){
 	case 1 :
@@ -96,23 +81,21 @@ switch ($row['showDisabledPins']){
 	default:
 		$display_string .= "$unknown";
 }
-$display_string .= "</td>";
+$display_string .= "</a></td>";
 $display_string .= "</tr>";
 
-//close table
+// Close table.
 $display_string .= "</table>";
 
-//display it
+// Display it.
 print $display_string;
 
-//if ($debugMode) {
-	if (1) {	
-	//debug output
-	
+// Debug output.
+if ($debugMode) {
 	print '<pre>Query params: ' . $updateConfig . ' ' . $debugMode . ' ' . $showDisabledPins . '</pre>';
-	print '<pre>DB    params: ' . $row['debugMode'] . ' ' . $row['showDisabledPins'] . '</pre>';	
+	print '<pre>DB    params: ' . $row['debugMode'] . ' ' . $row['showDisabledPins'] . '</pre>';
 	print '<pre>' . $query_update . '</pre>';
-	print '<pre>' . $query . '</pre>';	
+	print '<pre>' . $query . '</pre>';
 }
 
 ?>
