@@ -14,13 +14,13 @@ SET time_zone = "+00:00";
 -- Database: `gpio`
 --
 
-
 --
 -- Table structure for table `config`
 --
 
 CREATE TABLE IF NOT EXISTS `config` (
-  `debugMode` int(11) NOT NULL DEFAULT '0',
+  `configVersion` tinyint(4) NOT NULL DEFAULT '1',
+  `debugMode` tinyint(1) NOT NULL DEFAULT '0',
   `showDisabledPins` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='System wide configuration table, one row a time.';
 
@@ -28,9 +28,8 @@ CREATE TABLE IF NOT EXISTS `config` (
 -- Dumping data for table `config`
 --
 
-INSERT INTO `config` (`debugMode`, `showDisabledPins`) VALUES
-(0, 0);
-
+INSERT INTO `config` (`configVersion`, `debugMode`, `showDisabledPins`) VALUES
+(1, 0, 0);
 
 
 -- --------------------------------------------------------
