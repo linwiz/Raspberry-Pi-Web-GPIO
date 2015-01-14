@@ -69,14 +69,13 @@ while true; do
 				direction2=`cat /sys/class/gpio/gpio$PIN/direction`
 
 				# Read Pin Status'.
-				status2=`gpio -g read $PIN`
+				status2=`cat /sys/class/gpio/gpio$PIN/value`
 
 				# Change Pin Status'.
 				if [ "$pinDirection" != "$direction2" ]; then
-					addLogItem "Pin $PIN direction to: $pinDirection ($direction2)"
 					if [ -n $PIN ]; then
 						if [ -n $pinDirection ]; then
-							gpio -g write $PIN $pinDirection
+							echo $pinDirection > /sys/class/gpio/gpio$PIN/direction
 							if [ "$logging" ]; then
 								addLogItem "Pin $PIN direction to: $pinDirection"
 							fi
@@ -91,7 +90,7 @@ while true; do
 				if [ "$pinStatus" != "$status2" ]; then
 					if [ -n $PIN ]; then
 						if [ -n $pinStatus ]; then
-							gpio -g write $PIN $pinStatus
+							echo $pinStatus > /sys/class/gpio/gpio$PIN/value
 							if [ "$logging" ]; then
 								 addLogItem "Pin $PIN changed to: $pinStatus"
 							fi
