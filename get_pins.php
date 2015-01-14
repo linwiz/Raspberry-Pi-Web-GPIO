@@ -73,7 +73,7 @@ $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none
 $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
 $display_string .= "</tr>";
 
-// Insert a new row in the table for each person returned.
+
 while($row = mysqli_fetch_array($qry_result)){
 	$display_string .= "<tr>";
 

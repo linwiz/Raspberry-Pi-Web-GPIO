@@ -5,9 +5,9 @@
 </head>
 <body>
 
-        <div id='pins'>
+        <div id='config'>
                 <?php
-                include 'get_disabled.php';
+                include 'get_config.php';
                 ?>
         </div>
 

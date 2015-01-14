@@ -91,21 +91,23 @@ function showPins(sort,pinID,field){
     ajaxRequest.send(null); 
 }
 
-//Paku - change the PINs' table content
-function showDisabledPins(sort,pinID,field){
-        var ajaxRequest=getAjaxRequest();
 
-        // Create a function that will receive data sent from the server
-    ajaxRequest.onreadystatechange = function(){
-        if(ajaxRequest.readyState == 4){
-            var ajaxDisplay = document.getElementById('pins');
-            ajaxDisplay.innerHTML = ajaxRequest.responseText;
-        }
-    };
-    var queryString = "?sort="+sort+ "&id=" + pinID+ "&field=" + field;
-    ajaxRequest.open("GET", "get_disabled.php" + queryString, true);
-    ajaxRequest.send(null);
+function showConfig(updateConfig,debugMode,showDisabledPins){
+    var ajaxRequest=getAjaxRequest();
+
+    // Create a function that will receive data sent from the server
+ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+        var ajaxDisplay = document.getElementById('config');
+        ajaxDisplay.innerHTML = ajaxRequest.responseText;
+    }
+};
+var queryString = "?updateConfig="+updateConfig+ "&debugMode=" +debugMode+ "&showDisabledPins=" + showDisabledPins;
+ajaxRequest.open("GET", "get_config.php" + queryString, true);
+ajaxRequest.send(null);
 }
+
+///////////////////////////////////////////////////////
 
 
 $(function() {
