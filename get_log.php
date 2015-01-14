@@ -1,7 +1,5 @@
 <?php
-require_once('mysqli.php');
-
-require_once 'set_config_vars.php';
+require_once ('set_config_vars.php');
 
 $id1 = $_GET['id1'];
 $id2 = $_GET['id2'];
@@ -17,6 +15,7 @@ if(is_numeric($id1)) {
 }
 if(is_numeric($id2)) {
 	$query .= " AND id <= $id2";
+}
 
 //Execute query
 $query .= " ORDER BY date DESC";
@@ -66,4 +65,4 @@ if ($rowConfig['debugMode']) {
 	print '<pre>Select: ' . $query .'</pre>';
 
 }
-?>
+

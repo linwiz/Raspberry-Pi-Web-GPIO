@@ -1,5 +1,5 @@
 <?php
-require_once 'set_config_vars.php';
+require_once ('set_config_vars.php');
 
 // Set up calling params.
 
