@@ -12,32 +12,37 @@ $off = 'images/checkbox_unchecked_icon.png';
 
 // Update state and enabled fields as needed.
 $query_update ="";
-if ($id>0) {
-	$query_update = 'UPDATE pinRevision' . $pi_rev . ' SET :field = NOT :field WHERE pinID = :id';
-	$qry_result = $db->prepare($query_update);
-	$qry_result->execute(array(':field'=>$field, ':id'=>$id));
-	if (!$qry_result) {
-		$message .= '<pre>Invalid query: ' . $db->error . '</pre>';
-		$message .= '<pre>Whole query: ' . $query_update . '</pre>';
-		die($message);
+try {
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	if ($id>0) {
+		$query_update = 'UPDATE pinRevision' . $pi_rev . ' SET :field=NOT :field WHERE pinID = :id';
+//		$query_update = 'UPDATE pinRevision' . $pi_rev . ' SET :field=' . ($field == 1 ? 0 : 1) .' :field WHERE pinID = :id';
+		$qry_result = $db->prepare($query_update);
+		$qry_result->execute(array(':field'=>$field, ':id'=>$id));
+/*		if (!$qry_result) {
+			$message .= '<pre>Invalid query: ' . $db->error . '</pre>';
+			$message .= '<pre>Whole query: ' . $query_update . '</pre>';
+			die($message);
+		}*/
 	}
-}
 
 // Select rows
-$query = 'SELECT * FROM pinRevision' . $pi_rev . ' WHERE pinID > 0';
-if ($showDisabledPins == 0) {
-	$query .= ' AND pinEnabled = 1';
-}
-$query .= ' ORDER BY :sort ASC ';
+	$query = 'SELECT * FROM pinRevision' . $pi_rev . ' WHERE pinID > 0';
+	if ($showDisabledPins == 0) {
+		$query .= ' AND pinEnabled = 1';
+	}
+	$query .= ' ORDER BY :sort ASC ';
 
-$qry_result= $db->prepare($query);
-$qry_result->execute(array(':sort'=>$sort));
+	$qry_result= $db->prepare($query);
+	$qry_result->execute(array(':sort'=>$sort));
 
-if (!$qry_result) {
-	$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
-	$message .= '<pre>Whole query: ' . $query . '</pre>';
-	die($message);
-}
+	if (!$qry_result) {
+		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
+		$message .= '<pre>Whole query: ' . $query . '</pre>';
+		die($message);
+        }
+
 
 // Refresh using current sort order.
 print "<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>";
@@ -119,5 +124,11 @@ if ($rowConfig['debugMode'] == 1) {
 	print '<pre>' . $query_update . '</pre>';
 	print '<pre>:field = ' . $field . '</pre>';
 	print '<pre>:id = ' . $id . '</pre>';
+}
+
+}
+catch(Exception $e) {
+	echo 'Exception -> ';
+	var_dump($e->getMessage());
 }
 ?>
