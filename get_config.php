@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once ('set_config_vars.php');
 
 // Get params for update.
