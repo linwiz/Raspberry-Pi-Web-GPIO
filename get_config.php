@@ -14,9 +14,9 @@ $off = 'images/checkbox_unchecked_icon.png';
 $query_update = "";
 
 if ($updateConfig>0) {
-	$query_update = 'UPDATE config SET debugMode = ?, showDisabledPins = ? WHERE configVersion = 1';
+	$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins WHERE configVersion = 1';
 	$qry_result = $db->prepare($query_update);
-	$qry_result->execute(array($debugModeTemp, $showDisabledPinsTemp));
+	$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp));
 	if (!$qry_result) {
 		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
 		$message .= '<pre>Whole query: ' . $query_update . '</pre>';

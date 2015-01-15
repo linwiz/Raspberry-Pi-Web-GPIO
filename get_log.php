@@ -7,16 +7,16 @@ $id2 = $_GET['id2'];
 //build query
 $query = 'SELECT * FROM log WHERE id > 0 ';
 if(is_numeric($id1)) {
-	$query .= ' AND id >= ?';
+	$query .= ' AND id >= :id1';
 }
 if(is_numeric($id2)) {
-	$query .= ' AND id <= ?';
+	$query .= ' AND id <= :id2';
 }
 $query .= ' ORDER BY date DESC';
 
 //Execute query
 $qry_result = $db->prepare($query);
-$qry_result->execute(array($id1, $id2));
+$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
 if (!$qry_result) {
 	$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
 	$message .= '<pre>Whole query: ' . $query . '</pre>';

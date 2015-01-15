@@ -13,25 +13,25 @@ $off = 'images/checkbox_unchecked_icon.png';
 // Update state and enabled fields as needed.
 $query_update ="";
 if ($id>0) {
-	$query_update = 'UPDATE pinRevision ? SET ? = NOT ? WHERE pinID = ?';
+	$query_update = 'UPDATE pinRevision' . $pi_rev . ' SET :field = NOT :field WHERE pinID = :id';
 	$qry_result = $db->prepare($query_update);
-	$qry_result->execute(array($pi_rev, $field, $field, $id));
+	$qry_result->execute(array(':field'=>$field, ':id'=>$id));
 	if (!$qry_result) {
-		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
+		$message .= '<pre>Invalid query: ' . $db->error . '</pre>';
 		$message .= '<pre>Whole query: ' . $query_update . '</pre>';
 		die($message);
 	}
 }
 
 // Select rows
-$query = 'SELECT * FROM pinRevision' . $pi_rev . ' WHERE pinID > 0 ';
+$query = 'SELECT * FROM pinRevision' . $pi_rev . ' WHERE pinID > 0';
 if ($showDisabledPins == 0) {
-	$query .= ' AND pinEnabled = 1 ';
+	$query .= ' AND pinEnabled = 1';
 }
-$query .= ' ORDER BY ? ASC ';
+$query .= ' ORDER BY :sort ASC ';
 
 $qry_result= $db->prepare($query);
-$qry_result->execute(array($sort));
+$qry_result->execute(array(':sort'=>$sort));
 
 if (!$qry_result) {
 	$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
@@ -117,5 +117,7 @@ if ($rowConfig['debugMode'] == 1) {
 	print '<pre>' . $sort . ' ' . $id . ' ' . $field . '</pre>';
 	print '<pre>' . $query . '</pre>';
 	print '<pre>' . $query_update . '</pre>';
+	print '<pre>:field = ' . $field . '</pre>';
+	print '<pre>:id = ' . $id . '</pre>';
 }
 ?>

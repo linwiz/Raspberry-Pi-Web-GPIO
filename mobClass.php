@@ -16,9 +16,9 @@ class mobClass {
 	// Validate login information.
 	public function checkLogin($username, $password) {
 		global $db;
-		$loginQuery = 'SELECT count(*) FROM users WHERE username = ?';
+		$loginQuery = 'SELECT count(*) FROM users WHERE username = :username';
 		$loginResult = $db->prepare($loginQuery);
-		$loginResult->execute(array($username));
+		$loginResult->execute(array(':username'=>$username));
 
 		if($loginResult->fetchColumn() < 1){
 			return FALSE;
