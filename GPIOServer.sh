@@ -107,5 +107,4 @@ while true; do
 	# Complete Loop.
 	sleep $waitTime
 done
-}
-# >> /var/log/GPIOServer.log
+} >> /var/log/GPIOServer.log
