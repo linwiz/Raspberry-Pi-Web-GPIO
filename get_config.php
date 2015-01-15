@@ -1,8 +1,6 @@
 <?php
 require_once ('set_config_vars.php');
 
-// Set up calling params.
-
 // Get params for update.
 $updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined') 	? $_GET['updateConfig'] 	: 0;
 $debugModeTemp			= isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined') 	? $_GET['debugMode'] 	: 0;
@@ -12,48 +10,45 @@ $showDisabledPinsTemp 	= isset($_GET['showDisabledPins'])  	&& ($_GET['showDisab
 $on =  'images/checkbox_checked_icon.png';
 $off = 'images/checkbox_unchecked_icon.png';
 
-// Escape params.
-$updateConfig = $mysqli->real_escape_string($updateConfig);
-$debugModeTemp = $mysqli->real_escape_string($debugModeTemp);
-$showDisabledPinsTemp = $mysqli->real_escape_string($showDisabledPinsTemp);
-
 // Update config fields as (if) needed.
 $query_update = "";
 
 if ($updateConfig>0) {
-	$query_update = "UPDATE config SET debugMode=".$debugModeTemp.", showDisabledPins = ".$showDisabledPinsTemp."  WHERE configVersion = 1;";
-	$qry_result = $mysqli->query($query_update);
+	$query_update = 'UPDATE config SET debugMode = ?, showDisabledPins = ? WHERE configVersion = 1';
+	$qry_result = $db->prepare($query_update);
+	$qry_result->execute(array($debugModeTemp, $showDisabledPinsTemp));
 	if (!$qry_result) {
-		$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
-		$message .= '<pre>Whole query: ' . $query_update . "</pre>";
+		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
+		$message .= '<pre>Whole query: ' . $query_update . '</pre>';
 		die($message);
 	}
 }
 
 // Select the only row.
-$query = "SELECT * FROM config WHERE configVersion = 1";
+$query = 'SELECT * FROM config WHERE configVersion = 1';
 
-$qry_result = $mysqli->query($query);
+$qry_result = $db->prepare($query);
+$qry_result->execute();
 
 if (!$qry_result) {
-	$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
-	$message .= '<pre>Whole query: ' . $query . "</pre>";
+	$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
+	$message .= '<pre>Whole query: ' . $query . '</pre>';
 	die($message);
 }
 
 // Config table has only ONE row to return.
-$row = mysqli_fetch_array($qry_result);
+$row = $qry_result->fetch(PDO::FETCH_ASSOC);
 
-$debugMode=$row['debugMode'];
-$showDisabledPins=$row['showDisabledPins'];
+$debugMode = $row['debugMode'];
+$showDisabledPins = $row['showDisabledPins'];
 
 // Build Result String.
 $display_string = "<table>";
 
 // Debug Mode.
 $display_string .= "<tr>";
-$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".($debugMode == 1 ? '0':'1').",".$showDisabledPins.")\">Enable Debug Mode</a></td>";
-$display_string .= "<td>";
+$display_string .= "<td>Enable Debug Mode</td>";
+$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . ($debugMode == 1 ? '0':'1') . "," . $showDisabledPins . ")\">";
 
 switch ($debugMode){
 	case 1 :
@@ -68,8 +63,8 @@ $display_string .= "</tr>";
 
 // Show Disabled Pins.
 $display_string .= "<tr>";
-$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1,".$debugMode.",".($showDisabledPins == 1 ? '0':'1').")\">Show Disabled Pins</a></td>";
-$display_string .= "<td>";
+$display_string .= "<td>Show Disabled Pins</a></td>";
+$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . $debugMode . "," . ($showDisabledPins == 1 ? '0':'1') . ")\">";
 
 switch ($showDisabledPins){
 	case 1 :
@@ -92,9 +87,9 @@ if ($debugMode) {
 
 	//debug output
 	print '<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . '</pre>';
-	print '<pre>DB    params: ' . $debugMode . ' ' . $showDisabledPins. '</pre>';	
+	print '<pre>DB    params: ' . $debugMode . ' ' . $showDisabledPins. '</pre>';
 	print '<pre>' . $query_update . '</pre>';
-	print '<pre>' . $query . '</pre>';	
+	print '<pre>' . $query . '</pre>';
 }
 
 ?>

@@ -3,7 +3,7 @@
 //require_once ('set_config_vars.php');
 require_once('mobClass.php');
 $mobClass = new mobClass;
-if ($pi_rev == '' || $MySQLi_Host == '' || $MySQLi_User == '' || $MySQLi_Password == '' || $MySQLi_DataBase == '') {
+if ($pi_rev == '' || $db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == '') {
 	die("Please configure the values in the GPIOServer.conf.sh file and then run setup.py.");
 }
 ?>

@@ -2,7 +2,6 @@
 require_once ('set_config_vars.php');
 
 // Set up calling params.
-
 $sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 	? $_GET['sort'] 	: "pinNumberBCM+0";
 $id 	= isset($_GET['id'])  	&& ($_GET['id']!= 'undefined') 		? $_GET['id'] 		: 0;
 $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['field'] 	: 'none';
@@ -11,40 +10,37 @@ $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['fie
 $on =  'images/checkbox_checked_icon.png';
 $off = 'images/checkbox_unchecked_icon.png';
 
-// Escape params.
-$sort = $mysqli->real_escape_string($sort);
-$id = $mysqli->real_escape_string($id);
-$field = $mysqli->real_escape_string($field);
-
 // Update state and enabled fields as needed.
 $query_update ="";
 if ($id>0) {
-	$query_update = "UPDATE pinRevision" . $pi_rev . " SET " . $field . "= NOT " . $field . " WHERE pinID =" . $id . ";";
-	$qry_result= $mysqli->query($query_update);
+	$query_update = 'UPDATE pinRevision ? SET ? = NOT ? WHERE pinID = ?';
+	$qry_result = $db->prepare($query_update);
+	$qry_result->execute(array($pi_rev, $field, $field, $id));
 	if (!$qry_result) {
-		$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
-		$message .= '<pre>Whole query: ' . $query_update . "</pre>";
+		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
+		$message .= '<pre>Whole query: ' . $query_update . '</pre>';
 		die($message);
 	}
 }
 
 // Select rows
-$query = "SELECT * FROM pinRevision$pi_rev WHERE pinID > 0 ";
+$query = 'SELECT * FROM pinRevision' . $pi_rev . ' WHERE pinID > 0 ';
 if ($showDisabledPins == 0) {
-	$query .= " AND pinEnabled='1' ";
+	$query .= ' AND pinEnabled = 1 ';
 }
-$query .= " ORDER BY " . $sort . " ASC ";
+$query .= ' ORDER BY ? ASC ';
 
-$qry_result= $mysqli->query($query);
+$qry_result= $db->prepare($query);
+$qry_result->execute(array($sort));
 
 if (!$qry_result) {
-	$message  = '<pre>Invalid query: ' . $mysqli->error . "</pre>";
-	$message .= '<pre>Whole query: ' . $query ."</pre>";
+	$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
+	$message .= '<pre>Whole query: ' . $query . '</pre>';
 	die($message);
 }
 
 // Refresh using current sort order.
-print "<a href=\"#\" onclick=\"showPins('".urlencode($sort)."')\">Refresh</a>";
+print "<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>";
 
 // Build Result String.
 // Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
@@ -65,7 +61,7 @@ $display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'non
 $display_string .= "</tr>";
 
 
-while($row = mysqli_fetch_array($qry_result)){
+while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
 	$display_string .= "<tr>";
 
 	if ($rowConfig['debugMode'] == 1) {
@@ -122,5 +118,4 @@ if ($rowConfig['debugMode'] == 1) {
 	print '<pre>' . $query . '</pre>';
 	print '<pre>' . $query_update . '</pre>';
 }
-
 ?>
