@@ -17,6 +17,7 @@ $on =  'images/checkbox_checked_icon.png';
 $off = 'images/checkbox_unchecked_icon.png';
 
 $query_update ="";
+
 try {
 	// Update state and enabled fields as needed.
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -25,7 +26,6 @@ try {
 		$query_update = "UPDATE pinRevision$pi_rev SET $field = NOT $field WHERE pinID=:id";
 		$qry_result = $db->prepare($query_update);
 		$qry_result->bindParam(':id', $id, PDO::PARAM_INT);
-		//$qry_result->bindParam(':field', $field, PDO::PARAM_INT);
 		$qry_result->execute();
 	}
 
@@ -38,91 +38,73 @@ try {
 	$qry_result= $db->prepare($query);
 	$qry_result->execute();
 
-// Refresh using current sort order.
-print "<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>";
+	// Refresh using current sort order.
+	print "<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>";
 
-// Build Result String.
-// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
-$display_string = "<table>";
-$display_string .= "<tr>";
-
-if ($rowConfig['debugMode'] == 1) {
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
-}
-
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>";
-
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>";
-$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
-$display_string .= "</tr>";
-
-
-while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
+	// Build Result String.
+	// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
+	$display_string = "<table>";
 	$display_string .= "<tr>";
 
 	if ($rowConfig['debugMode'] == 1) {
-		$display_string .= "<td>" . $row['pinID'] . "</td>";
-		$display_string .= "<td>" . $row['pinDirection'] . "</td>";
+		$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
+		$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
 	}
 
-	$display_string .= "<td>" . $row['pinNumberBCM'] . "</td>";
-	$display_string .= "<td>" . $row['pinNumberWPi'] . "</td>";
-	$display_string .= "<td>" . $row['pinDescription'] . "</td>";
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>";
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>";
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>";
 
-	// On/Off.
-	if ($row['pinEnabled'] == 1) {
-		$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus'" . ")\">";
-		switch ($row['pinStatus']){
-			case 1 :
-			$display_string .= "<img src=\"$on\" />";
-			break;
-			case 0 :
-			$display_string .= "<img src=\"$off\" />";
-			break;
-		}
-		$display_string .= "</a></td>";
-	} else {
-		$display_string .= "<td>";
-		switch ($row['pinStatus']){
-			case 1 :
-       		        $display_string .= "<img src=\"$on\" />";
-			break;
-			case 0 :
-	                $display_string .= "<img src=\"$off\" />";
-		}
-		$display_string .= "</td>";
-	}
-
-	// Enabled.
-	$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled'" . ")\">";
-	switch ($row['pinEnabled']){
-		case 1 :
-                $display_string .= "<img src=\"$on\" />";
-		break;
-		case 0 :
-                $display_string .= "<img src=\"$off\" />";
-	}
-	$display_string .= "</a></td>";
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>";
+	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
 	$display_string .= "</tr>";
-}
-$display_string .= "</table>";
-print $display_string;
 
-if ($rowConfig['debugMode'] == 1) {
-	// Debug output.
-	print '<pre>' . $sort . ' ' . $id . ' ' . $field . '</pre>';
-	print '<pre>' . $query . '</pre>';
-	print '<pre>' . $query_update . '</pre>';
-	print '<pre>:field = ' . $field . '</pre>';
-	print '<pre>:id = ' . $id . '</pre>';
-}
+
+	while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
+		$display_string .= "<tr>";
+
+		if ($rowConfig['debugMode'] == 1) {
+			$display_string .= "<td>" . $row['pinID'] . "</td>";
+			$display_string .= "<td>" . $row['pinDirection'] . "</td>";
+		}
+
+		$display_string .= "<td>" . $row['pinNumberBCM'] . "</td>";
+		$display_string .= "<td>" . $row['pinNumberWPi'] . "</td>";
+		$display_string .= "<td>" . $row['pinDescription'] . "</td>";
+
+		// On/Off.
+		if ($row['pinEnabled'] == 1) {
+			$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus'" . ")\">";
+			$display_string .= $row['pinStatus'] ? "<img src=\"$on\" />" : "<img src=\"$off\" />";
+			$display_string .= "</a></td>";
+		} else {
+			$display_string .= "<td>";
+			$display_string .= $row['pinStatus'] ? "<img src=\"$on\" />" : "<img src=\"$off\" />";
+			$display_string .= "</td>";
+		}
+
+		// Enabled.
+		$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled'" . ")\">";
+		$display_string .= $row['pinEnabled'] ? "<img src=\"$on\" />" : "<img src=\"$off\" />";
+		$display_string .= "</a></td>";
+		$display_string .= "</tr>";
+	}
+	$display_string .= "</table>";
+
+	print $display_string;
+
+	if ($rowConfig['debugMode'] == 1) {
+		// Debug output.
+		print '<pre>' . $sort . ' ' . $id . ' ' . $field . '</pre>';
+		print '<pre>' . $query . '</pre>';
+		print '<pre>' . $query_update . '</pre>';
+		print '<pre>:id = ' . $id . '</pre>';
+	}
 
 }
 catch(Exception $e) {
-	echo 'Exception -> ';
+	print '<pre>' . 'Exception -> ';
 	var_dump($e->getMessage());
+	print '</pre>' ;
 }
 ?>
