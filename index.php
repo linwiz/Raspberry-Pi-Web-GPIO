@@ -1,9 +1,17 @@
 <?php
+session_start();
+// Database connection & config
+// looks strange when the Globals are displayed twice but it seems it's sent before headers so 'once' is not working ...
+// So I disabled getting config here,  it should be checked out.
+//require_once 'set_config_vars.php';
+require_once 'db.php';
+
+// Password hashing functions.
+require_once('scrypt.php');
+
 // not sure it's important here now
 //require_once ('set_config_vars.php');
-require_once('mobClass.php');
-$mobClass = new mobClass;
-if ($pi_rev == '' || $MySQLi_Host == '' || $MySQLi_User == '' || $MySQLi_Password == '' || $MySQLi_DataBase == '') {
+if ($pi_rev == '' || $db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == '') {
 	die("Please configure the values in the GPIOServer.conf.sh file and then run setup.py.");
 }
 ?>
