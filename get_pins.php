@@ -2,7 +2,13 @@
 require_once ('set_config_vars.php');
 
 // Set up calling params.
-$sort 	= isset($_GET['sort']) 	&& ($_GET['sort']!= 'undefined') 	? $_GET['sort'] 	: "pinNumberBCM+0";
+$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
+if (in_array($_GET['sort'], $sort_whitelist)) {
+	$sort = $_GET['sort'];
+} else {
+	$sort = "pinNumberBCM+0";
+}
+
 $id 	= isset($_GET['id'])  	&& ($_GET['id']!= 'undefined') 		? $_GET['id'] 		: 0;
 $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['field'] 	: 'none';
 
@@ -10,39 +16,27 @@ $field 	= isset($_GET['field']) && ($_GET['field']!= 'undefined')  	? $_GET['fie
 $on =  'images/checkbox_checked_icon.png';
 $off = 'images/checkbox_unchecked_icon.png';
 
-// Update state and enabled fields as needed.
 $query_update ="";
 try {
+	// Update state and enabled fields as needed.
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	if ($id>0) {
-		$query_update = 'UPDATE pinRevision' . $pi_rev . ' SET :field=NOT :field WHERE pinID = :id';
-//		$query_update = 'UPDATE pinRevision' . $pi_rev . ' SET :field=' . ($field == 1 ? 0 : 1) .' :field WHERE pinID = :id';
+	if ($id > 0) {
+		$query_update = "UPDATE pinRevision$pi_rev SET $field=NOT :field WHERE pinID=:id";
 		$qry_result = $db->prepare($query_update);
-		$qry_result->execute(array(':field'=>$field, ':id'=>$id));
-/*		if (!$qry_result) {
-			$message .= '<pre>Invalid query: ' . $db->error . '</pre>';
-			$message .= '<pre>Whole query: ' . $query_update . '</pre>';
-			die($message);
-		}*/
+		$qry_result->bindParam(':id', $id, PDO::PARAM_INT);
+		$qry_result->bindParam(':field', $field, PDO::PARAM_INT);
+		$qry_result->execute();
 	}
 
-// Select rows
-	$query = 'SELECT * FROM pinRevision' . $pi_rev . ' WHERE pinID > 0';
+	// Select rows
+	$query = "SELECT * FROM pinRevision$pi_rev WHERE pinID > 0";
 	if ($showDisabledPins == 0) {
-		$query .= ' AND pinEnabled = 1';
+		$query .= " AND pinEnabled = 1";
 	}
-	$query .= ' ORDER BY :sort ASC ';
-
+	$query .= " ORDER BY $sort ASC";
 	$qry_result= $db->prepare($query);
-	$qry_result->execute(array(':sort'=>$sort));
-
-	if (!$qry_result) {
-		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
-		$message .= '<pre>Whole query: ' . $query . '</pre>';
-		die($message);
-        }
-
+	$qry_result->execute();
 
 // Refresh using current sort order.
 print "<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>";
