@@ -5,11 +5,11 @@
 </head>
 <body>
 
-        <div id='config'>
-                <?php
-                include 'get_config.php';
-                ?>
-        </div>
+	<div id='config'>
+		<?php
+		include 'get_config.php';
+		?>
+	</div>
 
 </body>
 </html>
