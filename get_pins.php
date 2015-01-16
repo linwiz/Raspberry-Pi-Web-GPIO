@@ -20,12 +20,12 @@ $query_update ="";
 try {
 	// Update state and enabled fields as needed.
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	//$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	if ($id > 0) {
-		$query_update = "UPDATE pinRevision$pi_rev SET $field=NOT :field WHERE pinID=:id";
+		$query_update = "UPDATE pinRevision$pi_rev SET $field = NOT $field WHERE pinID=:id";
 		$qry_result = $db->prepare($query_update);
 		$qry_result->bindParam(':id', $id, PDO::PARAM_INT);
-		$qry_result->bindParam(':field', $field, PDO::PARAM_INT);
+		//$qry_result->bindParam(':field', $field, PDO::PARAM_INT);
 		$qry_result->execute();
 	}
 
