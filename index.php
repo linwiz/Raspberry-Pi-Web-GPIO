@@ -11,7 +11,7 @@ require_once('scrypt.php');
 
 // not sure it's important here now
 //require_once ('set_config_vars.php');
-if ($pi_rev == '' || $db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == '') {
+if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == '') {
 	die("Please configure the values in the GPIOServer.conf.sh file and then run setup.py.");
 }
 ?>

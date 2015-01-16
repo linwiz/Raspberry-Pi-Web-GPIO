@@ -14,6 +14,7 @@ $off = 'images/checkbox_unchecked_icon.png';
 // Update config fields as (if) needed.
 $query_update = "";
 
+try {
 if ($updateConfig>0) {
 	$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins WHERE configVersion = 1';
 	$qry_result = $db->prepare($query_update);
@@ -92,5 +93,9 @@ if ($debugMode) {
 	print '<pre>' . $query_update . '</pre>';
 	print '<pre>' . $query . '</pre>';
 }
-
+}
+        catch(Exception $e) {
+        echo 'Exception -> ';
+        var_dump($e->getMessage());
+}
 ?>

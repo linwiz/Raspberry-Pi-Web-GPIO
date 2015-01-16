@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 13, 2015 at 03:54 PM
+-- Generation Time: Jan 16, 2015 at 04:00 PM
 -- Server version: 5.5.40
--- PHP Version: 5.4.36-0+deb7u1
+-- PHP Version: 5.4.36-0+deb7u3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -13,6 +13,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `gpio`
 --
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `config`
@@ -31,8 +33,7 @@ CREATE TABLE IF NOT EXISTS `config` (
 --
 
 INSERT INTO `config` (`configVersion`, `piRevision`, `debugMode`, `showDisabledPins`, `logPageSize`) VALUES
-(1, '', 1, 1, 10);
-
+(1, '', 0, 0, 10);
 
 -- --------------------------------------------------------
 
@@ -111,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `pinRevision2` (
 --
 
 INSERT INTO `pinRevision2` (`pinID`, `pinNumberBCM`, `pinNumberWPi`, `pinDescription`, `pinDirection`, `pinStatus`, `pinEnabled`) VALUES
-(1, '2', '8', 'Pin 2', 'out', '1', '1'),
+(1, '2', '8', 'Pin 2', 'out', '0', '1'),
 (2, '3', '9', 'Pin 3', 'out', '0', '1'),
 (3, '4', '7', 'Pin 4', 'out', '0', '1'),
 (4, '7', '11', 'Pin 7', 'out', '0', '1'),

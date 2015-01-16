@@ -1,12 +1,13 @@
 ##############################################
 #####  GPIOServer    Configuration file  #####
 ##############################################
-mysqlhostname="localhost"
-mysqlusername="user"
-mysqlpassword="pass"
-mysqldatabase="gpio"
+dbtype="mysql"
+dbhostname="localhost"
+dbusername="user"
+dbpassword="pass"
+dbdatabase="gpio"
 
-# Enable logging in MySQL
+# Enable logging in db
 # TODO : Doesn't log errors
 logging="TRUE"
 

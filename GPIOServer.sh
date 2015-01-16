@@ -19,16 +19,16 @@ revision=`$rev_cmd`
 
 addLogItem() {
     logdatas="$1 $2 $3"
-    echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$mysqlhostname --user=$mysqlusername --password=$mysqlpassword $mysqldatabase;
+    echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --user=$dbusername --password=$dbpassword $dbdatabase;
 }
 
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
 
-mysqlquery="mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase"
+dbquery="mysql -B --host=$dbhostname --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
 
 # Retreive all GPIO pins.
-pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $mysqlquery`
+pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
 
 # Start Loop.
 while true; do
@@ -36,7 +36,7 @@ while true; do
 		do
 
 			# Select current PIN details.
-			currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
+			currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $dbquery`
 
 			this_pin=${currPIN[$PIN]}
 			currPIN=($this_pin)
