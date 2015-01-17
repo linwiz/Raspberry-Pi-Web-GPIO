@@ -9,6 +9,6 @@ if (empty($pids)) {
 else {
 	print ' RUNNING';
 }
-print ".";
+print ".\r\n";
 
 ?>

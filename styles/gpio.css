@@ -2,8 +2,11 @@
 	background-color: navy;
 	color: white;
 	text-align: center;
-	padding: 5px;
+	padding: 15px;
 	width: 95%;
+	display: block;
+	font-size: 2em;
+	font-weight: bold;
 }
 
 #nav {
@@ -18,13 +21,4 @@
 	float: left;
 	padding: 5px;
 	width: 95%;
-}
-
-#footer {
-	background-color: navy;
-	color: white;
-	clear: both;
-	text-align: center;
-	width: 95%;
-	padding: 5px;
 }

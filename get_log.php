@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once ('set_config_vars.php');
 
 $id1 = $_GET['id1'];

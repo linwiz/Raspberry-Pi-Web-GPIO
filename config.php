@@ -1,16 +1,21 @@
+<?php
+session_start();
+?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Pins</title>
+<script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
-
-        <div id='config'>
-                <?php
-                include 'get_config.php';
-                ?>
-        </div>
-
+	<div id='config'>
+	<?php
+	// Check if user logged in.
+	if (isset($_SESSION['username'])) {
+		include 'get_config.php';
+	}
+	?>
+	</div>
 </body>
 </html>
 
