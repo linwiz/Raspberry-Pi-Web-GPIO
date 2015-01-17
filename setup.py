@@ -2,6 +2,11 @@
 import subprocess
 import os
 import os.path
+import RPi.GPIO as GPIO
+
+# Retreive revision number.
+piRevisioni=GPIO.RPI_REVISION
+piRevision=str(piRevisioni)
 
 # Configure db.php.
 print "Importing settings from GPIOServer.conf.sh to db.php."
@@ -18,9 +23,24 @@ f.close()
 
 # Database import magic.
 if dbtype == "mysql":
-	print "Importing docs/gpio.sql into database: " + dbusername + "@" + dbhostname + "/" + dbdatabase
-#	proc = subprocess.Popen(["mysql", "--host=%s" % dbhostname, "--user=%s" % dbusername, "--password=%s" % dbpassword, dbdatabase], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-#	out, err = proc.communicate(file("docs/gpio.sql").read())
+	MYSQL_FILE="docs/gpio.sql"
+	import MySQLdb
+	db = MySQLdb.connect(host=dbhostname, user=dbusername, passwd=dbpassword, db=dbdatabase)
+	cur = db.cursor() 
+	if not cur.execute("SHOW TABLES LIKE 'config'"):
+		print "Importing " + MYSQL_FILE + " into database: " + dbusername + "@" + dbhostname + "/" + dbdatabase
+		proc = subprocess.Popen(["mysql", "--host=%s" % dbhostname, "--user=%s" % dbusername, "--password=%s" % dbpassword, dbdatabase], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+		out, err = proc.communicate(file(MYSQL_FILE).read())
+	else:
+		print "Database already imported. Skipping."
+
+	if cur.execute("SHOW TABLES LIKE 'config'"):
+		print "Updating revision information in the config table"
+		cur.execute("UPDATE config SET piRevision=" + piRevision + " WHERE configVersion=1")
+		db.commit()
+	else:
+		print "ERROR: config table was not found."
+
 else:
 	print "Database type " + dbtype + " is invalid."
 
