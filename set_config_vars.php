@@ -11,16 +11,7 @@ try {
 	$rowConfig = $qry_resultConfig->fetch(PDO::FETCH_ASSOC);
 
 	// Set site wide config variables.
-	// Check for missing revision.
-	if (!$rowConfig['piRevision']) {
-		exec("python revision.py", $apiRevision);
-		$piRevision = $apiRevision[0];
-		$queryRev = "UPDATE config SET piRevision=$piRevision WHERE configVersion='1'";
-		$qry_resultRev = $db->prepare($queryRev);
-		$qry_resultRev->execute();
-	} else {
-		$piRevision = $rowConfig['piRevision'];
-	}
+	$piRevision = $rowConfig['piRevision'];
 	$debugMode = $rowConfig['debugMode'];
 	$showDisabledPins = $rowConfig['showDisabledPins'];
 	$logPageSize = $rowConfig['logPageSize'];
