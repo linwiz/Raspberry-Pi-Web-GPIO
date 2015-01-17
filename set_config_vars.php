@@ -37,6 +37,7 @@ if ($debugMode) {
 	print "piRevision: $piRevision<br />";
 	print "debugMode: $debugMode<br />";
 	print "showDisabledPins: $showDisabledPins<br />";
+	print "logPageSize: $logPageSize<br />";
 	print_r($_SESSION);
 	print "</pre>";
 }
