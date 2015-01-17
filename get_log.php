@@ -14,7 +14,7 @@ try {
 		$query .= ' AND id <= :id2';
 	}
 	$query .= ' ORDER BY date DESC';
-	$query .= " LIMIT $logPageSize";
+	$query .= " LIMIT " . $_SESSION['logPageSize'];
 
 	// Execute query.
 	$qry_result = $db->prepare($query);

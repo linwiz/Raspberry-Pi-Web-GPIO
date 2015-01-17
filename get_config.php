@@ -65,7 +65,6 @@ try {
 		//debug output
 		print '<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . '</pre>';
 		print '<pre>' . $query_update . '</pre>';
-		print '<pre>' . $query . '</pre>';
 	}
 } catch(Exception $e) {
 	echo 'Exception -> ';

@@ -51,7 +51,7 @@ try {
 
 	// Select rows
 	$query = "SELECT * FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID > 0";
-	if ($showDisabledPins == 0) {
+	if ($_SESSION['showDisabledPins'] == 0) {
 		$query .= " AND pinEnabled = 1";
 	}
 	$query .= " ORDER BY $sort ASC";
