@@ -14,87 +14,74 @@ $off = 'images/checkbox_unchecked_icon.png';
 $query_update = "";
 
 try {
-if ($updateConfig>0) {
-	$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins WHERE configVersion = 1';
-	$qry_result = $db->prepare($query_update);
-	$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp));
-	if (!$qry_result) {
-		$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
-		$message .= '<pre>Whole query: ' . $query_update . '</pre>';
-		die($message);
+	if ($updateConfig>0) {
+		$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins WHERE configVersion = 1';
+		$qry_result = $db->prepare($query_update);
+		$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp));
 	}
-}
 
-// Select the only row.
-$query = 'SELECT * FROM config WHERE configVersion = 1';
+	// Select the only row.
+	$query = 'SELECT * FROM config WHERE configVersion = 1';
 
-$qry_result = $db->prepare($query);
-$qry_result->execute();
+	$qry_result = $db->prepare($query);
+	$qry_result->execute();
 
-if (!$qry_result) {
-	$message  = '<pre>Invalid query: ' . $db->error . '</pre>';
-	$message .= '<pre>Whole query: ' . $query . '</pre>';
-	die($message);
-}
+	// Config table has only ONE row to return.
+	$row = $qry_result->fetch(PDO::FETCH_ASSOC);
 
-// Config table has only ONE row to return.
-$row = $qry_result->fetch(PDO::FETCH_ASSOC);
+	$debugMode = $row['debugMode'];
+	$showDisabledPins = $row['showDisabledPins'];
 
-$debugMode = $row['debugMode'];
-$showDisabledPins = $row['showDisabledPins'];
+	// Build Result String.
+	$display_string = "<table>";
 
-// Build Result String.
-$display_string = "<table>";
+	// Debug Mode.
+	$display_string .= "<tr>";
+	$display_string .= "<td>Enable Debug Mode</td>";
+	$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . ($debugMode == 1 ? '0':'1') . "," . $showDisabledPins . ")\">";
 
-// Debug Mode.
-$display_string .= "<tr>";
-$display_string .= "<td>Enable Debug Mode</td>";
-$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . ($debugMode == 1 ? '0':'1') . "," . $showDisabledPins . ")\">";
+	switch ($debugMode){
+		case 1 :
+			$display_string .= "<img src=\"$on\" />";
+			break;
+		case 0 :
+			$display_string .= "<img src=\"$off\" />";
+			break;
+	}
+	$display_string .= "</a></td>";
+	$display_string .= "</tr>";
 
-switch ($debugMode){
-	case 1 :
-		$display_string .= "<img src=\"$on\" />";
-		break;
-	case 0 :
-		$display_string .= "<img src=\"$off\" />";
-		break;
-}
-$display_string .= "</a></td>";
-$display_string .= "</tr>";
+	// Show Disabled Pins.
+	$display_string .= "<tr>";
+	$display_string .= "<td>Show Disabled Pins</a></td>";
+	$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . $debugMode . "," . ($showDisabledPins == 1 ? '0':'1') . ")\">";
 
-// Show Disabled Pins.
-$display_string .= "<tr>";
-$display_string .= "<td>Show Disabled Pins</a></td>";
-$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . $debugMode . "," . ($showDisabledPins == 1 ? '0':'1') . ")\">";
+	switch ($showDisabledPins){
+		case 1 :
+			$display_string .= "<img src=\"$on\" />";
+			break;
+		case 0 :
+			$display_string .= "<img src=\"$off\" />";
+			break;
+	}
+	$display_string .= "</a></td>";
+	$display_string .= "</tr>";
 
-switch ($showDisabledPins){
-	case 1 :
-		$display_string .= "<img src=\"$on\" />";
-		break;
-	case 0 :
-		$display_string .= "<img src=\"$off\" />";
-		break;
-}
-$display_string .= "</a></td>";
-$display_string .= "</tr>";
+	// Close table.
+	$display_string .= "</table>";
 
-// Close table.
-$display_string .= "</table>";
+	// Display it.
+	print $display_string;
 
-// Display it.
-print $display_string;
-
-if ($debugMode) {
-
-	//debug output
-	print '<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . '</pre>';
-	print '<pre>DB    params: ' . $debugMode . ' ' . $showDisabledPins. '</pre>';
-	print '<pre>' . $query_update . '</pre>';
-	print '<pre>' . $query . '</pre>';
-}
-}
-        catch(Exception $e) {
-        echo 'Exception -> ';
-        var_dump($e->getMessage());
+	if ($debugMode) {
+		//debug output
+		print '<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . '</pre>';
+		print '<pre>DB    params: ' . $debugMode . ' ' . $showDisabledPins. '</pre>';
+		print '<pre>' . $query_update . '</pre>';
+		print '<pre>' . $query . '</pre>';
+	}
+} catch(Exception $e) {
+	echo 'Exception -> ';
+	var_dump($e->getMessage());
 }
 ?>

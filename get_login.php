@@ -24,10 +24,9 @@ if (isset($_POST)) { // if ajax request submitted
 				echo $post_username;
 			}
 		}
-	}
-	        catch(Exception $e) {
-        	echo 'Exception -> ';
-	        var_dump($e->getMessage());
+	} catch(Exception $e) {
+		echo 'Exception -> ';
+		var_dump($e->getMessage());
 	}
 }
 ?>

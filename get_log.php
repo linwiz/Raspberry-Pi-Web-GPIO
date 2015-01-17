@@ -19,11 +19,6 @@ try {
 	// Execute query.
 	$qry_result = $db->prepare($query);
 	$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
-	if (!$qry_result) {
-		$message  = "<pre>Invalid query: $db->error</pre>";
-		$message .= "<pre>Whole query: $query</pre>";
-		die($message);
-	}
 
 	print "<a href=\"#\" onclick=\"showLog()\">Refresh</a>";
 
@@ -59,9 +54,8 @@ try {
 		print "<pre>Range Set: $id1 <-> $id2</pre>";
 		print "<pre>Select: $query</pre>";
 	}
-}
-        catch(Exception $e) {
-        echo 'Exception -> ';
-        var_dump($e->getMessage());
+} catch(Exception $e) {
+	echo 'Exception -> ';
+	var_dump($e->getMessage());
 }
 ?>

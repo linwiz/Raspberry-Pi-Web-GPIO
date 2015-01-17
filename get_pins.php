@@ -138,8 +138,7 @@ try {
 		print "<pre>:id=$id</pre>";
 	}
 
-}
-	catch(Exception $e) {
+} catch(Exception $e) {
 	echo 'Exception -> ';
 	var_dump($e->getMessage());
 }
