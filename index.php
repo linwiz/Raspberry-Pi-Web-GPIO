@@ -37,23 +37,23 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 	include 'set_config_vars.php';
 	// Check if user logged in.
 	if (isset($_SESSION['username'])) {
-		print "<script type=\"text/javascript\">showNavigation();changeSection(1);</script>\r\n";
+		print "		<script type=\"text/javascript\">showNavigation();changeSection(1);</script>\r\n";
 	}
 ?>
-	        <div id='login'>
-        	        <div class="login_form">
-                	        <h3>Login</h3>
-                        	<form method="POST">
-                        	        <label>Username</label>
-                	                <input type="text" name="username" id="username" placeholder="your username" /><br />
-        	                        <label>Password</label>
-	                                <input type="password" name="pasword" id="password" placeholder="your password" /><br />
-                                	<input type="submit" id="submit_login" name="submit" class="inputbutton grey" value="Login" />
-                        	        <span class="login_loading"></span>
-                	                <span class="errormess"></span>
-        	                </form>
-	                </div>
-	        </div>
+		<div id='login'>
+			<div class="login_form">
+				<h3>Login</h3>
+				<form method="POST">
+					<label>Username</label>
+					<input type="text" name="username" id="username" placeholder="your username" /><br />
+					<label>Password</label>
+					<input type="password" name="pasword" id="password" placeholder="your password" /><br />
+					<input type="submit" id="submit_login" name="submit" class="inputbutton grey" value="Login" />
+					<span class="login_loading"></span>
+					<span class="errormess"></span>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
