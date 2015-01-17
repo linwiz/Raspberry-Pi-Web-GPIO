@@ -13,9 +13,10 @@ dir="$(dirname "$0")"
 # Read config file (relative).
 source "$dir/GPIOServer.conf.sh"
 
+dbquery="mysql -B --host=$dbhostname --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
+
 # Retrieve revision information.
-rev_cmd="python $dir/revision.py"
-revision=`$rev_cmd`
+revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
 
 addLogItem() {
     logdatas="$1 $2 $3"
@@ -24,8 +25,6 @@ addLogItem() {
 
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
-
-dbquery="mysql -B --host=$dbhostname --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
 
 # Retreive all GPIO pins.
 pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
