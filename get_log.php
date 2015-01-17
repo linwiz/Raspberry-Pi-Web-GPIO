@@ -1,5 +1,5 @@
 <?php
-require_once ('set_config_vars.php');
+include 'set_config_vars.php';
 
 $id1 = $_GET['id1'];
 $id2 = $_GET['id2'];

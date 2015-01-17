@@ -1,5 +1,5 @@
 <?php
-require_once ('set_config_vars.php');
+include 'set_config_vars.php';
 
 // Get params for update.
 $updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined') 	? $_GET['updateConfig'] 	: 0;

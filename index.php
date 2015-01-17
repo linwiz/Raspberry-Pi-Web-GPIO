@@ -29,16 +29,17 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 	<script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
-<?php
-// Check if user logged in.
-if (isset($_SESSION['username'])) {
-	print "<script type=\"text/javascript\">showNavigation();changeSection(1);</script>\r\n";
-}
-?>
 	<div id="header">RPi Web GPIO</div>
 	<div id="nav">
 	</div>
 	<div id="section">
+<?php
+	include 'set_config_vars.php';
+	// Check if user logged in.
+	if (isset($_SESSION['username'])) {
+		print "<script type=\"text/javascript\">showNavigation();changeSection(1);</script>\r\n";
+	}
+?>
 	        <div id='login'>
         	        <div class="login_form">
                 	        <h3>Login</h3>

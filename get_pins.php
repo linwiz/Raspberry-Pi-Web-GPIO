@@ -1,5 +1,5 @@
 <?php
-require_once ('set_config_vars.php');
+include 'set_config_vars.php';
 
 // Set up calling params.
 $sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
