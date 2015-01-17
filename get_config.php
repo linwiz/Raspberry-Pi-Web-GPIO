@@ -33,12 +33,12 @@ try {
 	$showDisabledPins = $row['showDisabledPins'];
 
 	// Build Result String.
-	$display_string = "<table>";
+	$display_string = "		<table>\r\n";
 
 	// Debug Mode.
-	$display_string .= "<tr>";
-	$display_string .= "<td>Enable Debug Mode</td>";
-	$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . ($debugMode == 1 ? '0':'1') . "," . $showDisabledPins . ")\">";
+	$display_string .= "			<tr>\r\n";
+	$display_string .= "				<td>Enable Debug Mode</td>\r\n";
+	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . ($debugMode == 1 ? '0':'1') . "," . $showDisabledPins . ")\">";
 
 	switch ($debugMode){
 		case 1 :
@@ -48,13 +48,13 @@ try {
 			$display_string .= "<img src=\"$off\" />";
 			break;
 	}
-	$display_string .= "</a></td>";
-	$display_string .= "</tr>";
+	$display_string .= "</a></td>\r\n";
+	$display_string .= "			</tr>\r\n";
 
 	// Show Disabled Pins.
-	$display_string .= "<tr>";
-	$display_string .= "<td>Show Disabled Pins</a></td>";
-	$display_string .= "<td><a href=\"#\" onclick=\"showConfig(1," . $debugMode . "," . ($showDisabledPins == 1 ? '0':'1') . ")\">";
+	$display_string .= "			<tr>\r\n";
+	$display_string .= "				<td>Show Disabled Pins</a></td>\r\n";
+	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . $debugMode . "," . ($showDisabledPins == 1 ? '0':'1') . ")\">";
 
 	switch ($showDisabledPins){
 		case 1 :
@@ -64,11 +64,11 @@ try {
 			$display_string .= "<img src=\"$off\" />";
 			break;
 	}
-	$display_string .= "</a></td>";
-	$display_string .= "</tr>";
+	$display_string .= "</a></td>\r\n";
+	$display_string .= "			</tr>\r\n";
 
 	// Close table.
-	$display_string .= "</table>";
+	$display_string .= "		</table>\r\n";
 
 	// Display it.
 	print $display_string;

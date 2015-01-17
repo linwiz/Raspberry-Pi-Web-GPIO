@@ -20,39 +20,39 @@ try {
 	$qry_result = $db->prepare($query);
 	$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
 
-	print "<a href=\"#\" onclick=\"showLog()\">Refresh</a>";
+	print "	<a href=\"#\" onclick=\"showLog()\">Refresh</a>\r\n";
 
-	print "<form name=\"myForm\">ID Range: ";
-	print "<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showLog()\" size=\"5\" />";
-	print "<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showLog()\" size=\"5\" /> <br />";
+	print "		<form name=\"myForm\">ID Range: \r\n";
+	print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showLog()\" size=\"5\" />\r\n";
+	print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showLog()\" size=\"5\" /><br />\r\n";
 
-	print "</form>";
+	print "		</form>\r\n";
 
 	// Build Result String.
-	$display_string = "<table>";
-	$display_string .= "<tr>";
-	$display_string .= "<th>ID</th>";
-	$display_string .= "<th>Time</th>";
-	$display_string .= "<th>Entry</th>";
-	$display_string .= "</tr>";
+	$display_string = "		<table>\r\n";
+	$display_string .= "			<tr>\r\n";
+	$display_string .= "				<th>ID</th>\r\n";
+	$display_string .= "				<th>Time</th>\r\n";
+	$display_string .= "				<th>Entry</th>\r\n";
+	$display_string .= "			</tr>\r\n";
 
 	// Insert a new row in the table for each result returned.
 	while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
-		$display_string .= "<tr>";
-		$display_string .= "<td>" . $row['id'] . "</td>";
-		$display_string .= "<td>" . $row['date'] . "</td>";
-		$display_string .= "<td>" . $row['data'] . "</td>";
-		$display_string .= "</tr>";
+		$display_string .= "			<tr>\r\n";
+		$display_string .= "				<td>" . $row['id'] . "</td>\r\n";
+		$display_string .= "				<td>" . $row['date'] . "</td>\r\n";
+		$display_string .= "				<td>" . $row['data'] . "</td>\r\n";
+		$display_string .= "			</tr>";
 	}
 
-	$display_string .= "</table>";
+	$display_string .= "		</table>\r\n";
 
 	print $display_string;
 
 	if ($debugMode) {
 		// Debug output.
-		print "<pre>Range Set: $id1 <-> $id2</pre>";
-		print "<pre>Select: $query</pre>";
+		print "<pre>Range Set: $id1 <-> $id2</pre>\r\n";
+		print "<pre>Select: $query</pre>\r\n";
 	}
 } catch(Exception $e) {
 	echo 'Exception -> ';

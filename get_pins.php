@@ -59,41 +59,41 @@ try {
 	$qry_result->execute();
 
 	// Refresh using current sort order.
-	print "<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>";
+	print "	<a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "')\">Refresh</a>\r\n";
 
 	// Build Result String.
 	// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
-	$display_string = "<table>";
-	$display_string .= "<tr>";
+	$display_string = "		<table>\r\n";
+	$display_string .= "			<tr>\r\n";
 
 	if ($debugMode) {
-		$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>";
-		$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>\r\n";
 	}
 
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>";
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>";
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>";
+	$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinNumberBCM%2B0',0,'none')\">BCM#</a></th>\r\n";
+	$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinNumberWPi%2B0',0,'none')\">WPi#</a></th>\r\n";
+	$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinDescription',0,'none')\">Description</a></th>\r\n";
 
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>";
-	$display_string .= "<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>";
-	$display_string .= "</tr>";
+	$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinStatus%2B0',0,'none')\">Status</a></th>\r\n";
+	$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinEnabled%2B0',0,'none')\">Enabled</a></th>\r\n";
+	$display_string .= "			</tr>\r\n";
 
 	while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
-		$display_string .= "<tr>";
+		$display_string .= "			<tr>\r\n";
 
 		if ($debugMode) {
-			$display_string .= "<td>" . $row['pinID'] . "</td>";
-			$display_string .= "<td>" . $row['pinDirection'] . "</td>";
+			$display_string .= "				<td>" . $row['pinID'] . "</td>\r\n";
+			$display_string .= "				<td>" . $row['pinDirection'] . "</td>\r\n";
 		}
 
-		$display_string .= "<td>" . $row['pinNumberBCM'] . "</td>";
-		$display_string .= "<td>" . $row['pinNumberWPi'] . "</td>";
-		$display_string .= "<td>" . $row['pinDescription'] . "</td>";
+		$display_string .= "				<td>" . $row['pinNumberBCM'] . "</td>\r\n";
+		$display_string .= "				<td>" . $row['pinNumberWPi'] . "</td>\r\n";
+		$display_string .= "				<td>" . $row['pinDescription'] . "</td>\r\n";
 
 		// On/Off.
 		if ($row['pinEnabled'] == 1) {
-			$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus')\">";
+			$display_string .= "				<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus')\">";
 			switch ($row['pinStatus']){
 				case 1 :
 					$display_string .= "<img src=\"$on\" />";
@@ -101,9 +101,9 @@ try {
 				case 0 :
 					$display_string .= "<img src=\"$off\" />";
 			}
-			$display_string .= "</a></td>";
+			$display_string .= "</a></td>\r\n";
 		} else {
-			$display_string .= "<td>";
+			$display_string .= "				<td>";
 			switch ($row['pinStatus']){
 				case 1 :
 	       			        $display_string .= "<img src=\"$on\" />";
@@ -111,11 +111,11 @@ try {
 				case 0 :
 			                $display_string .= "<img src=\"$off\" />";
 			}
-			$display_string .= "</td>";
+			$display_string .= "</td>\r\n";
 		}
 
 		// Enabled.
-		$display_string .= "<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled')\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPins('" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled')\">";
 		switch ($row['pinEnabled']){
 			case 1 :
 	        	        $display_string .= "<img src=\"$on\" />";
@@ -123,19 +123,19 @@ try {
 			case 0 :
         		        $display_string .= "<img src=\"$off\" />";
 		}
-		$display_string .= "</a></td>";
-		$display_string .= "</tr>";
+		$display_string .= "</a></td>\r\n";
+		$display_string .= "			</tr>\r\n";
 	}
-	$display_string .= "</table>";
+	$display_string .= "		</table>\r\n";
 	print $display_string;
 
 	if ($debugMode) {
 		// Debug output.
-		print "<pre>$sort $id $field</pre>";
-		print "<pre>$query</pre>";
-		print "<pre>$query_update</pre>";
-		print "<pre>:field=$field</pre>";
-		print "<pre>:id=$id</pre>";
+		print "<pre>$sort $id $field</pre>\r\n";
+		print "<pre>$query</pre>\r\n";
+		print "<pre>$query_update</pre>\r\n";
+		print "<pre>:field=$field</pre>\r\n";
+		print "<pre>:id=$id</pre>\r\n";
 	}
 
 } catch(Exception $e) {
