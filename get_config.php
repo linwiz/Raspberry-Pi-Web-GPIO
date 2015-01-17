@@ -31,7 +31,7 @@ try {
 	// Debug Mode.
 	$display_string .= "			<tr>\r\n";
 	$display_string .= "				<td>Enable Debug Mode</td>\r\n";
-	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . ")\">";
+	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . ")\" />";
 
 	switch ($_SESSION['debugMode']) {
 		case 1 :
@@ -46,7 +46,7 @@ try {
 	// Show Disabled Pins.
 	$display_string .= "			<tr>\r\n";
 	$display_string .= "				<td>Show Disabled Pins</a></td>\r\n";
-	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . ")\">";
+	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . ")\" />";
 
 	switch ($_SESSION['showDisabledPins']) {
 		case 1 :
@@ -61,7 +61,7 @@ try {
         // Log page size.
         $display_string .= "                    <tr>\r\n";
         $display_string .= "                            <td>Log pagination</a></td>\r\n";
-        $display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" /><input type=\"submit\" value=\"save\" onclick=\"alert(logPageSize.value);showConfig(1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value)\"></td>\r\n";
+        $display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . " \" size=\"3\" /><input type=\"submit\" value=\"save\" onclick=\"alert(logPageSize.value);showConfig(1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value)\" /></td>\r\n";
 
         $display_string .= "</a></td>\r\n";
         $display_string .= "                    </tr>\r\n";
