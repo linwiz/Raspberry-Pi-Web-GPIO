@@ -14,23 +14,13 @@ $off = 'images/checkbox_unchecked_icon.png';
 $query_update = "";
 
 try {
-	if ($updateConfig>0) {
+	if ($updateConfig > 0) {
 		$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins WHERE configVersion = 1';
 		$qry_result = $db->prepare($query_update);
 		$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp));
+		$_SESSION['debugMode'] = $debugModeTemp;
+		$_SESSION['showDisabledPins'] = $showDisabledPinsTemp;
 	}
-
-	// Select the only row.
-	$query = 'SELECT * FROM config WHERE configVersion = 1';
-
-	$qry_result = $db->prepare($query);
-	$qry_result->execute();
-
-	// Config table has only ONE row to return.
-	$row = $qry_result->fetch(PDO::FETCH_ASSOC);
-
-	$debugMode = $row['debugMode'];
-	$showDisabledPins = $row['showDisabledPins'];
 
 	// Build Result String.
 	$display_string = "		<table>\r\n";
@@ -38,15 +28,14 @@ try {
 	// Debug Mode.
 	$display_string .= "			<tr>\r\n";
 	$display_string .= "				<td>Enable Debug Mode</td>\r\n";
-	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . ($debugMode == 1 ? '0':'1') . "," . $showDisabledPins . ")\">";
+	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . ")\">";
 
-	switch ($debugMode){
+	switch ($_SESSION['debugMode']) {
 		case 1 :
 			$display_string .= "<img src=\"$on\" />";
 			break;
 		case 0 :
 			$display_string .= "<img src=\"$off\" />";
-			break;
 	}
 	$display_string .= "</a></td>\r\n";
 	$display_string .= "			</tr>\r\n";
@@ -54,15 +43,14 @@ try {
 	// Show Disabled Pins.
 	$display_string .= "			<tr>\r\n";
 	$display_string .= "				<td>Show Disabled Pins</a></td>\r\n";
-	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . $debugMode . "," . ($showDisabledPins == 1 ? '0':'1') . ")\">";
+	$display_string .= "				<td><a href=\"#\" onclick=\"showConfig(1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . ")\">";
 
-	switch ($showDisabledPins){
+	switch ($_SESSION['showDisabledPins']) {
 		case 1 :
 			$display_string .= "<img src=\"$on\" />";
 			break;
 		case 0 :
 			$display_string .= "<img src=\"$off\" />";
-			break;
 	}
 	$display_string .= "</a></td>\r\n";
 	$display_string .= "			</tr>\r\n";
@@ -73,10 +61,9 @@ try {
 	// Display it.
 	print $display_string;
 
-	if ($debugMode) {
+	if ($_SESSION['debugMode']) {
 		//debug output
 		print '<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . '</pre>';
-		print '<pre>DB    params: ' . $debugMode . ' ' . $showDisabledPins. '</pre>';
 		print '<pre>' . $query_update . '</pre>';
 		print '<pre>' . $query . '</pre>';
 	}

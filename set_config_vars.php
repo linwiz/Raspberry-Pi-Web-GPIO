@@ -2,27 +2,25 @@
 require_once('db.php');
 
 try {
-	// Get config setting
-	$queryConfig = 'SELECT * FROM config WHERE configVersion = 1';
+	if (!$_SESSION['piRevision']) {
+		// Get config setting
+		$queryConfig = 'SELECT * FROM config WHERE configVersion = 1';
 
-	$qry_resultConfig = $db->prepare($queryConfig);
-	$qry_resultConfig->execute();
+		$qry_resultConfig = $db->prepare($queryConfig);
+		$qry_resultConfig->execute();
 
-	$rowConfig = $qry_resultConfig->fetch(PDO::FETCH_ASSOC);
+		$rowConfig = $qry_resultConfig->fetch(PDO::FETCH_ASSOC);
 
-	// Set site wide config variables.
-	$piRevision = $rowConfig['piRevision'];
-	$debugMode = $rowConfig['debugMode'];
-	$showDisabledPins = $rowConfig['showDisabledPins'];
-	$logPageSize = $rowConfig['logPageSize'];
+		// Set site wide config variables.
+		$_SESSION['piRevision'] = $rowConfig['piRevision'];
+		$_SESSION['debugMode'] = $rowConfig['debugMode'];
+		$_SESSION['showDisabledPins'] = $rowConfig['showDisabledPins'];
+		$_SESSION['logPageSize'] = $rowConfig['logPageSize'];
+	}
 
-	if ($debugMode) {
+	if ($_SESSION['debugMode']) {
 		print "<pre>System Wide Config Variables: </pre>";
 		print "<pre>";
-		print "piRevision: $piRevision<br />";
-		print "debugMode: $debugMode<br />";
-		print "showDisabledPins: $showDisabledPins<br />";
-		print "logPageSize: $logPageSize<br />";
 		print_r($_SESSION);
 		print "</pre>";
 	}

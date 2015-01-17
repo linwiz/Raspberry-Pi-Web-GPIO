@@ -25,7 +25,7 @@ $off = 'images/checkbox_unchecked_icon.png';
 $query_update = "";
 try {
 	// Get value of $field.
-	$query_fieldvalue = "SELECT $field FROM pinRevision$piRevision WHERE pinID=:id";
+	$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
 	$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
 	$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
 	$qry_fieldvalue_result->execute();
@@ -41,7 +41,7 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	if ($id > 0) {
-		$query_update = "UPDATE pinRevision$piRevision SET $field=:field_value WHERE pinID=:id";
+		$query_update = "UPDATE pinRevision" . $_SESSION['piRevision'] . " SET $field=:field_value WHERE pinID=:id";
 		$qry_result = $db->prepare($query_update);
 		$qry_result->bindParam(':id', $id, PDO::PARAM_INT);
 		$qry_result->bindParam(':field_value', $field_value, PDO::PARAM_INT);
@@ -50,7 +50,7 @@ try {
 
 
 	// Select rows
-	$query = "SELECT * FROM pinRevision$piRevision WHERE pinID > 0";
+	$query = "SELECT * FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID > 0";
 	if ($showDisabledPins == 0) {
 		$query .= " AND pinEnabled = 1";
 	}
@@ -66,7 +66,7 @@ try {
 	$display_string = "		<table>\r\n";
 	$display_string .= "			<tr>\r\n";
 
-	if ($debugMode) {
+	if ($_SESSION['debugMode']) {
 		$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinID%2B0',0,'none')\">pinID</a></th>\r\n";
 		$display_string .= "				<th><a href=\"#\" onclick=\"showPins('pinDirection',0,'none')\">Direction</a></th>\r\n";
 	}
@@ -82,7 +82,7 @@ try {
 	while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
 		$display_string .= "			<tr>\r\n";
 
-		if ($debugMode) {
+		if ($_SESSION['debugMode']) {
 			$display_string .= "				<td>" . $row['pinID'] . "</td>\r\n";
 			$display_string .= "				<td>" . $row['pinDirection'] . "</td>\r\n";
 		}
@@ -129,7 +129,7 @@ try {
 	$display_string .= "		</table>\r\n";
 	print $display_string;
 
-	if ($debugMode) {
+	if ($_SESSION['debugMode']) {
 		// Debug output.
 		print "<pre>$sort $id $field</pre>\r\n";
 		print "<pre>$query</pre>\r\n";

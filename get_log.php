@@ -37,7 +37,7 @@ try {
 	$display_string .= "			</tr>\r\n";
 
 	// Insert a new row in the table for each result returned.
-	while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
+	while($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>" . $row['id'] . "</td>\r\n";
 		$display_string .= "				<td>" . $row['date'] . "</td>\r\n";
@@ -49,7 +49,7 @@ try {
 
 	print $display_string;
 
-	if ($debugMode) {
+	if ($_SESSION['debugMode']) {
 		// Debug output.
 		print "<pre>Range Set: $id1 <-> $id2</pre>\r\n";
 		print "<pre>Select: $query</pre>\r\n";
