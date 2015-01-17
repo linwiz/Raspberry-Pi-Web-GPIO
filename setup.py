@@ -1,11 +1,10 @@
 #!/usr/bin/python
-import RPi.GPIO as GPIO
-
-# Retrieve revision information.
-revision = GPIO.RPI_REVISION
-print "Raspberry Pi Revision Found! Revision: " + str(revision)
+import subprocess
+import os
+import os.path
 
 # Configure db.php.
+print "Importing settings from GPIOServer.conf.sh to db.php."
 s = open("db.php", 'r').read()
 f = open("db.php", 'w')
 execfile("GPIOServer.conf.sh")
@@ -19,9 +18,18 @@ f.close()
 
 # Database import magic.
 if dbtype == "mysql":
-	print "Importing docs/gpio.sql into database " + dbusername + "@" + dbhostname + "/" + dbdatabase
-	import subprocess
-	proc = subprocess.Popen(["mysql", "--host=%s" % dbhostname, "--user=%s" % dbusername, "--password=%s" % dbpassword, dbdatabase], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-	out, err = proc.communicate(file("docs/gpio.sql").read())
+	print "Importing docs/gpio.sql into database: " + dbusername + "@" + dbhostname + "/" + dbdatabase
+#	proc = subprocess.Popen(["mysql", "--host=%s" % dbhostname, "--user=%s" % dbusername, "--password=%s" % dbpassword, dbdatabase], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+#	out, err = proc.communicate(file("docs/gpio.sql").read())
 else:
 	print "Database type " + dbtype + " is invalid."
+
+# Install service.
+PATH='/etc/init.d/gpioserver'
+if os.path.isfile(PATH) and os.access(PATH, os.R_OK):
+	print "gpioserver already installed to " + PATH
+else:
+	print "Installing gpioserver to " + PATH
+	subprocess.call(["sudo", "chmod", "+x", "init.d/gpioserver"])
+	subprocess.call(["sudo", "cp", "init.d/gpioserver", "/etc/init.d"])
+	subprocess.call(["sudo", "update-rc.d", "gpioserver", "defaults"])
