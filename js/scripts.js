@@ -78,7 +78,7 @@ function showPins(sort,pinID,field) {
 	ajaxRequest.send(null);
 }
 
-function showConfig(updateConfig,debugMode,showDisabledPins) {
+function showConfig(updateConfig,debugMode,showDisabledPins,logPageSize) {
     var ajaxRequest=getAjaxRequest();
 	// Create a function that will receive data sent from the server.
 	ajaxRequest.onreadystatechange = function() {
@@ -87,7 +87,7 @@ function showConfig(updateConfig,debugMode,showDisabledPins) {
 			ajaxDisplay.innerHTML = ajaxRequest.responseText;
 		}
 	};
-	var queryString = "?updateConfig=" + updateConfig + "&debugMode=" + debugMode + "&showDisabledPins=" + showDisabledPins;
+	var queryString = "?updateConfig=" + updateConfig + "&debugMode=" + debugMode + "&showDisabledPins=" + showDisabledPins + "&logPageSize=" + logPageSize;
 	ajaxRequest.open("GET", "get_config.php" + queryString, true);
 	ajaxRequest.send(null);
 }
