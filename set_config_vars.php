@@ -21,12 +21,33 @@ try {
 		$_SESSION['logPageSize'] = $rowConfig['logPageSize'];
 	}
 
-	if ($_SESSION['debugMode']) {
-		print "<pre>System Wide Config Variables: </pre>";
-		print "<pre>";
-		print_r($_SESSION);
-		print "</pre>";
+	// Page whitelist.
+	$page_whitelist = array('pins', 'log', 'config');
+	if (isset($_GET['pageType']) && in_array($_GET['pageType'], $page_whitelist)) {
+	        $_SESSION['pageType'] = $_GET['pageType'];
+	} else {
+	        $_SESSION['pageType'] = "pins";
 	}
+
+	// Debug output.
+	if ($_SESSION['debugMode']) {
+		$configVariables = "            <pre>System Wide Config Variables: </pre>\r\n";
+		$configVariables .= "           <pre>\r\n";
+		$configVariables .= "           [piRevision] => " . $_SESSION['piRevision'] . "\r\n";
+		$configVariables .= "           [debugMode] => " . $_SESSION['debugMode'] . "\r\n";
+		$configVariables .= "           [showDisabledPins] => " . $_SESSION['showDisabledPins'] . "\r\n";
+		$configVariables .= "           [logPageSize] => " . $_SESSION['logPageSize'] . "\r\n";
+		$configVariables .= "           [username] => " . $_SESSION['username'] . "\r\n";
+		$configVariables .= "           [userID] => " . $_SESSION['userID'] . "\r\n";
+		$configVariables .= "           [pageType] => " . $_SESSION['pageType'] . "\r\n";
+		$configVariables .= "           </pre>\r\n";
+	}
+
+	// Set up state icons.
+	$stateIcon = array();
+	$stateIcon['on'] =  'images/checkbox_checked_icon.png';
+	$stateIcon['off'] = 'images/checkbox_unchecked_icon.png';
+
 } catch(Exception $e) {
 	echo 'Exception -> ';
 	var_dump($e->getMessage());

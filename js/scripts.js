@@ -1,7 +1,6 @@
 // Common ajaxRequest variable creation.
 function getAjaxRequest() {
 	var ajaxRequest;
-
 	try {
 		// Opera 8.0+, Firefox, Safari.
 		ajaxRequest = new XMLHttpRequest();
@@ -24,88 +23,78 @@ function getAjaxRequest() {
 
 // Paku - change the main section content.
 function changeSection(secID) {
-	var ajaxRequest=getAjaxRequest();
+	var ajaxRequest = getAjaxRequest();
 	// Create a function that will receive data sent from the server.
 	ajaxRequest.onreadystatechange = function() {
-		if(ajaxRequest.readyState == 4) {
+		if (ajaxRequest.readyState == 4) {
 			var ajaxDisplay = document.getElementById('section');
 			ajaxDisplay.innerHTML = ajaxRequest.responseText;
 		}
 	};
 	switch(secID) {
 		case 1:
-			ajaxRequest.open("GET", "pins.php?sort=pinNumberBCM%2B0", true);
+			ajaxRequest.open("GET", "page.php?pageType=pins&sort=pinNumberBCM%2B0", true);
 			break;
 		case 2:
-			ajaxRequest.open("GET", "log.php?id1=0&id2=99999", true);
+			ajaxRequest.open("GET", "page.php?pageType=log&id1=0&id2=99999", true);
 			break;
 		case 3:
-			ajaxRequest.open("GET", "config.php", true);
+			ajaxRequest.open("GET", "page.php?pageType=config", true);
 			break;
 		default:
 	}
 	ajaxRequest.send(null);
 }
 
-// Paku - change the log table content.
-function showLog() {
-	var ajaxRequest=getAjaxRequest();
+function showPage() {
+	var pageType = ["null", "pins", "log", "config"];
+	var ajaxRequest = getAjaxRequest();
+	var elementID = pageType[arguments[0]];
 	ajaxRequest.onreadystatechange = function() {
-		if(ajaxRequest.readyState == 4) {
-			var ajaxDisplay = document.getElementById('log');
+		if (ajaxRequest.readyState == 4) {
+			var ajaxDisplay = document.getElementById(elementID);
 			ajaxDisplay.innerHTML = ajaxRequest.responseText;
 		}
 	};
-	var id1 = document.getElementById('id1').value;
-	var id2 = document.getElementById('id2').value;
-	var queryString = "?id1=" + id1 + "&id2=" + id2;
-	ajaxRequest.open("GET", "get_log.php" + queryString, true);
-	ajaxRequest.send(null);
-}
-
-// Paku - change the PINs' table content.
-function showPins(sort,pinID,field) {
-	var ajaxRequest=getAjaxRequest();
-	// Create a function that will receive data sent from the server.
-	ajaxRequest.onreadystatechange = function() {
-		if(ajaxRequest.readyState == 4) {
-			var ajaxDisplay = document.getElementById('pins');
-			ajaxDisplay.innerHTML = ajaxRequest.responseText;
-		}
-	};
-	var queryString = "?sort=" + sort + "&id=" + pinID + "&field=" + field;
-	ajaxRequest.open("GET", "get_pins.php" + queryString, true);
-	ajaxRequest.send(null);
-}
-
-function showConfig(updateConfig,debugMode,showDisabledPins,logPageSize) {
-    var ajaxRequest=getAjaxRequest();
-	// Create a function that will receive data sent from the server.
-	ajaxRequest.onreadystatechange = function() {
-		if(ajaxRequest.readyState == 4) {
-			var ajaxDisplay = document.getElementById('config');
-			ajaxDisplay.innerHTML = ajaxRequest.responseText;
-		}
-	};
-	var queryString = "?updateConfig=" + updateConfig + "&debugMode=" + debugMode + "&showDisabledPins=" + showDisabledPins + "&logPageSize=" + logPageSize;
-	ajaxRequest.open("GET", "get_config.php" + queryString, true);
-	ajaxRequest.send(null);
-}
-
-function showNavigation() {
-    var ajaxRequest=getAjaxRequest();
-        // Create a function that will receive data sent from the server.
-        ajaxRequest.onreadystatechange = function() {
-                if(ajaxRequest.readyState == 4) {
-                        var ajaxDisplay = document.getElementById('nav');
-			ajaxDisplay.innerHTML = '<a href="#" onclick="changeSection(1)">PINs</a> ';
-			ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + '<a href="#" onclick="changeSection(2)">Log</a> ';
-			ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + '<a href="#" onclick="changeSection(3)">Config</a> ';
-                        ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + ajaxRequest.responseText;
-                }
-        };
-        ajaxRequest.open("GET", "status.php", true);
+	switch(arguments[0]) {
+		case 1:
+			// Params: sort pinID field
+			var queryString = "?pageType=" + pageType[arguments[0]]  + "&sort=" + arguments[1] + "&id=" + arguments[2] + "&field=" + arguments[3];
+			break;
+		case 2:
+			// Params: none
+		        var id1 = document.getElementById('id1').value;
+        		var id2 = document.getElementById('id2').value;
+	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2;
+			break;
+		case 3:
+			// Params: updateConfig debugMode showDisabledPins logPageSize
+			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4];
+		default:
+ 	}
+        ajaxRequest.open("GET", "ajax.php" + queryString, true);
         ajaxRequest.send(null);
+}
+
+function showNavigation(loggedin) {
+	var ajaxRequest = getAjaxRequest();
+	// Create a function that will receive data sent from the server.
+	ajaxRequest.onreadystatechange = function() {
+		if (ajaxRequest.readyState == 4) {
+			if (loggedin == 1) {
+				var ajaxDisplay = document.getElementById('nav');
+				ajaxDisplay.innerHTML = '<a href="#" onclick="changeSection(1)">PINs</a> ';
+				ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + '<a href="#" onclick="changeSection(2)">Log</a> ';
+				ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + '<a href="#" onclick="changeSection(3)">Config</a> ';
+				ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + ajaxRequest.responseText;
+			} else {
+				var ajaxDisplay = document.getElementById('nav');
+				ajaxDisplay.innerHTML = '';
+			}
+		}
+	};
+	ajaxRequest.open("GET", "status.php", true);
+	ajaxRequest.send(null);
 }
 
 ///////////////////////////////////////////////////////
@@ -134,7 +123,7 @@ $(function() {
 					$('.errormess').html('Wrong Login Data'); // print error message
 				} else { // if the reurned data not equal 0
 					$('.errormess').html('<b style="color: green;">You are logged in. Wait for redirection.</b>');// print success message
-					showNavigation();
+					showNavigation(1);
 					changeSection(1);
 				}
 			}
