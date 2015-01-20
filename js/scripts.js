@@ -98,8 +98,11 @@ function showNavigation(loggedin) {
 }
 
 ///////////////////////////////////////////////////////
+// jquery 
+///////////////////////////////////////////////////////
 
 $(function() {
+	// Login processing.
 	$("#submit_login").click(function() { // if submit button is clicked
 		var username = $("input#username").val(); // define username variable
 		if (username == "") { // if username variable is empty
@@ -115,7 +118,7 @@ $(function() {
 		$('.errormess').html('Checking...');
 		$.ajax({ // JQuery ajax function
 			type: "POST", // Submitting Method
-			url: 'get_login.php', // PHP processor
+			url: 'ajax.php', // PHP processor
 			data: 'username='+ username + '&password=' + password, // the data that will be sent to php processor
 			dataType: "html", // type of returned data
 			success: function(data) { // if ajax function results success
