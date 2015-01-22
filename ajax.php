@@ -22,6 +22,8 @@ if (isset($_POST['username'])) { // if ajax request submitted
 				echo $post_username;
 			}
 		}
+		unset($loginResult);
+		unset($loginData);
 	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
@@ -169,7 +171,11 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 			print "		<pre>:field=$field</pre>\r\n";
 			print "		<pre>:id=$id</pre>";
 		}
-
+		unset($row);
+		unset($qry_result);
+		unset($row_fieldvalue);
+		unset($qry_fieldvalue_result);
+		$db = null;
 	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
@@ -282,6 +288,10 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			print "		<pre>Range Set: $id1 <-> $id2</pre>\r\n";
 			print "		<pre>Select: $query</pre>";
 		}
+		unset($row);
+		unset($qry_result);
+		unset($qry_resultpn);
+		$db = null;
 	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
@@ -418,6 +428,8 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 			print '		<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . ' ' . $pageSizeTemp . ' ' . $enableLoggingTemp . "</pre>\r\n";
 			print '		<pre>' . $query_update . "</pre>\r\n";
 		}
+		unset($qry_result);
+		$db = null;
 	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
