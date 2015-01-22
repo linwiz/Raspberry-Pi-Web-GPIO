@@ -256,7 +256,11 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 		$pnTemp = 1;
 		$logPagination = '';
 		while ($pnTemp <= $logLastPage) {
-			$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$pnTemp)\">$pnTemp</a> \r\n";
+			if ($pnTemp != $pn) {
+				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$pnTemp)\">$pnTemp</a> \r\n";
+			} else {
+				$logPagination .= $pnTemp . " \r\n";
+			}
 			$pnTemp++;
 		}
 		print $logPagination . "<br />\r\n";
