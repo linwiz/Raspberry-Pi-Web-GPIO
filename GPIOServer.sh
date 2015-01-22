@@ -18,9 +18,6 @@ dbquery="mysql -B --host=$dbhostname --disable-column-names --user=$dbusername -
 # Retrieve revision information.
 revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
 
-# Retrieve logging information.
-logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
-
 addLogItem() {
     logdatas="$1 $2 $3"
     echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --user=$dbusername --password=$dbpassword $dbdatabase;
@@ -34,6 +31,8 @@ pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNum
 
 # Start Loop.
 while true; do
+	# Retrieve logging information.
+	logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
 	for PIN in $pins ;
 		do
 
