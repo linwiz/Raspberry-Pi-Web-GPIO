@@ -45,7 +45,14 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$field = "none";
 	}
 
-	$id = isset($_GET['id']) && ($_GET['id']!= 'undefined')	? $_GET['id'] : 0;
+	if (isset($_GET['id']) && ($_GET['id']!= 'undefined')) {
+		$id = $_GET['id'];
+		if ((int)$id != $id || (int)$id >= 0) {
+			$id = $_GET['id'];
+		} else {
+			$id = 0;
+		}
+	}
 
 	$query_update = "";
 	try {
@@ -247,11 +254,50 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 // Config page.
 elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 	// Get params for update.
-	$pageSizeTemp		= isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined') 	? $_GET['logPageSize'] 	: 10;
-	$updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined') 	? $_GET['updateConfig'] 	: 0;
-	$debugModeTemp			= isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined') 	? $_GET['debugMode'] 	: 0;
-	$showDisabledPinsTemp 	= isset($_GET['showDisabledPins'])  	&& ($_GET['showDisabledPins']!= 'undefined') 		? $_GET['showDisabledPins'] 		: 0;
-	$enableLoggingTemp 	= isset($_GET['enableLogging'])  	&& ($_GET['enableLogging']!= 'undefined') 		? $_GET['enableLogging'] 		: 1;
+	if (isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined')) {
+		$pageSizeTemp = $_GET['logPageSize'];
+		if ((int)$pageSizeTemp != $pageSizeTemp || (int)$pageSizeTemp <= 0) {
+			$pageSizeTemp = 10;
+		}
+	} else {
+		$pageSizeTemp = 10;
+	}
+
+	if (isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined')) {
+		$updateConfig = $_GET['updateConfig'];
+		if ((int)$updateConfig != $updateConfig || (int)$updateConfig < 0 || (int)$updateConfig > 1) {
+			$updateConfig = 0;
+		}
+ 	} else {
+		$updateConfig = 0;
+	}
+
+	if (isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined')) {
+		$debugModeTemp = $_GET['debugMode'];
+		if ((int)$debugModeTemp != $debugModeTemp || (int)$debugModeTemp < 0 || (int)$debugModeTemp > 1) {
+			$debugModeTemp = 0;
+		}
+	} else {
+		$debugModeTemp = 0;
+	}
+
+	if (isset($_GET['showDisabledPins']) && ($_GET['showDisabledPins']!= 'undefined')) {
+		$showDisabledPinsTemp = $_GET['showDisabledPins'];
+		if ((int)$showDisabledPinsTemp != $showDisabledPinsTemp || (int)$showDisabledPinsTemp < 0 || (int)$showDisabledPinsTemp > 1) {
+			$showDisabledPinsTemp = 0;
+		}
+	} else {
+		$showDisabledPinsTemp = 0;
+	}
+
+	if (isset($_GET['enableLogging']) && ($_GET['enableLogging']!= 'undefined')) {
+		$enableLoggingTemp = $_GET['enableLogging'];
+		if ((int)$enableLoggingTemp != $enableLoggingTemp || (int)$enableLoggingTemp < 0 || (int)$enableLoggingTemp > 1) {
+			$enableLoggingTemp = 1;
+		}
+	} else {
+		$enableLoggingTemp = 1;
+	}
 
 	// Update config fields as (if) needed.
 	$query_update = "";
