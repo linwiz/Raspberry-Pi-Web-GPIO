@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once('db.php');
 
 try {
-	if (!$_SESSION['piRevision']) {
+	if (!isset($_SESSION['piRevision'])) {
 		// Get config setting
 		$queryConfig = 'SELECT * FROM config WHERE configVersion = 1';
 
