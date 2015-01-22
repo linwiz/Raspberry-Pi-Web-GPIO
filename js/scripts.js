@@ -79,8 +79,9 @@ function showPage() {
 			if (!isNormalInteger(id2)) {
 				var id2 = 99999;
 			}
+			// This doesn't work.
 			if (!isNormalInteger(pn)) {
-				var pn = 1;
+				//var pn = 1;
 			}
 
 			// id1 must be <= id2.

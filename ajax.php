@@ -210,30 +210,30 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 	if ((int)$id2 < (int)$id1) {
 		$id2 = 99999;
 	}
+	if ((int)$pn != $pn || (int)$pn < 0) {
+		$pn = 1;
+	}
 
 	try {
 		// Build query.
 		$query = 'SELECT * FROM log WHERE id > 0 ';
 		$query .= ' AND id >= :id1';
 		$query .= ' AND id <= :id2';
-		$query .= ' ORDER BY date DESC';
+		$query .= ' ORDER BY id DESC';
 
 		// Execute query.
 		$qry_resultpn = $db->prepare($query);
 		$qry_resultpn->execute(array(':id1'=>$id1, ':id2'=>$id2));
+		$logCount = $qry_resultpn->rowCount();
 
-		$query .= " LIMIT " . $_SESSION['logPageSize'];
+		$query .= " LIMIT " . (($pn - 1) * $_SESSION['logPageSize']) . "," . $_SESSION['logPageSize'];
 
 		// Execute query.
 		$qry_result = $db->prepare($query);
 		$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
 
 		// Determine number of pages needed.
-		$logCount = $qry_resultpn->rowCount();
 		$logLastPage = ceil($logCount / $_SESSION['logPageSize']);
-		if ((int)$pn != $pn || (int)$pn < 0) {
-			$pn = 1;
-		}
 		if ((int)$pn > (int)$logLastPage) {
 			$pn = $logLastPage;
 		}
