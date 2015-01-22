@@ -38,8 +38,11 @@ installs the gpioserver into /etc/init.d and makes changes to db.php
 ```
 
 ## Usage
-### Execute `sudo service gpioserver start`
-Make sure the file has execute permissions.
+### Start gpioserver
+Start gpioserver
+```
+sudo service gpioserver start
+```
 
 Load the script in your browser/mobile device.
 
