@@ -53,3 +53,5 @@ else:
 	subprocess.call(["sudo", "chmod", "+x", "init.d/gpioserver"])
 	subprocess.call(["sudo", "cp", "init.d/gpioserver", "/etc/init.d"])
 	subprocess.call(["sudo", "update-rc.d", "gpioserver", "defaults"])
+	print "Starting service gpioserver."
+	subprocess.call(["sudo", "service", "gpioserver", "start"])
