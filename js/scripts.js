@@ -76,27 +76,6 @@ function showPage() {
         ajaxRequest.send(null);
 }
 
-function showNavigation(loggedin) {
-	var ajaxRequest = getAjaxRequest();
-	// Create a function that will receive data sent from the server.
-	ajaxRequest.onreadystatechange = function() {
-		if (ajaxRequest.readyState == 4) {
-			if (loggedin == 1) {
-				var ajaxDisplay = document.getElementById('nav');
-				ajaxDisplay.innerHTML = '<a href="#" onclick="changeSection(1)">PINs</a> ';
-				ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + '<a href="#" onclick="changeSection(2)">Log</a> ';
-				ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + '<a href="#" onclick="changeSection(3)">Config</a> ';
-				ajaxDisplay.innerHTML = ajaxDisplay.innerHTML + ajaxRequest.responseText;
-			} else {
-				var ajaxDisplay = document.getElementById('nav');
-				ajaxDisplay.innerHTML = '';
-			}
-		}
-	};
-	ajaxRequest.open("GET", "status.php", true);
-	ajaxRequest.send(null);
-}
-
 ///////////////////////////////////////////////////////
 // jquery 
 ///////////////////////////////////////////////////////
@@ -126,7 +105,6 @@ $(function() {
 					$('.errormess').html('Wrong Login Data'); // print error message
 				} else { // if the reurned data not equal 0
 					$('.errormess').html('<b style="color: green;">You are logged in. Wait for redirection.</b>');// print success message
-					showNavigation(1);
 					changeSection(1);
 				}
 			}

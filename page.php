@@ -15,7 +15,6 @@ include 'set_config_vars.php';
         if (isset($_SESSION['username'])) {
                 include "ajax.php";
         } else {
-                print "         <script type=\"text/javascript\">showNavigation(0);</script>\r\n";
                 print "Logged out. Please reload page.\r\n";
         }
         ?>

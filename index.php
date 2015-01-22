@@ -1,7 +1,8 @@
 <?php
 session_start();
+include 'set_config_vars.php';
 // Database connection & config
-require_once 'db.php';
+//require_once 'db.php';
 // Password hashing functions.
 require_once('scrypt.php');
 
@@ -31,15 +32,16 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 <body>
 	<div id="header">RPi Web GPIO</div>
 	<div id="nav">
+		<a href="#" onclick="changeSection(1)">PINs</a>&nbsp;
+		<a href="#" onclick="changeSection(2)">Log</a>&nbsp;
+		<a href="#" onclick="changeSection(3)">Config</a>&nbsp;
+		<?php include 'status.php'; ?>
 	</div>
 	<div id="section">
 <?php
-	include 'set_config_vars.php';
 	// Check if user logged in.
 	if (isset($_SESSION['username'])) {
-		print "		<script type=\"text/javascript\">showNavigation(1);changeSection(1);</script>\r\n";
-	} else {
-		print "		<script type=\"text/javascript\">showNavigation(0);</script>\r\n";
+		print "		<script type=\"text/javascript\">changeSection(1);</script>\r\n";
 	}
 ?>
 		<div id='login'>
