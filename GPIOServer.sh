@@ -13,14 +13,14 @@ dir="$(dirname "$0")"
 # Read config file (relative).
 source "$dir/GPIOServer.conf.sh"
 
-dbquery="mysql -B --host=$dbhostname --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
+dbquery="mysql -B --host=$dbhostname --port=$dbport --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
 
 # Retrieve revision information.
 revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
 
 addLogItem() {
     logdatas="$1 $2 $3"
-    echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --user=$dbusername --password=$dbpassword $dbdatabase;
+    echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --port=$dbport --user=$dbusername --password=$dbpassword $dbdatabase;
 }
 
 addLogItem "Starting GPIO Server"
