@@ -13,7 +13,7 @@ if (isset($_POST['username'])) { // if ajax request submitted
 		$loginResult = $db->prepare($loginQuery);
 		$loginResult->execute(array(':username'=>$post_username));
 
-		if($loginResult->rowCount() > 0){
+		if ($loginResult->rowCount() > 0) {
 			$loginData = $loginResult->fetch(PDO::FETCH_ASSOC);
 			If (Password::check($post_password, $loginData['password'])) {
 				session_regenerate_id();
@@ -22,7 +22,7 @@ if (isset($_POST['username'])) { // if ajax request submitted
 				echo $post_username;
 			}
 		}
-	} catch(Exception $e) {
+	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
 	}
@@ -110,7 +110,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none')\">Enabled</a></th>\r\n";
 		$display_string .= "			</tr>\r\n";
 
-		while($row = $qry_result->fetch(PDO::FETCH_ASSOC)){
+		while ($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
 			$display_string .= "			<tr>\r\n";
 
 			if ($_SESSION['debugMode']) {
@@ -125,7 +125,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 			// On/Off.
 			if ($row['pinEnabled'] == 1) {
 				$display_string .= "				<td><a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus')\">";
-				switch ($row['pinStatus']){
+				switch ($row['pinStatus']) {
 					case 1 :
 						$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
 						break;
@@ -135,7 +135,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 				$display_string .= "</a></td>\r\n";
 			} else {
 				$display_string .= "				<td>";
-				switch ($row['pinStatus']){
+				switch ($row['pinStatus']) {
 					case 1 :
 		       			        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
 						break;
@@ -147,7 +147,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 
 			// Enabled.
 			$display_string .= "				<td><a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled')\">";
-			switch ($row['pinEnabled']){
+			switch ($row['pinEnabled']) {
 				case 1 :
 		        	        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
 					break;
@@ -170,7 +170,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 			print "		<pre>:id=$id</pre>";
 		}
 
-	} catch(Exception $e) {
+	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
 	}
@@ -227,7 +227,7 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 		$display_string .= "			</tr>\r\n";
 
 		// Insert a new row in the table for each result returned.
-		while($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
+		while ($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
 			$display_string .= "			<tr>\r\n";
 			$display_string .= "				<td>" . $row['id'] . "</td>\r\n";
 			$display_string .= "				<td>" . $row['date'] . "</td>\r\n";
@@ -245,7 +245,7 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			print "		<pre>Range Set: $id1 <-> $id2</pre>\r\n";
 			print "		<pre>Select: $query</pre>";
 		}
-	} catch(Exception $e) {
+	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
 	}
@@ -381,7 +381,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 			print '		<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . ' ' . $pageSizeTemp . ' ' . $enableLoggingTemp . "</pre>\r\n";
 			print '		<pre>' . $query_update . "</pre>\r\n";
 		}
-	} catch(Exception $e) {
+	} catch (Exception $e) {
 		echo 'Exception -> ';
 		var_dump($e->getMessage());
 	}

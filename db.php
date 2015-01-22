@@ -17,7 +17,7 @@ try {
 	else {
 		echo "Database type $db_Type is invalid.";
 	}
-} catch(PDOException $e){
+} catch (PDOException $e) {
 	echo "ERROR: ". $e->getMessage();
 }
 ?>
