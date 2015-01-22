@@ -22,6 +22,14 @@ s = s.replace("$db_DataBase = '';", "$db_DataBase = '" + dbdatabase + "';")
 f.write(s)
 f.close()
 
+# Configure gpioserver.
+workdir=os.path.dirname(os.path.realpath(__file__))
+s = open("init.d/gpioserver", 'r').read()
+f = open("init.d/gpioserver", 'w')
+s = s.replace("workdir=''", "workdir='" + workdir + "'")
+f.write(s)
+f.close()
+
 # Database import magic.
 if dbtype == "mysql":
 	MYSQL_FILE="docs/gpio.sql"

@@ -13,12 +13,17 @@
 
 set -e
 
+# Directory where web files are stored.
+workdir=''
+
 source /lib/lsb/init-functions
+
+scriptloc="$workdir/GPIOServer.sh"
 
 case "$1" in
     start)
 		log_daemon_msg "Starting GPIO Server" "GPIOServer.sh" || true
-		/var/www/gpio/GPIOServer.sh &
+		$scriptloc &
 		if pgrep GPIOServer.sh >/dev/null 2>&1
 		then
 			log_end_msg 0 || true
@@ -36,9 +41,15 @@ case "$1" in
 		fi
         ;;
     restart)
-		echo "Restarting GPIOServer.sh"
-		killall GPIOServer.sh
-		/var/www/gpio/GPIOServer.sh &
+		killall GPIOServer.sh && sleep 2
+		if pgrep GPIOServer.sh >/dev/null 2>&1
+		then
+			echo "Stopping GPIO Server: FAIL"
+		else
+			echo "Stopping GPIO Server: Stopped"
+		fi
+		log_daemon_msg "Starting GPIO Server" "GPIOServer.sh" || true
+		$scriptloc &
         ;;
 	status)
 		if pgrep GPIOServer.sh >/dev/null 2>&1
