@@ -234,22 +234,24 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 // Config page.
 elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 	// Get params for update.
-	$pageSize		= isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined') 	? $_GET['logPageSize'] 	: 10;
+	$pageSizeTemp		= isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined') 	? $_GET['logPageSize'] 	: 10;
 	$updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined') 	? $_GET['updateConfig'] 	: 0;
 	$debugModeTemp			= isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined') 	? $_GET['debugMode'] 	: 0;
 	$showDisabledPinsTemp 	= isset($_GET['showDisabledPins'])  	&& ($_GET['showDisabledPins']!= 'undefined') 		? $_GET['showDisabledPins'] 		: 0;
+	$enableLoggingTemp 	= isset($_GET['enableLogging'])  	&& ($_GET['enableLogging']!= 'undefined') 		? $_GET['enableLogging'] 		: 1;
 
 	// Update config fields as (if) needed.
 	$query_update = "";
 
 	try {
 		if ($updateConfig > 0) {
-			$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins, logPageSize = :logPageSize WHERE configVersion = 1';
+			$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins, logPageSize = :logPageSize, enableLogging = :enableLogging WHERE configVersion = 1';
 			$qry_result = $db->prepare($query_update);
-			$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp, ':logPageSize'=>$pageSize));
+			$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp, ':logPageSize'=>$pageSizeTemp, ':enableLogging'=>$enableLoggingTemp));
 			$_SESSION['debugMode'] = $debugModeTemp;
 			$_SESSION['showDisabledPins'] = $showDisabledPinsTemp;
-			$_SESSION['logPageSize'] = $pageSize;
+			$_SESSION['logPageSize'] = $pageSizeTemp;
+			$_SESSION['enableLogging'] = $enableLoggingTemp;
 		}
 
 		// Build Result String.
@@ -259,7 +261,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Debug Mode.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Debug Mode</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . ")\" />";
 
 		switch ($_SESSION['debugMode']) {
 			case 1 :
@@ -274,9 +276,23 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Show Disabled Pins.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show Disabled Pins</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . ")\" />";
 
 		switch ($_SESSION['showDisabledPins']) {
+			case 1 :
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				break;
+			case 0 :
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+		}
+		$display_string .= "</a></td>\r\n";
+		$display_string .= "			</tr>\r\n";
+
+		// Enable logging.
+		$display_string .= "			<tr>\r\n";
+		$display_string .= "				<td>Enable Logging</a></td>\r\n";
+		$display_string .= " <td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . ")\" />";
+		switch ($_SESSION['enableLogging']) {
 			case 1 :
 				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
 				break;
@@ -289,7 +305,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Log pagination</a></td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value)\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . ")\" /></td>\r\n";
 
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
@@ -303,8 +319,8 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		if ($_SESSION['debugMode']) {
 			//debug output
 			print $configVariables . "\r\n";
-			print '		<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . ' ' . $pageSize . '</pre>';
-			print '		<pre>' . $query_update . '</pre>';
+			print '		<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . ' ' . $pageSizeTemp . ' ' . $enableLoggingTemp . "</pre>\r\n";
+			print '		<pre>' . $query_update . "</pre>\r\n";
 		}
 	} catch(Exception $e) {
 		echo 'Exception -> ';

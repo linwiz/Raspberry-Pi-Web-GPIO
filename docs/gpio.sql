@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 16, 2015 at 04:00 PM
+-- Generation Time: Jan 21, 2015 at 10:38 PM
 -- Server version: 5.5.40
 -- PHP Version: 5.4.36-0+deb7u3
 
@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `config` (
   `piRevision` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
   `debugMode` tinyint(1) NOT NULL DEFAULT '0',
   `showDisabledPins` tinyint(1) NOT NULL DEFAULT '0',
+  `enableLogging` int(1) NOT NULL,
   `logPageSize` int(11) NOT NULL DEFAULT '10'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='System wide configuration table, one row a time.';
 
@@ -32,8 +33,8 @@ CREATE TABLE IF NOT EXISTS `config` (
 -- Dumping data for table `config`
 --
 
-INSERT INTO `config` (`configVersion`, `piRevision`, `debugMode`, `showDisabledPins`, `logPageSize`) VALUES
-(1, '', 0, 0, 10);
+INSERT INTO `config` (`configVersion`, `piRevision`, `debugMode`, `showDisabledPins`, `enableLogging`, `logPageSize`) VALUES
+(1, '2', 1, 0, 1, 10);
 
 -- --------------------------------------------------------
 

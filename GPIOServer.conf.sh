@@ -1,15 +1,12 @@
 ##############################################
 #####  GPIOServer    Configuration file  #####
 ##############################################
+# Database connection information.
 dbtype="mysql"
 dbhostname="localhost"
 dbusername="user"
 dbpassword="pass"
 dbdatabase="gpio"
 
-# Enable logging in db
-# TODO : Doesn't log errors
-logging="TRUE"
-
-# Set  Refresh.
+# Set pin refresh time.
 waitTime=1

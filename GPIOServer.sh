@@ -18,6 +18,9 @@ dbquery="mysql -B --host=$dbhostname --disable-column-names --user=$dbusername -
 # Retrieve revision information.
 revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
 
+# Retrieve logging information.
+logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
+
 addLogItem() {
     logdatas="$1 $2 $3"
     echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --user=$dbusername --password=$dbpassword $dbdatabase;
@@ -51,13 +54,13 @@ while true; do
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/export
-					if [ "$logging" ]; then addLogItem "Enabled Pin $PIN"; fi
+					if [ "$logging" == "1" ]; then addLogItem "Enabled Pin $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
 					echo $PIN > /sys/class/gpio/unexport
-					if [ "$logging" ]; then addLogItem "Disabled Pin $PIN"; fi
+					if [ "$logging" == "1" ]; then addLogItem "Disabled Pin $PIN"; fi
 				fi
 			fi
 
@@ -75,7 +78,7 @@ while true; do
 					if [ -n $PIN ]; then
 						if [ -n $pinDirection ]; then
 							echo $pinDirection > /sys/class/gpio/gpio$PIN/direction
-							if [ "$logging" ]; then
+							if [ "$logging" == "1" ]; then
 								addLogItem "Pin $PIN direction to: $pinDirection"
 							fi
 						elif [ -z $pinDirection ]; then
@@ -90,7 +93,7 @@ while true; do
 					if [ -n $PIN ]; then
 						if [ -n $pinStatus ]; then
 							echo $pinStatus > /sys/class/gpio/gpio$PIN/value
-							if [ "$logging" ]; then
+							if [ "$logging" == "1" ]; then
 								 addLogItem "Pin $PIN changed to: $pinStatus"
 							fi
 						elif [ -z $pinStatus ]; then

@@ -69,7 +69,7 @@ function showPage() {
 			break;
 		case 3:
 			// Params: updateConfig debugMode showDisabledPins logPageSize
-			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4];
+			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4] + "&enableLogging=" + arguments[5];
 		default:
  	}
         ajaxRequest.open("GET", "ajax.php" + queryString, true);

@@ -19,6 +19,7 @@ try {
 		$_SESSION['debugMode'] = $rowConfig['debugMode'];
 		$_SESSION['showDisabledPins'] = $rowConfig['showDisabledPins'];
 		$_SESSION['logPageSize'] = $rowConfig['logPageSize'];
+		$_SESSION['enableLogging'] = $rowConfig['enableLogging'];
 	}
 
 	// Page whitelist.
@@ -36,9 +37,14 @@ try {
 		$configVariables .= "           [piRevision] => " . $_SESSION['piRevision'] . "\r\n";
 		$configVariables .= "           [debugMode] => " . $_SESSION['debugMode'] . "\r\n";
 		$configVariables .= "           [showDisabledPins] => " . $_SESSION['showDisabledPins'] . "\r\n";
+		$configVariables .= "           [enableLogging] => " . $_SESSION['enableLogging'] . "\r\n";
 		$configVariables .= "           [logPageSize] => " . $_SESSION['logPageSize'] . "\r\n";
-		$configVariables .= "           [username] => " . $_SESSION['username'] . "\r\n";
-		$configVariables .= "           [userID] => " . $_SESSION['userID'] . "\r\n";
+		if (isset($_SESSION['username'])) {
+			$configVariables .= "           [username] => " . $_SESSION['username'] . "\r\n";
+		}
+		if (isset($_SESSION['userID'])) {
+			$configVariables .= "           [userID] => " . $_SESSION['userID'] . "\r\n";
+		}
 		$configVariables .= "           [pageType] => " . $_SESSION['pageType'] . "\r\n";
 		$configVariables .= "           </pre>\r\n";
 	}
