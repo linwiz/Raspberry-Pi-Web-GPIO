@@ -178,8 +178,21 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 
 // Log page.
 elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
-	$id1 = $_GET['id1'];
-	$id2 = $_GET['id2'];
+	if (isset($_GET['id1'])) {
+		$id1 = $_GET['id1'];
+	} else {
+		$id1 = 0;
+	}
+	if (isset($_GET['id2'])) {
+		$id2 = $_GET['id2'];
+	} else {
+		$id2 = 99999;
+	}
+	if (isset($_GET['pn'])) {
+		$pn = $_GET['pn'];
+	} else {
+		$pn = 1;
+	}
 
 	// Check for positive integers.
 	if ((int)$id1 != $id1 || (int)$id1 < 0) {
@@ -204,19 +217,43 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 		$query .= ' AND id >= :id1';
 		$query .= ' AND id <= :id2';
 		$query .= ' ORDER BY date DESC';
+
+		// Execute query.
+		$qry_resultpn = $db->prepare($query);
+		$qry_resultpn->execute(array(':id1'=>$id1, ':id2'=>$id2));
+
 		$query .= " LIMIT " . $_SESSION['logPageSize'];
 
 		// Execute query.
 		$qry_result = $db->prepare($query);
 		$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
 
-		print "	<a href=\"#\" onclick=\"showPage(2)\">Refresh</a>\r\n";
+		// Determine number of pages needed.
+		$logCount = $qry_resultpn->rowCount();
+		$logLastPage = ceil($logCount / $_SESSION['logPageSize']);
+		if ((int)$pn != $pn || (int)$pn < 0) {
+			$pn = 1;
+		}
+		if ((int)$pn > (int)$logLastPage) {
+			$pn = $logLastPage;
+		}
+
+		print "	<a href=\"#\" onclick=\"showPage(2,$pn)\">Refresh</a>\r\n";
 
 		print "		<form name=\"myForm\">ID Range: \r\n";
-		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2)\" size=\"5\" />\r\n";
-		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2)\" size=\"5\" /><br />\r\n";
+		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2,$pn)\" size=\"5\" />\r\n";
+		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2,$pn)\" size=\"5\" /><br />\r\n";
 
 		print "		</form>\r\n";
+
+		// Generate pagination links.
+		$pnTemp = 1;
+		$logPagination = '';
+		while ($pnTemp <= $logLastPage) {
+			$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$pnTemp)\">$pnTemp</a> \r\n";
+			$pnTemp++;
+		}
+		print $logPagination . "<br />\r\n";
 
 		// Build Result String.
 		$display_string = "		<table>\r\n";

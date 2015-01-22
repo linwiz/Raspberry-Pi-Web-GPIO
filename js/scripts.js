@@ -1,7 +1,9 @@
+// Check for positive integers.
 function isNormalInteger(str) {
 	var n = ~~Number(str);
 	return String(n) === str && n >= 0;
 }
+
 // Common ajaxRequest variable creation.
 function getAjaxRequest() {
 	var ajaxRequest;
@@ -40,7 +42,7 @@ function changeSection(secID) {
 			ajaxRequest.open("GET", "page.php?pageType=pins&sort=pinNumberBCM%2B0", true);
 			break;
 		case 2:
-			ajaxRequest.open("GET", "page.php?pageType=log&id1=0&id2=99999", true);
+			ajaxRequest.open("GET", "page.php?pageType=log&id1=0&id2=99999&pn=1", true);
 			break;
 		case 3:
 			ajaxRequest.open("GET", "page.php?pageType=config", true);
@@ -69,13 +71,16 @@ function showPage() {
 			// Params: none
 		        var id1 = document.getElementById('id1').value;
         		var id2 = document.getElementById('id2').value;
-
+			var pn = arguments[1];
 			// Check for positive integers.
 			if (!isNormalInteger(id1)) {
 				var id1 = 0;
 			}
 			if (!isNormalInteger(id2)) {
 				var id2 = 99999;
+			}
+			if (!isNormalInteger(pn)) {
+				var pn = 1;
 			}
 
 			// id1 must be <= id2.
@@ -86,7 +91,7 @@ function showPage() {
 			if (parseInt(id2) < parseInt(id1)) {
 				var id2 = 99999;
 			}
-	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2;
+	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2 + "&pn=" + pn;
 			break;
 		case 3:
 			// Params: updateConfig debugMode showDisabledPins logPageSize
