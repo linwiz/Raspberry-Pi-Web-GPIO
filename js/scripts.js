@@ -1,3 +1,7 @@
+function isNormalInteger(str) {
+	var n = ~~Number(str);
+	return String(n) === str && n >= 0;
+}
 // Common ajaxRequest variable creation.
 function getAjaxRequest() {
 	var ajaxRequest;
@@ -65,6 +69,23 @@ function showPage() {
 			// Params: none
 		        var id1 = document.getElementById('id1').value;
         		var id2 = document.getElementById('id2').value;
+
+			// Check for positive integers.
+			if (!isNormalInteger(id1)) {
+				var id1 = 0;
+			}
+			if (!isNormalInteger(id2)) {
+				var id2 = 99999;
+			}
+
+			// id1 must be <= id2.
+			if (parseInt(id1) > parseInt(id2)) {
+				var id1 = 0;
+			}
+			// id2 must be >= id1.
+			if (parseInt(id2) < parseInt(id1)) {
+				var id2 = 99999;
+			}
 	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2;
 			break;
 		case 3:

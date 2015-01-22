@@ -174,15 +174,28 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 	$id1 = $_GET['id1'];
 	$id2 = $_GET['id2'];
 
+	// Check for positive integers.
+	if ((int)$id1 != $id1 || (int)$id1 < 0) {
+		$id1 = 0;
+	}
+	if ((int)$id2 != $id2 || (int)$id2 < 0) {
+		$id2 = 99999;
+	}
+
+	// id1 must be <= id2.
+	if ((int)$id1 > (int)$id2) {
+		$id1 = 0;
+	}
+	// id2 must be >= id1.
+	if ((int)$id2 < (int)$id1) {
+		$id2 = 99999;
+	}
+
 	try {
 		// Build query.
 		$query = 'SELECT * FROM log WHERE id > 0 ';
-		if(is_numeric($id1)) {
-			$query .= ' AND id >= :id1';
-		}
-		if(is_numeric($id2)) {
-			$query .= ' AND id <= :id2';
-		}
+		$query .= ' AND id >= :id1';
+		$query .= ' AND id <= :id2';
 		$query .= ' ORDER BY date DESC';
 		$query .= " LIMIT " . $_SESSION['logPageSize'];
 
