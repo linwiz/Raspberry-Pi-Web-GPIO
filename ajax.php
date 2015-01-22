@@ -29,7 +29,7 @@ if (isset($_POST['username'])) { // if ajax request submitted
 }
 
 // Pins page.
-if ($_SESSION['pageType'] == "pins") {
+if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 	// Set up calling params.
 	$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
 	if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_whitelist)) {
@@ -170,7 +170,7 @@ if ($_SESSION['pageType'] == "pins") {
 }
 
 // Log page.
-if ($_SESSION['pageType'] == "log") {
+elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 	$id1 = $_GET['id1'];
 	$id2 = $_GET['id2'];
 
@@ -232,7 +232,7 @@ if ($_SESSION['pageType'] == "log") {
 }
 
 // Config page.
-if ($_SESSION['pageType'] == "config") {
+elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 	// Get params for update.
 	$pageSize		= isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined') 	? $_GET['logPageSize'] 	: 10;
 	$updateConfig		= isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined') 	? $_GET['updateConfig'] 	: 0;
@@ -311,5 +311,8 @@ if ($_SESSION['pageType'] == "config") {
 		var_dump($e->getMessage());
 	}
 }
-?>
 
+else {
+	print "Logged out. Please reload page.\r\n";
+}
+?>
