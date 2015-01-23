@@ -17,7 +17,7 @@ dbquery="mysql -B --host=$dbhostname --port=$dbport --disable-column-names --use
 
 addLogItem() {
     logdatas="$1 $2 $3"
-    echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --port=$dbport --user=$dbusername --password=$dbpassword $dbdatabase;
+    echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | $dbquery;
 }
 
 # Retrieve revision information.
@@ -29,7 +29,7 @@ if [ $? != 0 ]; then
 fi
 
 addLogItem "Starting GPIO Server"
-trap "addLogItem Stopping GPIO Server" EXIT
+trap "addLogItem Stopping GPIO Server" EXIT SIGINT
 
 # Retreive all GPIO pins.
 pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
@@ -39,7 +39,7 @@ if [ $? != 0 ]; then
 	pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
 fi
 
-# Start Loop.
+# Start loop.
 while true; do
 
 	# Retrieve logging information.
@@ -53,8 +53,7 @@ while true; do
 	for PIN in $pins ;
 		do
 
-
-			# Select current PIN details.
+			# Select current pin details.
 			currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $dbquery`
 			if [ $? != 0 ]; then
 				addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
@@ -65,12 +64,11 @@ while true; do
 			this_pin=${currPIN[$PIN]}
 			currPIN=($this_pin)
 
-			# Populate varbiables from query.
+			# Populate variables from query.
 			pinID=${currPIN[0]}
 			pinEnabled=${currPIN[1]}
 			pinStatus=${currPIN[2]}
 			pinDirection=${currPIN[3]}
-
 
 			if [ "$pinEnabled" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
@@ -89,13 +87,13 @@ while true; do
 			# Skip disabled pins.
 			if [ -d "/sys/class/gpio/gpio$PIN" ]; then
 
-				# Read Pin Directions.
+				# Read pin directions.
 				direction2=`cat /sys/class/gpio/gpio$PIN/direction`
 
-				# Read Pin Status'.
+				# Read pin status'.
 				status2=`cat /sys/class/gpio/gpio$PIN/value`
 
-				# Change Pin Status'.
+				# Change pin status'.
 				if [ "$pinDirection" != "$direction2" ]; then
 					if [ -n $PIN ]; then
 						if [ -n $pinDirection ]; then
@@ -104,10 +102,10 @@ while true; do
 								addLogItem "Pin $PIN direction to: $pinDirection"
 							fi
 						elif [ -z $pinDirection ]; then
-							addLogItem "PIN direction zero"
+							addLogItem "Pin $PIN direction zero"
 						fi
 					elif [ -z $PIN ]; then
-						addLogItem "PIN value zero"
+						addLogItem "Pin $PIN value zero"
 					fi
 				fi
 
@@ -119,16 +117,16 @@ while true; do
 								 addLogItem "Pin $PIN changed to: $pinStatus"
 							fi
 						elif [ -z $pinStatus ]; then
-							addLogItem "PIN status zero"
+							addLogItem "Pin $PIN status zero"
 						fi
 					elif [ -z $PIN ]; then
-						addLogItem "PIN value zero"
+						addLogItem "Pin $PIN value zero"
 					fi
 				fi
 			fi
 	done
 
-	# Complete Loop.
+	# Complete loop.
 	sleep $waitTime
 done
 } >> /var/log/GPIOServer.log
