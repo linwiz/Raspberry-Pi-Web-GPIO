@@ -7,60 +7,59 @@
 # Heavily modified script by linwiz.
 # January 7th 2015
 
-# Check if MySQL is running.
-checkMySQL() {
-	UP=$(pgrep mysql | wc -l);
-	if [ "$UP" -eq 0 ]; then
-		echo "MySQL is down.";
-		sudo service mysql start
-		sleep 5
-		UP=$(pgrep mysql | wc -l);
-		if [ "$UP" -eq 0 ]; then
-			echo "MySQL is down. Exiting";
-			sudo service gpioserver stop
-			return 1;
-		fi
-	fi
-}
-
-checkMySQL
-
 # Set working directory.
 dir="$(dirname "$0")"
 
 # Read config file (relative).
 source "$dir/GPIOServer.conf.sh"
 
-dbquery="mysql -B --host=$dbhostname --port=$dbport --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
+# Check if MySQL is running.
+checkMySQL() {
+	if ! nc -z "$dbhostname" "$dbport"; then
+		echo "MySQL is down.";
+		sudo service mysql start
+		sleep 5
+		if ! nc -z "$dbhostname" "$dbport"; then
+			echo "MySQL is down. Exiting";
+			sudo service gpioserver stop
+			exit;
+		fi
+	fi
+}
+
+checkMySQL
+
+dbquery() {
+	mysql -B --host="$dbhostname" --port="$dbport" --disable-column-names --user="$dbusername" --password="$dbpassword" "$dbdatabase" -e "$1"
+}
 
 addLogItem() {
-    logdatas="$1 $2 $3"
-    echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | $dbquery;
+    logdatas="$1"
+    dbquery "INSERT INTO log (data) VALUES (\"$logdatas\");"
 }
 
 mysqlQuery() {
-	echo $1 | $dbquery
-	if [ $? != 0 ]; then
+	if ! dbquery "$1"; then
 		checkMySQL
 		addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
 		sleep 5
-		echo $1 | $dbquery
+		dbquery "$1"
 	fi
 }
 
 # Retrieve revision information.
 revision=`mysqlQuery "SELECT piRevision FROM config WHERE configVersion=1"`
-#if [ $? != 0 ]; then
+#if [ "$?" != 0 ]; then
 #	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
 #	sleep 5
-#	revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
+#	revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | dbquery`
 #fi
 
 
 #########################
 # TEMPORARY BREAK POINT #
 #########################
-echo $revision
+echo "$revision"
 exit
 #########################
 # TEMPORARY BREAK POINT #
@@ -168,4 +167,5 @@ while true; do
 	# Complete loop.
 	sleep $waitTime
 done
-} >> /var/log/GPIOServer.log
+}
+# >> /var/log/GPIOServer.log
