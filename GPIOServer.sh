@@ -7,6 +7,24 @@
 # Heavily modified script by linwiz.
 # January 7th 2015
 
+# Check if MySQL is running.
+checkMySQL() {
+	UP=$(pgrep mysql | wc -l);
+	if [ "$UP" -eq 0 ]; then
+		echo "MySQL is down.";
+		sudo service mysql start
+		sleep 5
+		UP=$(pgrep mysql | wc -l);
+		if [ "$UP" -eq 0 ]; then
+			echo "MySQL is down. Exiting";
+			sudo service gpioserver stop
+			return 1;
+		fi
+	fi
+}
+
+checkMySQL
+
 # Set working directory.
 dir="$(dirname "$0")"
 
@@ -20,16 +38,38 @@ addLogItem() {
     echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | $dbquery;
 }
 
+mysqlQuery() {
+	echo $1 | $dbquery
+	if [ $? != 0 ]; then
+		checkMySQL
+		addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+		sleep 5
+		echo $1 | $dbquery
+	fi
+}
+
 # Retrieve revision information.
-revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
-if [ $? != 0 ]; then
-	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
-	sleep 5
-	revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
-fi
+revision=`mysqlQuery "SELECT piRevision FROM config WHERE configVersion=1"`
+#if [ $? != 0 ]; then
+#	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+#	sleep 5
+#	revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
+#fi
+
+
+#########################
+# TEMPORARY BREAK POINT #
+#########################
+echo $revision
+exit
+#########################
+# TEMPORARY BREAK POINT #
+#########################
+
+
 
 addLogItem "Starting GPIO Server"
-trap "addLogItem Stopping GPIO Server" EXIT SIGINT
+trap "addLogItem Stopping GPIO Server" EXIT
 
 # Retreive all GPIO pins.
 pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
@@ -41,7 +81,6 @@ fi
 
 # Start loop.
 while true; do
-
 	# Retrieve logging information.
 	logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
 	if [ $? != 0 ]; then
