@@ -49,56 +49,21 @@ mysqlQuery() {
 
 # Retrieve revision information.
 revision=`mysqlQuery "SELECT piRevision FROM config WHERE configVersion=1"`
-#if [ "$?" != 0 ]; then
-#	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
-#	sleep 5
-#	revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | dbquery`
-#fi
-
-
-#########################
-# TEMPORARY BREAK POINT #
-#########################
-echo "$revision"
-exit
-#########################
-# TEMPORARY BREAK POINT #
-#########################
-
-
 
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
 
 # Retreive all GPIO pins.
-pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
-if [ $? != 0 ]; then
-	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
-	sleep 5
-	pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
-fi
+pins=`mysqlQuery "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID"`
 
 # Start loop.
 while true; do
 	# Retrieve logging information.
-	logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
-	if [ $? != 0 ]; then
-		addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
-		sleep 5
-		logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
-	fi
-
+	logging=`mysqlQuery "SELECT enableLogging FROM config WHERE configVersion=1"`
 	for PIN in $pins ;
 		do
-
 			# Select current pin details.
-			currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $dbquery`
-			if [ $? != 0 ]; then
-				addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
-				sleep 5
-				currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $dbquery`
-			fi
-
+			currPIN[$PIN]=`mysqlQuery "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			this_pin=${currPIN[$PIN]}
 			currPIN=($this_pin)
 
@@ -167,5 +132,4 @@ while true; do
 	# Complete loop.
 	sleep $waitTime
 done
-}
-# >> /var/log/GPIOServer.log
+} >> /var/log/GPIOServer.log
