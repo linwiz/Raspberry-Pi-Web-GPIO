@@ -15,29 +15,52 @@ source "$dir/GPIOServer.conf.sh"
 
 dbquery="mysql -B --host=$dbhostname --port=$dbport --disable-column-names --user=$dbusername --password=$dbpassword $dbdatabase"
 
-# Retrieve revision information.
-revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
-
 addLogItem() {
     logdatas="$1 $2 $3"
-    echo "INSERT INTO	 log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --port=$dbport --user=$dbusername --password=$dbpassword $dbdatabase;
+    echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | mysql --host=$dbhostname --port=$dbport --user=$dbusername --password=$dbpassword $dbdatabase;
 }
+
+# Retrieve revision information.
+revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
+if [ $? != 0 ]; then
+	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+	sleep 5
+	revision=`echo "SELECT piRevision FROM config WHERE configVersion=1" | $dbquery`
+fi
 
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
 
 # Retreive all GPIO pins.
 pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
+if [ $? != 0 ]; then
+	addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+	sleep 5
+	pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID" | $dbquery`
+fi
 
 # Start Loop.
 while true; do
+
 	# Retrieve logging information.
 	logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
+	if [ $? != 0 ]; then
+		addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+		sleep 5
+		logging=`echo "SELECT enableLogging FROM config WHERE configVersion=1" | $dbquery`
+	fi
+
 	for PIN in $pins ;
 		do
 
+
 			# Select current PIN details.
 			currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $dbquery`
+			if [ $? != 0 ]; then
+				addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+				sleep 5
+				currPIN[$PIN]=`echo "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $dbquery`
+			fi
 
 			this_pin=${currPIN[$PIN]}
 			currPIN=($this_pin)
