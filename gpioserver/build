@@ -1,0 +1,2 @@
+#!/bin/bash
+g++ -o gpioserverd gpioserverd.cpp `mysql_config --cflags` `mysql_config --libs` && chmod +x gpioserverd

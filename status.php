@@ -1,5 +1,5 @@
 <?php
-exec("pgrep GPIOServer.sh", $pids);
+exec("pgrep gpioserverd", $pids);
 
 print 'Status:';
 if (empty($pids)) {
