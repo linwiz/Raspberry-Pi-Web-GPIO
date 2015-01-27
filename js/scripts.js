@@ -30,7 +30,6 @@ function getAjaxRequest() {
 // Paku - change the main section content.
 function changeSection(secID) {
 	var ajaxRequest = getAjaxRequest();
-	// Create a function that will receive data sent from the server.
 	ajaxRequest.onreadystatechange = function() {
 		if (ajaxRequest.readyState == 4) {
 			var ajaxDisplay = document.getElementById('section');
@@ -38,14 +37,21 @@ function changeSection(secID) {
 		}
 	};
 	switch(secID) {
+		// Pins page.
 		case 1:
 			ajaxRequest.open("GET", "page.php?pageType=pins&sort=pinNumberBCM%2B0", true);
 			break;
+		// Log page.
 		case 2:
 			ajaxRequest.open("GET", "page.php?pageType=log&id1=0&id2=99999&pn=1", true);
 			break;
+		// Config page.
 		case 3:
 			ajaxRequest.open("GET", "page.php?pageType=config", true);
+			break;
+		// Edit page.
+		case 4:
+			ajaxRequest.open("GET", "page.php?pageType=edit", true);
 			break;
 		default:
 	}
@@ -53,7 +59,7 @@ function changeSection(secID) {
 }
 
 function showPage() {
-	var pageType = ["null", "pins", "log", "config"];
+	var pageType = ["null", "pins", "log", "config", "edit"];
 	var ajaxRequest = getAjaxRequest();
 	var elementID = pageType[arguments[0]];
 	ajaxRequest.onreadystatechange = function() {
@@ -63,10 +69,12 @@ function showPage() {
 		}
 	};
 	switch(arguments[0]) {
+		// Pins page.
 		case 1:
 			// Params: sort pinID field
 			var queryString = "?pageType=" + pageType[arguments[0]]  + "&sort=" + arguments[1] + "&id=" + arguments[2] + "&field=" + arguments[3];
 			break;
+		// Log page.
 		case 2:
 			// Params: none
 		        var id1 = document.getElementById('id1').value;
@@ -101,9 +109,17 @@ function showPage() {
 			}
 	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2 + "&pn=" + pn + "&truncate=" + truncate;
 			break;
+		// Config page.
 		case 3:
 			// Params: updateConfig debugMode showDisabledPins logPageSize showBCMNumber showWPiNumber showDisableBox pinDelay
 			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4] + "&enableLogging=" + arguments[5] + "&showBCMNumber=" + arguments[6] + "&showWPiNumber=" + arguments[7] + "&showDisableBox=" + arguments[8] + "&pinDelay=" + arguments[9];
+			break;
+		// Edit page.
+		case 4:
+			// Params:
+			alert(arguments[1]);
+			var queryString = "?pageType=" + pageType[arguments[0]];
+			break;
 		default:
  	}
         ajaxRequest.open("GET", "ajax.php" + queryString, true);

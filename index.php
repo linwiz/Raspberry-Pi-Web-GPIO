@@ -1,9 +1,6 @@
 <?php
 session_start();
 include 'set_config_vars.php';
-// Database connection & config
-//require_once 'db.php';
-// Password hashing functions.
 require_once('scrypt.php');
 
 if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == '') {
