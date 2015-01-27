@@ -9,7 +9,7 @@ piRevisioni=GPIO.RPI_REVISION
 piRevision=str(piRevisioni)
 
 # Configure db.php.
-print "Importing settings from GPIOServer.conf.sh to db.php."
+print "Exporting settings from GPIOServer.conf.sh to db.php."
 s = open("db.php", 'r').read()
 f = open("db.php", 'w')
 execfile("GPIOServer.conf.sh")
@@ -60,6 +60,6 @@ if os.path.isfile(PATH) and os.access(PATH, os.R_OK):
 else:
 	print "Installing gpioserver to " + PATH
 	subprocess.call(["sudo", "chmod", "+x", "init.d/gpioserver"])
-	subprocess.call(["sudo", "ln", "-s", workdir + "init.d/gpioserver", "/etc/init.d/gpioserver"])
+	subprocess.call(["sudo", "ln", "-s", workdir + "init.d/gpioserver", PATH])
 	subprocess.call(["sudo", "update-rc.d", "gpioserver", "defaults"])
 	subprocess.call(["sudo", "service", "gpioserver", "start"])
