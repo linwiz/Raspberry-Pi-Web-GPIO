@@ -1,14 +1,13 @@
 <?php
-// Enter Database connection details below, OR
-// leave these values blank and run setup.py.
-// eg; python setup.py OR ./setup.py
+// Leave these values blank. Edit GPIOServer.conf.sh
+// and run setup.py. eg; python setup.py OR ./setup.py
 
-$db_Type = ''; // Enter your db Type here.
-$db_Host = ''; // Enter your db Server address here.
-$db_Port = ''; // Enter your db Port here.
-$db_User = ''; // Enter your db Username here.
-$db_Password = ''; // Enter your db Password here.
-$db_DataBase = ''; // Enter your db Database here.
+$db_Type = '';
+$db_Host = '';
+$db_Port = '';
+$db_User = '';
+$db_Password = '';
+$db_DataBase = '';
 
 // Database connection
 try {
