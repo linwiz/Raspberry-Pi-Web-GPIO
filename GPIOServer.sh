@@ -13,7 +13,6 @@ dir="$(dirname "$0")"
 # Read config file (relative).
 source "$dir/GPIOServer.conf.sh"
 
-# Check if MySQL is running.
 checkMySQL() {
 	if ! nc -z "$dbhostname" "$dbport"; then
 		echo "MySQL is down.";
@@ -29,41 +28,40 @@ checkMySQL() {
 
 checkMySQL
 
-dbquery() {
+dbExec() {
 	mysql -B --host="$dbhostname" --port="$dbport" --disable-column-names --user="$dbusername" --password="$dbpassword" "$dbdatabase" -e "$1"
 }
 
 addLogItem() {
-    logdatas="$1"
-    dbquery "INSERT INTO log (data) VALUES (\"$logdatas\");"
+    dbExec "INSERT INTO log (data) VALUES (\"$1\");"
 }
 
-mysqlQuery() {
-	if ! dbquery "$1"; then
+dbQuery() {
+	if ! dbExec "$1"; then
 		checkMySQL
 		addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
 		sleep 5
-		dbquery "$1"
+		dbExec "$1"
 	fi
 }
 
 # Retrieve revision information.
-revision=`mysqlQuery "SELECT piRevision FROM config WHERE configVersion=1"`
+revision=`dbQuery "SELECT piRevision FROM config WHERE configVersion=1"`
 
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
 
 # Retreive all GPIO pins.
-pins=`mysqlQuery "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID"`
+pins=`dbQuery "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID"`
 
 # Start loop.
 while true; do
 	# Retrieve logging information.
-	logging=`mysqlQuery "SELECT enableLogging FROM config WHERE configVersion=1"`
+	logging=`dbQuery "SELECT enableLogging FROM config WHERE configVersion=1"`
 	for PIN in $pins ;
 		do
 			# Select current pin details.
-			currPIN[$PIN]=`mysqlQuery "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
+			currPIN[$PIN]=`dbQuery "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
 			this_pin=${currPIN[$PIN]}
 			currPIN=($this_pin)
 
