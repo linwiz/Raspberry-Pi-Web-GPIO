@@ -30,12 +30,11 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 	<script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
-	<div id="header">RPi Web GPIO</div>
+	<div id="header" class="page dark gradient"><h1>RPi Web GPIO</h1></div>
 	<div id="nav">
-		<a href="#" onclick="changeSection(1)">PINs</a>&nbsp;
-		<a href="#" onclick="changeSection(2)">Log</a>&nbsp;
-		<a href="#" onclick="changeSection(3)">Config</a>&nbsp;
-		<?php include 'status.php'; ?>
+		<a href="#" onclick="changeSection(1)" class="page dark gradient">PINs</a>&nbsp;
+		<a href="#" onclick="changeSection(2)" class="page dark gradient">Log</a>&nbsp;
+		<a href="#" onclick="changeSection(3)" class="page dark gradient">Config</a>&nbsp;
 	</div>
 	<div id="section">
 <?php
@@ -49,10 +48,10 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 				<h3>Login</h3>
 				<form method="POST">
 					<label>Username</label>
-					<input type="text" name="username" id="username" placeholder="your username" /><br />
+					<input type="text" name="username" id="username" placeholder="your username" class="page dark gradient" /><br />
 					<label>Password</label>
-					<input type="password" name="pasword" id="password" placeholder="your password" /><br />
-					<input type="submit" id="submit_login" name="submit" class="inputbutton grey" value="Login" />
+					<input type="password" name="pasword" id="password" placeholder="your password" class="page dark gradient" /><br />
+					<input type="submit" id="submit_login" name="submit" value="Login" class="page dark gradient" />
 					<span class="login_loading"></span>
 					<span class="errormess"></span>
 				</form>

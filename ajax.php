@@ -92,7 +92,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$qry_result->execute();
 
 		// Refresh using current sort order.
-		print "	<a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "')\">Refresh</a>\r\n";
+		print "	<a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "')\" class=\"page dark gradient\">Refresh</a>\r\n";
 
 		// Build Result String.
 		// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
@@ -100,16 +100,16 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$display_string .= "			<tr>\r\n";
 
 		if ($_SESSION['debugMode']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinID%2B0',0,'none')\">pinID</a></th>\r\n";
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDirection',0,'none')\">Direction</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinID%2B0',0,'none')\" class=\"page dark gradient\">pinID</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDirection',0,'none')\" class=\"page dark gradient\">Direction</a></th>\r\n";
 		}
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none')\">BCM#</a></th>\r\n";
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none')\">WPi#</a></th>\r\n";
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDescription',0,'none')\">Description</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none')\" class=\"page dark gradient\">BCM#</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none')\" class=\"page dark gradient\">WPi#</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDescription',0,'none')\" class=\"page dark gradient\">Description</a></th>\r\n";
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinStatus%2B0',0,'none')\">Status</a></th>\r\n";
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none')\">Enabled</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinStatus%2B0',0,'none')\" class=\"page dark gradient\">Status</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none')\" class=\"page dark gradient\">Enabled</a></th>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		while ($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
@@ -257,30 +257,31 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			$pn = $logLastPage;
 		}
 
-		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'false')\">Refresh</a> \r\n";
-		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\">Clear Log</a> \r\n";
+		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\">Refresh</a> \r\n";
+		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\">Clear Log</a> \r\n";
 
 		print "		<form name=\"myForm\">ID Range: \r\n";
-		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" />\r\n";
-		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" /><br />\r\n";
+		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
+		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" /><br />\r\n";
 
 		print "		</form>\r\n";
 
 		if($logLastPage > 1) {
+			$logPagination .= "<div class=\"pagination dark\">";
 			//previous button
 			if ($pn > 1) {
-				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logPrev)\">&lt;-</a> ";
+				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logPrev)\" class=\"page dark gradient\">prev</a> ";
 			} else {
-				$logPagination .= "&lt;- ";
+				$logPagination .= "<span class=\"page dark gradient\">prev</span>";
 			}
 
 			//pages
 			if ($logLastPage < 7 + (3 * 2)) {
 				for ($counter = 1; $counter <= $logLastPage; $counter++) {
 					if ($counter == $pn) {
-						$logPagination .= "$counter ";
+						$logPagination .= "<span class=\"page dark active\">$counter</span>";
 					} else {
-						$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
+						$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
 					}
 				}
 			}
@@ -289,41 +290,41 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 				if($pn < 1 + (3 * 2)) {
 					for ($counter = 1; $counter < 4 + (3 * 2); $counter++) {
 						if ($counter == $pn) {
-							$logPagination .= "$counter ";
+							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
-							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
+							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
 						}
 					}
-					$logPagination .= "... ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\">$logNextToLastPage</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\">$logLastPage</a> ";
+					$logPagination .= "<span class=\"page dark gradient\">...</span>";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\" class=\"page dark gradient\">$logNextToLastPage</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\">$logLastPage</a> ";
 				}
 				//in middle; hide some front and some back
 				elseif($logLastPage - (3 * 2) > $pn && $pn > (3 * 2)) {
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a> ";
-					$logPagination .= "... ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\" class=\"page dark gradient\">1</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\" class=\"page dark gradient\">2</a> ";
+					$logPagination .= "<span class=\"page dark gradient\">...</span>";
 					for ($counter = $pn - 3; $counter <= $pn + 3; $counter++) {
 						if ($counter == $pn) {
-							$logPagination .= "$counter ";
+							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
-							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
+							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
 						}
 					}
-					$logPagination .= "... ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\">$logNextToLastPage</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\">$logLastPage</a> ";
+					$logPagination .= "<span class=\"page dark gradient\">...</span>";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\" class=\"page dark gradient\">$logNextToLastPage</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\">$logLastPage</a> ";
 				}
 				//close to end; only hide early pages
 				else {
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a> ";
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a> ";
-					$logPagination .= "... ";
+					$logPagination .= "<span class=\"page dark gradient\">...</span>";
 					for ($counter = $logLastPage - (2 + (3 * 2)); $counter <= $logLastPage; $counter++) {
 						if ($counter == $pn) {
-							$logPagination .= "$counter ";
+							$logPagination .= "<span class=\"page dark gradient\">$counter</span>";
 						} else {
-							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
+							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
 						}
 					}
 				}
@@ -331,10 +332,11 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 
 			//next button
 			if ($pn < $counter - 1) {
-				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNext)\">-&gt;</a> ";
+				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNext)\" class=\"page dark gradient\">next</a> ";
 			} else {
-				$logPagination .= "-&gt; ";
+				$logPagination .= "<span class=\"page dark gradient\">next</span>";
 			}
+			$logPagination .= "</div>";
 		}
 		if (isset($logPagination)) {
 			print $logPagination . "<br />\r\n";
@@ -443,6 +445,14 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		$display_string = "		<script type=\"text/javascript\">logPageSize=document.getElementById('logPageSize').value);</script>\r\n";
 		$display_string .= "		<table>\r\n";
 
+		// gpioserverd status..
+		$display_string .= "			<tr>\r\n";
+		$display_string .= "				<td>gpioserverd status</td>\r\n";
+		$display_string .= "				<td>";
+		$display_string .= $_SESSION['gpioserverdStatus'];
+		$display_string .= "				</td>\r\n";
+		$display_string .= "			</tr>\r\n";
+
 		// Debug Mode.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Debug Mode</td>\r\n";
@@ -490,7 +500,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Log pagination</a></td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . ")\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . ")\" class=\"page dark gradient\" /></td>\r\n";
 
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "                    </tr>\r\n";

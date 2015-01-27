@@ -52,6 +52,14 @@ try {
 	$stateIcon['on'] =  'images/checkbox_checked_icon.png';
 	$stateIcon['off'] = 'images/checkbox_unchecked_icon.png';
 
+	exec("pgrep GPIOServer.sh", $pids);
+	if (empty($pids)) {
+		$_SESSION['gpioserverdStatus'] = 'stopped';
+	} else {
+		$_SESSION['gpioserverdStatus'] = 'running';
+	}
+
+
 } catch(Exception $e) {
 	echo 'Exception -> ';
 	var_dump($e->getMessage());
