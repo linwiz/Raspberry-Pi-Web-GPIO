@@ -241,8 +241,8 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 		// Determine number of pages needed.
 		$logPrev = $pn - 1;
 		$logNext = $pn + 1;
-		$logNextToLastPage = $logLastPage - 1;
 		$logLastPage = ceil($logCount / $_SESSION['logPageSize']);
+		$logNextToLastPage = $logLastPage - 1;
 		if ((int)$pn > (int)$logLastPage) {
 			$pn = $logLastPage;
 		}
@@ -255,74 +255,74 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 
 		print "		</form>\r\n";
 
-		if($logLastPage > 1) {	
+		if($logLastPage > 1) {
 			//previous button
 			if ($pn > 1) {
-				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logPrev)\"><-</a>";
+				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logPrev)\">&lt;-</a> ";
 			} else {
-				$logPagination .= "<-";
+				$logPagination .= "&lt;- ";
 			}
-			
-			//pages	
-			if ($logLastPage < 7 + (3 * 2)) {	
+
+			//pages
+			if ($logLastPage < 7 + (3 * 2)) {
 				for ($counter = 1; $counter <= $logLastPage; $counter++) {
-					if ($counter == $pn) P
-						$pagination.= "$counter";
+					if ($counter == $pn) {
+						$logPagination .= "$counter ";
 					} else {
-						$pagination.= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a>";
+						$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
 					}
 				}
 			}
 			elseif($logLastPage > 5 + (3 * 2)) {
 				//close to beginning; only hide later pages
 				if($pn < 1 + (3 * 2)) {
-					for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
+					for ($counter = 1; $counter < 4 + (3 * 2); $counter++) {
 						if ($counter == $pn) {
-							$pagination .= "$counter";
+							$logPagination .= "$counter ";
 						} else {
-							$pagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a>";
+							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
 						}
 					}
-					$pagination.= "...";
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\">$logNextToLastPage</a>";
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\">$logLastPage</a>";
+					$logPagination .= "... ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\">$logNextToLastPage</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\">$logLastPage</a> ";
 				}
 				//in middle; hide some front and some back
 				elseif($logLastPage - (3 * 2) > $pn && $pn > (3 * 2)) {
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a>";
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a>";
-					$pagination.= "...";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a> ";
+					$logPagination .= "... ";
 					for ($counter = $pn - 3; $counter <= $pn + 3; $counter++) {
 						if ($counter == $pn) {
-							$pagination.= "$counter";
+							$logPagination .= "$counter ";
 						} else {
-							$pagination.= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a>";
+							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
 						}
 					}
-					$pagination.= "...";
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\">$logNextToLastPage</a>";
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\">$logLastPage</a>";
+					$logPagination .= "... ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\">$logNextToLastPage</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\">$logLastPage</a> ";
 				}
 				//close to end; only hide early pages
 				else {
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a>";
-					$pagination.= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a>";
-					$pagination.= "...";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a> ";
+					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a> ";
+					$logPagination .= "... ";
 					for ($counter = $logLastPage - (2 + (3 * 2)); $counter <= $logLastPage; $counter++) {
 						if ($counter == $pn) {
-							$pagination .= "$counter";
+							$logPagination .= "$counter ";
 						} else {
-							$pagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a>";
+							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\">$counter</a> ";
 						}
 					}
 				}
 			}
-			
+
 			//next button
 			if ($pn < $counter - 1) {
-				$pagination .= "<a href=\"#\" onclick=\"showPage(2,$logNext)\">-&gt;</a>";
+				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNext)\">-&gt;</a> ";
 			} else {
-				$pagination .= "-&gt;";
+				$logPagination .= "-&gt; ";
 			}
 		}
 		print $logPagination . "<br />\r\n";
