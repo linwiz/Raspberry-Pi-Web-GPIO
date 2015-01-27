@@ -56,13 +56,10 @@ else:
 # Install service.
 PATH='/etc/init.d/gpioserver'
 if os.path.isfile(PATH) and os.access(PATH, os.R_OK):
-	print "Updating gpioserver at " + PATH
-	subprocess.call(["sudo", "rm", "/etc/init.d/gpioserver"])
-
+	print "gpioserver already installed at " + PATH
 else:
 	print "Installing gpioserver to " + PATH
-
-subprocess.call(["sudo", "chmod", "+x", "init.d/gpioserver"])
-subprocess.call(["sudo", "cp", "init.d/gpioserver", "/etc/init.d"])
-subprocess.call(["sudo", "update-rc.d", "gpioserver", "defaults"])
-subprocess.call(["sudo", "service", "gpioserver", "start"])
+	subprocess.call(["sudo", "chmod", "+x", "init.d/gpioserver"])
+	subprocess.call(["sudo", "ln", "-s", workdir + "init.d/gpioserver", "/etc/init.d/gpioserver"])
+	subprocess.call(["sudo", "update-rc.d", "gpioserver", "defaults"])
+	subprocess.call(["sudo", "service", "gpioserver", "start"])
