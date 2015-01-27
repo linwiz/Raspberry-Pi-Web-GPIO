@@ -19,7 +19,7 @@ string userId   = "user";
 string password = "pass";
 string DB   = "gpio";
 
-int mysql_log_insert(string datas) {
+int mysql_log_insert(string datas, string str) {
 	MYSQL  *MySQLConRet;
 	MYSQL  *MySQLConnection = NULL;
 
@@ -37,7 +37,7 @@ int mysql_log_insert(string datas) {
 	int mysqlStatus = 0;
 	MYSQL_RES  *mysqlResult = NULL;
 	try {
-		string sqlInsStatement = "INSERT INTO log (data) VALUES ('" + datas + "')";
+		string sqlInsStatement = "INSERT INTO log (data) VALUES ('" + datas + str + "')";
 		mysqlStatus = mysql_query( MySQLConnection, sqlInsStatement.c_str() );
 		if (mysqlStatus) {
 			throw FFError( (char*)mysql_error(MySQLConnection) );

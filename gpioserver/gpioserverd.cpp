@@ -16,14 +16,9 @@ using namespace std;
 #define DAEMON_NAME "gpioserver"
 
 int intRevision;
-char* strRevision;
+const char* strRevision;
 
 void process(){
-	//syslog (LOG_NOTICE, "Writing to my Syslog");
-	intRevision = mysql_get_revision();
-	sprintf(strRevision, "%d", intRevision);
-
-	mysql_log_insert(strRevision);
 }
 
 int main(int argc, char *argv[]) {
@@ -31,8 +26,6 @@ int main(int argc, char *argv[]) {
 	//Set our Logging Mask and open the Log
 	setlogmask(LOG_UPTO(LOG_NOTICE));
 	openlog(DAEMON_NAME, LOG_CONS | LOG_NDELAY | LOG_PERROR | LOG_PID, LOG_USER);
-
-	syslog(LOG_INFO, "gpioserverd Starting.");
 
 	pid_t pid, sid;
 
@@ -49,7 +42,7 @@ int main(int argc, char *argv[]) {
 	// Create PID file.
 	FILE *fp = fopen("/var/run/gpioserver.pid", "w");
 	if (!fp) {
-		syslog(LOG_INFO, "Failed opening PID file.");
+		syslog(LOG_NOTICE, "Failed opening PID file.");
 		exit(EXIT_FAILURE);
 	}
 	fprintf(fp, "%d\n", pid);
@@ -70,6 +63,22 @@ int main(int argc, char *argv[]) {
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
+
+
+	// Get raspberry pi board revision
+	intRevision = mysql_get_revision();
+	switch (intRevision) {
+	case 1:
+		strRevision = "1";
+		break;
+	case 2:
+		strRevision = "2";
+		break;
+	}
+	std::string strRev = strRevision;
+	mysql_log_insert("Revision: ", strRev);
+
+	syslog(LOG_NOTICE, "gpioserverd Starting.");
 
 	//----------------
 	//Main Process
