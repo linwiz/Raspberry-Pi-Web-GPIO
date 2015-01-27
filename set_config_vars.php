@@ -23,6 +23,7 @@ try {
 		$_SESSION['showBCMNumber'] = $rowConfig['showBCMNumber'];
 		$_SESSION['showWPiNumber'] = $rowConfig['showWPiNumber'];
 		$_SESSION['showDisableBox'] = $rowConfig['showDisableBox'];
+		$_SESSION['pinDelay'] = $rowConfig['pinDelay'];
 	}
 
 	// Page whitelist.
@@ -44,6 +45,7 @@ try {
 	$configVariables .= "           [showBCMNumber] => " . $_SESSION['showBCMNumber'] . "\r\n";
 	$configVariables .= "           [showWPiNumber] => " . $_SESSION['showWPiNumber'] . "\r\n";
 	$configVariables .= "           [showDisableBox] => " . $_SESSION['showDisableBox'] . "\r\n";
+	$configVariables .= "           [pinDelay] => " . $_SESSION['pinDelay'] . "\r\n";
 	if (isset($_SESSION['username'])) {
 		$configVariables .= "           [username] => " . $_SESSION['username'] . "\r\n";
 	}

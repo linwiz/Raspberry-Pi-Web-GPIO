@@ -56,6 +56,9 @@ pins=`dbQuery "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pin
 
 # Start loop.
 while true; do
+	# Retrieve pinDelay.
+	pinDelay=`dbQuery "SELECT pinDelay FROM config WHERE configVersion=1"`
+
 	# Retrieve logging information.
 	logging=`dbQuery "SELECT enableLogging FROM config WHERE configVersion=1"`
 	for PIN in $pins ;
@@ -128,6 +131,6 @@ while true; do
 	done
 
 	# Complete loop.
-	sleep $waitTime
+	sleep $pinDelay
 done
 } >> /var/log/GPIOServer.log

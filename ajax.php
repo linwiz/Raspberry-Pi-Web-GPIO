@@ -283,6 +283,7 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 
 		print "		</form>\r\n";
 
+		$logPagination = '';
 		if($logLastPage > 1) {
 			$logPagination .= "<div class=\"pagination dark\">";
 			//previous button
@@ -471,14 +472,23 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		$showDisableBoxTemp = 0;
 	}
 
+	if (isset($_GET['pinDelay']) && ($_GET['pinDelay']!= 'undefined')) {
+		$pinDelayTemp = $_GET['pinDelay'];
+		if ((int)$pinDelayTemp != $pinDelayTemp || (int)$pinDelayTemp < 0) {
+			$pinDelayTemp = 5;
+		}
+	} else {
+		$pinDelayTemp = 5;
+	}
+
 	// Update config fields as (if) needed.
 	$query_update = "";
 
 	try {
 		if ($updateConfig > 0) {
-			$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins, logPageSize = :logPageSize, enableLogging = :enableLogging, showBCMNumber = :showBCMNumber, showWPiNumber = :showWPiNumber, showDisableBox = :showDisableBox WHERE configVersion = 1';
+			$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins, logPageSize = :logPageSize, enableLogging = :enableLogging, showBCMNumber = :showBCMNumber, showWPiNumber = :showWPiNumber, showDisableBox = :showDisableBox, pinDelay = :pinDelay WHERE configVersion = 1';
 			$qry_result = $db->prepare($query_update);
-			$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp, ':logPageSize'=>$pageSizeTemp, ':enableLogging'=>$enableLoggingTemp, ':showBCMNumber'=>$showBCMNumberTemp, ':showWPiNumber'=>$showWPiNumberTemp, ':showDisableBox'=>$showDisableBoxTemp));
+			$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp, ':logPageSize'=>$pageSizeTemp, ':enableLogging'=>$enableLoggingTemp, ':showBCMNumber'=>$showBCMNumberTemp, ':showWPiNumber'=>$showWPiNumberTemp, ':showDisableBox'=>$showDisableBoxTemp, ':pinDelay'=>$pinDelayTemp));
 			$_SESSION['debugMode'] = $debugModeTemp;
 			$_SESSION['showDisabledPins'] = $showDisabledPinsTemp;
 			$_SESSION['logPageSize'] = $pageSizeTemp;
@@ -486,6 +496,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 			$_SESSION['showBCMNumber'] = $showBCMNumberTemp;
 			$_SESSION['showWPiNumber'] = $showWPiNumberTemp;
 			$_SESSION['showDisableBox'] = $showDisableBoxTemp;
+			$_SESSION['pinDelay'] = $pinDelayTemp;
 		}
 
 		// Build Result String.
@@ -503,7 +514,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Debug Mode.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Debug Mode</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
 
 		switch ($_SESSION['debugMode']) {
 			case 1 :
@@ -518,7 +529,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Show Disabled Pins.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show Disabled Pins</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
 
 		switch ($_SESSION['showDisabledPins']) {
 			case 1 :
@@ -533,7 +544,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Show BCM number.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show BCM pin number</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . ($_SESSION['showBCMNumber'] == 1 ? '0':'1') . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . ($_SESSION['showBCMNumber'] == 1 ? '0':'1') . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
 
 		switch ($_SESSION['showBCMNumber']) {
 			case 1 :
@@ -548,7 +559,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Show WPi number.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show WPi number</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . ($_SESSION['showWPiNumber'] == 1 ? '0':'1')  . "," . $_SESSION['showDisableBox'] . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . ($_SESSION['showWPiNumber'] == 1 ? '0':'1')  . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
 
 		switch ($_SESSION['showWPiNumber']) {
 			case 1 :
@@ -563,7 +574,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Show Disable box.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show Disable box</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . ($_SESSION['showDisableBox'] == 1 ? '0':'1') . ")\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . ($_SESSION['showDisableBox'] == 1 ? '0':'1') . ",pinDelay.value)\" />";
 
 		switch ($_SESSION['showDisableBox']) {
 			case 1 :
@@ -578,7 +589,7 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Enable logging.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Logging</a></td>\r\n";
-		$display_string .= " <td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ")\" />";
+		$display_string .= " <td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
 		switch ($_SESSION['enableLogging']) {
 			case 1 :
 				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
@@ -592,9 +603,13 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Log pagination</a></td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ")\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                    </tr>\r\n";
 
-		$display_string .= "</a></td>\r\n";
+	        // Pin delay.
+		$display_string .= "                    <tr>\r\n";
+		$display_string .= "                            <td>Pin delay</a></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 		// Close table.

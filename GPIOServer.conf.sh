@@ -9,6 +9,3 @@ dbport="3306" # service port number
 dbusername="user" # service username
 dbpassword="pass" # service password
 dbdatabase="gpio" # service database
-
-# Set pin refresh time.
-waitTime=1
