@@ -102,8 +102,8 @@ function showPage() {
 	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2 + "&pn=" + pn + "&truncate=" + truncate;
 			break;
 		case 3:
-			// Params: updateConfig debugMode showDisabledPins logPageSize
-			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4] + "&enableLogging=" + arguments[5];
+			// Params: updateConfig debugMode showDisabledPins logPageSize showBCMNumber showWPiNumber showDisableBox
+			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4] + "&enableLogging=" + arguments[5] + "&showBCMNumber=" + arguments[6] + "&showWPiNumber=" + arguments[7] + "&showDisableBox=" + arguments[8];
 		default:
  	}
         ajaxRequest.open("GET", "ajax.php" + queryString, true);

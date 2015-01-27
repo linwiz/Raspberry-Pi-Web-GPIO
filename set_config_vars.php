@@ -20,6 +20,9 @@ try {
 		$_SESSION['showDisabledPins'] = $rowConfig['showDisabledPins'];
 		$_SESSION['logPageSize'] = $rowConfig['logPageSize'];
 		$_SESSION['enableLogging'] = $rowConfig['enableLogging'];
+		$_SESSION['showBCMNumber'] = $rowConfig['showBCMNumber'];
+		$_SESSION['showWPiNumber'] = $rowConfig['showWPiNumber'];
+		$_SESSION['showDisableBox'] = $rowConfig['showDisableBox'];
 	}
 
 	// Page whitelist.
@@ -38,6 +41,9 @@ try {
 	$configVariables .= "           [showDisabledPins] => " . $_SESSION['showDisabledPins'] . "\r\n";
 	$configVariables .= "           [enableLogging] => " . $_SESSION['enableLogging'] . "\r\n";
 	$configVariables .= "           [logPageSize] => " . $_SESSION['logPageSize'] . "\r\n";
+	$configVariables .= "           [showBCMNumber] => " . $_SESSION['showBCMNumber'] . "\r\n";
+	$configVariables .= "           [showWPiNumber] => " . $_SESSION['showWPiNumber'] . "\r\n";
+	$configVariables .= "           [showDisableBox] => " . $_SESSION['showDisableBox'] . "\r\n";
 	if (isset($_SESSION['username'])) {
 		$configVariables .= "           [username] => " . $_SESSION['username'] . "\r\n";
 	}
