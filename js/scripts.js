@@ -72,6 +72,13 @@ function showPage() {
 		        var id1 = document.getElementById('id1').value;
         		var id2 = document.getElementById('id2').value;
 			var pn = arguments[1];
+			var truncate = arguments[2];
+
+			if (truncate == 'true') {
+				var truncate = 'true';
+			} else {
+				var truncate = 'false';
+			}
 			// Check for positive integers.
 			if (!isNormalInteger(id1)) {
 				var id1 = 0;
@@ -92,7 +99,7 @@ function showPage() {
 			if (parseInt(id2) < parseInt(id1)) {
 				var id2 = 99999;
 			}
-	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2 + "&pn=" + pn;
+	        	var queryString = "?pageType=" + pageType[arguments[0]]  + "&id1=" + id1 + "&id2=" + id2 + "&pn=" + pn + "&truncate=" + truncate;
 			break;
 		case 3:
 			// Params: updateConfig debugMode showDisabledPins logPageSize

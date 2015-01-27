@@ -199,6 +199,11 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 	} else {
 		$pn = 1;
 	}
+	if (isset($_GET['truncate'])) {
+		$truncate = $_GET['truncate'];
+	} else {
+		$truncate = 'false';
+	}
 
 	// Check for positive integers.
 	if ((int)$id1 != $id1 || (int)$id1 < 0) {
@@ -221,6 +226,11 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 	}
 
 	try {
+		if ($truncate == "true") {
+			$qry_result = $db->prepare("TRUNCATE TABLE log;");
+			$qry_result->execute();
+		}
+
 		// Build query.
 		$query = 'SELECT * FROM log WHERE id > 0 ';
 		$query .= ' AND id >= :id1';
@@ -247,11 +257,12 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			$pn = $logLastPage;
 		}
 
-		print "	<a href=\"#\" onclick=\"showPage(2,$pn)\">Refresh</a>\r\n";
+		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'false')\">Refresh</a> \r\n";
+		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\">Clear Log</a> \r\n";
 
 		print "		<form name=\"myForm\">ID Range: \r\n";
-		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2,$pn)\" size=\"5\" />\r\n";
-		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2,$pn)\" size=\"5\" /><br />\r\n";
+		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" />\r\n";
+		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" /><br />\r\n";
 
 		print "		</form>\r\n";
 
@@ -325,7 +336,9 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 				$logPagination .= "-&gt; ";
 			}
 		}
-		print $logPagination . "<br />\r\n";
+		if (isset($logPagination)) {
+			print $logPagination . "<br />\r\n";
+		}
 
 		// Build Result String.
 		$display_string = "		<table>\r\n";
