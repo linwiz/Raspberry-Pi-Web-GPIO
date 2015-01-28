@@ -174,13 +174,17 @@ try {
 		foreach($_GET as $key => $editPinValue) {
 			if (strpos($key,'editPin') !== false) {
 				$editPinID = str_replace("editPin", "", $key);
-				//echo "			" . $editPinID . '=>' . $editPinValue . "\r\n";
 				$query_update = "UPDATE pinRevision" . $_SESSION['piRevision'] . " SET pinDescription=:editPinValue WHERE pinID=:editPinID";
 				$qry_result = $db->prepare($query_update);
 				$qry_result->bindParam(':editPinID', $editPinID, PDO::PARAM_INT);
 				$qry_result->bindParam(':editPinValue', $editPinValue);
 				$qry_result->execute();
 			}
+		}
+
+		// Show pins page if changes were saved.
+		if (isset($editPinID)) {
+			print "		<script type=\"text/javascript\">changeSection(1);</script>\r\n";
 		}
 
 		// Select rows
