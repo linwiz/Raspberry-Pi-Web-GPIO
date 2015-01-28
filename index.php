@@ -1,7 +1,5 @@
 <?php
-session_start();
-include 'set_config_vars.php';
-require_once('scrypt.php');
+require_once('set_config_vars.php');
 
 if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == '') {
 	die("Please configure the values in the GPIOServer.conf.sh file and then run setup.py.");

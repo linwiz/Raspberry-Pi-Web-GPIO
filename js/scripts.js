@@ -118,10 +118,10 @@ function showPage() {
 		case 4:
 			// Params: pin description fields
 			var queryString = "?pageType=" + pageType[arguments[0]];
-			var editPins = arguments[1];
-			for (i = 0; i < editPins.length; i++) {
-				var editPinValue = document.getElementById('editPin' + editPins[i]).value;
-				queryString += "&editPin" + editPins[i] + "=" + editPinValue;
+			var editPinList = arguments[1];
+			for (i = 0; i < editPinList.length; i++) {
+				var editPinValue = document.getElementById('editPin' + editPinList[i]).value;
+				queryString += "&editPin" + editPinList[i] + "=" + editPinValue;
 			}
 			break;
 		default:

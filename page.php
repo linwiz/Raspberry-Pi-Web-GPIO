@@ -1,5 +1,5 @@
 <?php
-include 'set_config_vars.php';
+require_once('set_config_vars.php');
 ?>
 <html>
 <head>

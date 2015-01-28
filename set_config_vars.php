@@ -3,6 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
 	session_start();
 }
 require_once('db.php');
+require_once('scrypt.php');
 
 try {
 	if (!isset($_SESSION['piRevision'])) {
