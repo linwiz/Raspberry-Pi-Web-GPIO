@@ -65,17 +65,19 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 
 	$query_update = "";
 	try {
-		// Get value of $field.
-		$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
-		$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
-		$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
-		$qry_fieldvalue_result->execute();
-		$row_fieldvalue = $qry_fieldvalue_result->fetch(PDO::FETCH_ASSOC);
-		$field_value = $row_fieldvalue[$field];
-		if ($field_value == 1) {
-			$field_value = 0;
-		} else {
-			$field_value = 1;
+		if (isset($field) && $field != "none") {
+			// Get value of $field.
+			$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
+			$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
+			$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
+			$qry_fieldvalue_result->execute();
+			$row_fieldvalue = $qry_fieldvalue_result->fetch(PDO::FETCH_ASSOC);
+			$field_value = $row_fieldvalue[$field];
+			if ($field_value == 1) {
+				$field_value = 0;
+			} else {
+				$field_value = 1;
+			}
 		}
 
 		// Update state and enabled fields as needed.
@@ -237,17 +239,19 @@ elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
 
 	$query_update = "";
 	try {
-		// Get value of $field.
-		$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
-		$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
-		$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
-		$qry_fieldvalue_result->execute();
-		$row_fieldvalue = $qry_fieldvalue_result->fetch(PDO::FETCH_ASSOC);
-		$field_value = $row_fieldvalue[$field];
-		if ($field_value == 1) {
-			$field_value = 0;
-		} else {
-			$field_value = 1;
+		if (isset($field) && $field != "none") {
+			// Get value of $field.
+			$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
+			$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
+			$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
+				$qry_fieldvalue_result->execute();
+			$row_fieldvalue = $qry_fieldvalue_result->fetch(PDO::FETCH_ASSOC);
+			$field_value = $row_fieldvalue[$field];
+			if ($field_value == 1) {
+				$field_value = 0;
+			} else {
+				$field_value = 1;
+			}
 		}
 
 		// Update state and enabled fields as needed.
@@ -423,6 +427,16 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			$qry_result = $db->prepare("TRUNCATE TABLE log;");
 			$qry_result->execute();
 		}
+//////////
+// TODO //
+//////////
+/* NEED TO REDUCE MYSQL QUERIES. E.G.:
+POSSIBLE FIXES: ????
+150127 20:25:36 222771 Connect  user@localhost on gpio
+                222771 Query    SELECT * FROM log WHERE id > 0  AND id >= '0' AND id <= '99999' ORDER BY id DESC
+                222771 Query    SELECT * FROM log WHERE id > 0  AND id >= '0' AND id <= '99999' ORDER BY id DESC LIMIT 0,10
+                222771 Quit
+*/
 
 		// Build query.
 		$query = 'SELECT * FROM log WHERE id > 0 ';
@@ -440,7 +454,9 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 		// Execute query.
 		$qry_result = $db->prepare($query);
 		$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
-
+//////////////
+// END TODO //
+//////////////
 		// Determine number of pages needed.
 		$logPrev = $pn - 1;
 		$logNext = $pn + 1;
