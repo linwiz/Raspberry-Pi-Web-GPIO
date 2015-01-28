@@ -171,12 +171,16 @@ try {
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-		if ($id > 0) {
-			$query_update = "UPDATE pinRevision" . $_SESSION['piRevision'] . " SET $field=:field_value WHERE pinID=:id";
-			$qry_result = $db->prepare($query_update);
-			$qry_result->bindParam(':id', $id, PDO::PARAM_INT);
-			$qry_result->bindParam(':field_value', $field_value, PDO::PARAM_INT);
-			$qry_result->execute();
+		foreach($_GET as $key => $editPinValue) {
+			if (strpos($key,'editPin') !== false) {
+				$editPinID = str_replace("editPin", "", $key);
+				//echo "			" . $editPinID . '=>' . $editPinValue . "\r\n";
+				$query_update = "UPDATE pinRevision" . $_SESSION['piRevision'] . " SET pinDescription=:editPinValue WHERE pinID=:editPinID";
+				$qry_result = $db->prepare($query_update);
+				$qry_result->bindParam(':editPinID', $editPinID, PDO::PARAM_INT);
+				$qry_result->bindParam(':editPinValue', $editPinValue);
+				$qry_result->execute();
+			}
 		}
 
 		// Select rows
@@ -222,8 +226,7 @@ try {
 		$editPinString = '';
 		while ($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
 			$display_string .= "			<tr>\r\n";
-			$editPinString .= "			var editPin" . $row['pinID'] . "=document.getElementById('editPin" . $row['pinID'] . "').value);\r\n";
-			$editPins .= $row['pinID'] . ",";
+			$editPins .= "\"" . $row['pinID'] . "\",";
 
 			if ($_SESSION['debugMode']){
 				$display_string .= "				<td>" . $row['pinID'] . "</td>\r\n";
@@ -267,8 +270,7 @@ try {
 		}
 		$display_string .= "		</table>\r\n";
 		$display_string .= "		<script type=\"text/javascript\">\r\n";
-		$display_string .= $editPinString;
-		$display_string .= "			var editPins=\"" . $editPins . "\";\r\n";
+		$display_string .= "			var editPins=[" . rtrim($editPins, ",") . "];\r\n";
 		$display_string .="		</script>\r\n";
 
 		print $display_string;
@@ -281,6 +283,8 @@ try {
 			print "		<pre>$query_update</pre>\r\n";
 			print "		<pre>:field=$field</pre>\r\n";
 			print "		<pre>:id=$id</pre>\r\n";
+			//print "		<pre>\r\n";
+			//print " 	</pre>\r\n";
 		}
 	}
 

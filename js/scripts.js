@@ -117,8 +117,12 @@ function showPage() {
 		// Edit page.
 		case 4:
 			// Params:
-			alert(arguments[1]);
 			var queryString = "?pageType=" + pageType[arguments[0]];
+			var editPins = arguments[1];
+			for (i = 0; i < editPins.length; i++) {
+				var editPinValue = document.getElementById('editPin' + editPins[i]).value;
+				queryString += "&editPin" + editPins[i] + "=" + editPinValue;
+			}
 			break;
 		default:
  	}
