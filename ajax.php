@@ -1,14 +1,11 @@
 <?php
 require 'set_config_vars.php';
+require_once('scrypt.php');
 
-if (isset($_POST['username'])) { // if ajax request submitted
-	// Password hashing functions.
-	require_once('scrypt.php');
-
-	$post_username = $_POST['username']; // the ajax post username
-	$post_password = $_POST['password']; // the ajax post password
-
-	try {
+try {
+	if (isset($_POST['username'])) {
+		$post_username = $_POST['username'];
+		$post_password = $_POST['password'];
 		$loginQuery = 'SELECT * FROM users WHERE username = :username';
 		$loginResult = $db->prepare($loginQuery);
 		$loginResult->execute(array(':username'=>$post_username));
@@ -24,43 +21,37 @@ if (isset($_POST['username'])) { // if ajax request submitted
 		}
 		unset($loginResult);
 		unset($loginData);
-	} catch (Exception $e) {
-		echo 'Exception -> ';
-		var_dump($e->getMessage());
 	}
-}
 
-if ($_SESSION['pageType'] == "pins" || $_SESSION['pageType'] == "edit") {
 	// Set up calling params.
-	$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
-	if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_whitelist)) {
-		$sort = $_GET['sort'];
-	} else {
-		$sort = "pinNumberBCM+0";
-	}
+	if (($_SESSION['pageType'] == "pins") || ($_SESSION['pageType'] == "edit") && (isset($_SESSION['username']))) {
+		$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
+		if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_whitelist)) {
+			$sort = $_GET['sort'];
+		} else {
+			$sort = "pinNumberBCM+0";
+		}
 
-	$field_whitelist = array('pinID', 'pinDirection', 'pinNumberBCM', 'pinNumberWPi', 'pinDescription', 'pinStatus', 'pinEnabled');
-	if (isset($_GET['id']) && in_array($_GET['field'], $field_whitelist)) {
-		$field = $_GET['field'];
-	} else {
-		$field = "none";
-	}
+		$field_whitelist = array('pinID', 'pinDirection', 'pinNumberBCM', 'pinNumberWPi', 'pinDescription', 'pinStatus', 'pinEnabled');
+		if (isset($_GET['id']) && in_array($_GET['field'], $field_whitelist)) {
+			$field = $_GET['field'];
+		} else {
+			$field = "none";
+		}
 
-	if (isset($_GET['id']) && ($_GET['id']!= 'undefined')) {
-		$id = $_GET['id'];
-		if ((int)$id != $id || (int)$id >= 0) {
+		if (isset($_GET['id']) && ($_GET['id']!= 'undefined')) {
 			$id = $_GET['id'];
+			if ((int)$id != $id || (int)$id >= 0) {
+				$id = $_GET['id'];
+			} else {
+				$id = 0;
+			}
 		} else {
 			$id = 0;
 		}
-	} else {
-		$id = 0;
-	}
 
-	$query_update = "";
-	try {
+		$query_update = "";
 		if (isset($field) && $field != "none") {
-			// Get value of $field.
 			$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
 			$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
 			$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
@@ -73,21 +64,17 @@ if ($_SESSION['pageType'] == "pins" || $_SESSION['pageType'] == "edit") {
 				$field_value = 1;
 			}
 		}
-	} catch (Exception $e) {
-		echo 'Exception -> ';
-		var_dump($e->getMessage());
 	}
-}
 
-// Pins page.
-if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
-	$sortDir_whitelist = array('ASC', 'DESC');
-	if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
-		$_SESSION['sortDir'] = $_GET['sortDir'];
-	} else {
-		$_SESSION['sortDir'] = "ASC";
-	}
-	try {
+	// Pins page.
+	if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
+		$sortDir_whitelist = array('ASC', 'DESC');
+		if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
+			$_SESSION['sortDir'] = $_GET['sortDir'];
+		} else {
+			$_SESSION['sortDir'] = "ASC";
+		}
+
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -208,20 +195,10 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 			print "		<pre>:field=$field</pre>\r\n";
 			print "		<pre>:id=$id</pre>";
 		}
-		unset($row);
-		unset($qry_result);
-		unset($row_fieldvalue);
-		unset($qry_fieldvalue_result);
-		$db = null;
-	} catch (Exception $e) {
-		echo 'Exception -> ';
-		var_dump($e->getMessage());
 	}
-}
 
-// Edit page.
-elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
-	try {
+	// Edit page.
+	elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -336,61 +313,51 @@ elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
 			print "		<pre>:field=$field</pre>\r\n";
 			print "		<pre>:id=$id</pre>\r\n";
 		}
-		unset($row);
-		unset($qry_result);
-		unset($row_fieldvalue);
-		unset($qry_fieldvalue_result);
-		$db = null;
-	} catch (Exception $e) {
-		echo 'Exception -> ';
-		var_dump($e->getMessage());
-	}
-}
-
-// Log page.
-elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
-	if (isset($_GET['id1'])) {
-		$id1 = $_GET['id1'];
-	} else {
-		$id1 = 0;
-	}
-	if (isset($_GET['id2'])) {
-		$id2 = $_GET['id2'];
-	} else {
-		$id2 = 99999;
-	}
-	if (isset($_GET['pn'])) {
-		$pn = $_GET['pn'];
-	} else {
-		$pn = 1;
-	}
-	if (isset($_GET['truncate'])) {
-		$truncate = $_GET['truncate'];
-	} else {
-		$truncate = 'false';
 	}
 
-	// Check for positive integers.
-	if ((int)$id1 != $id1 || (int)$id1 < 0) {
-		$id1 = 0;
-	}
-	if ((int)$id2 != $id2 || (int)$id2 < 0) {
-		$id2 = 99999;
-	}
+	// Log page.
+	elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
+		if (isset($_GET['id1'])) {
+			$id1 = $_GET['id1'];
+		} else {
+			$id1 = 0;
+		}
+		if (isset($_GET['id2'])) {
+			$id2 = $_GET['id2'];
+		} else {
+			$id2 = 99999;
+			}
+		if (isset($_GET['pn'])) {
+			$pn = $_GET['pn'];
+		} else {
+			$pn = 1;
+		}
+		if (isset($_GET['truncate'])) {
+			$truncate = $_GET['truncate'];
+		} else {
+			$truncate = 'false';
+		}
 
-	// id1 must be <= id2.
-	if ((int)$id1 > (int)$id2) {
-		$id1 = 0;
-	}
-	// id2 must be >= id1.
-	if ((int)$id2 < (int)$id1) {
-		$id2 = 99999;
-	}
-	if ((int)$pn != $pn || (int)$pn < 0) {
-		$pn = 1;
-	}
+		// Check for positive integers.
+		if ((int)$id1 != $id1 || (int)$id1 < 0) {
+			$id1 = 0;
+		}
+		if ((int)$id2 != $id2 || (int)$id2 < 0) {
+			$id2 = 99999;
+		}
 
-	try {
+		// id1 must be <= id2.
+		if ((int)$id1 > (int)$id2) {
+			$id1 = 0;
+			}
+		// id2 must be >= id1.
+		if ((int)$id2 < (int)$id1) {
+			$id2 = 99999;
+			}
+		if ((int)$pn != $pn || (int)$pn < 0) {
+			$pn = 1;
+		}
+
 		if ($truncate == "true") {
 			$qry_result = $db->prepare("TRUNCATE TABLE log;");
 			$qry_result->execute();
@@ -536,104 +503,95 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			print "		<pre>Range Set: $id1 <-> $id2</pre>\r\n";
 			print "		<pre>Select: $query</pre>";
 		}
-		unset($row);
-		unset($qry_result);
-		unset($qry_resultpn);
-		$db = null;
-	} catch (Exception $e) {
-		echo 'Exception -> ';
-		var_dump($e->getMessage());
 	}
-}
 
-// Config page.
-elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
-	// Get params for update.
-	if (isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined')) {
-		$pageSizeTemp = $_GET['logPageSize'];
-		if ((int)$pageSizeTemp != $pageSizeTemp || (int)$pageSizeTemp <= 0) {
+	// Config page.
+	elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
+		// Get params for update.
+		if (isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined')) {
+			$pageSizeTemp = $_GET['logPageSize'];
+			if ((int)$pageSizeTemp != $pageSizeTemp || (int)$pageSizeTemp <= 0) {
+				$pageSizeTemp = 10;
+			}
+		} else {
 			$pageSizeTemp = 10;
 		}
-	} else {
-		$pageSizeTemp = 10;
-	}
 
-	if (isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined')) {
-		$updateConfig = $_GET['updateConfig'];
-		if ((int)$updateConfig != $updateConfig || (int)$updateConfig < 0 || (int)$updateConfig > 1) {
+		if (isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined')) {
+			$updateConfig = $_GET['updateConfig'];
+			if ((int)$updateConfig != $updateConfig || (int)$updateConfig < 0 || (int)$updateConfig > 1) {
+				$updateConfig = 0;
+			}
+ 		} else {
 			$updateConfig = 0;
 		}
- 	} else {
-		$updateConfig = 0;
-	}
 
-	if (isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined')) {
-		$debugModeTemp = $_GET['debugMode'];
-		if ((int)$debugModeTemp != $debugModeTemp || (int)$debugModeTemp < 0 || (int)$debugModeTemp > 1) {
+		if (isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined')) {
+			$debugModeTemp = $_GET['debugMode'];
+			if ((int)$debugModeTemp != $debugModeTemp || (int)$debugModeTemp < 0 || (int)$debugModeTemp > 1) {
+				$debugModeTemp = 0;
+			}
+		} else {
 			$debugModeTemp = 0;
 		}
-	} else {
-		$debugModeTemp = 0;
-	}
 
-	if (isset($_GET['showDisabledPins']) && ($_GET['showDisabledPins']!= 'undefined')) {
-		$showDisabledPinsTemp = $_GET['showDisabledPins'];
-		if ((int)$showDisabledPinsTemp != $showDisabledPinsTemp || (int)$showDisabledPinsTemp < 0 || (int)$showDisabledPinsTemp > 1) {
+		if (isset($_GET['showDisabledPins']) && ($_GET['showDisabledPins']!= 'undefined')) {
+			$showDisabledPinsTemp = $_GET['showDisabledPins'];
+			if ((int)$showDisabledPinsTemp != $showDisabledPinsTemp || (int)$showDisabledPinsTemp < 0 || (int)$showDisabledPinsTemp > 1) {
+				$showDisabledPinsTemp = 0;
+			}
+		} else {
 			$showDisabledPinsTemp = 0;
 		}
-	} else {
-		$showDisabledPinsTemp = 0;
-	}
 
-	if (isset($_GET['enableLogging']) && ($_GET['enableLogging']!= 'undefined')) {
-		$enableLoggingTemp = $_GET['enableLogging'];
-		if ((int)$enableLoggingTemp != $enableLoggingTemp || (int)$enableLoggingTemp < 0 || (int)$enableLoggingTemp > 1) {
+		if (isset($_GET['enableLogging']) && ($_GET['enableLogging']!= 'undefined')) {
+			$enableLoggingTemp = $_GET['enableLogging'];
+			if ((int)$enableLoggingTemp != $enableLoggingTemp || (int)$enableLoggingTemp < 0 || (int)$enableLoggingTemp > 1) {
+				$enableLoggingTemp = 1;
+			}
+		} else {
 			$enableLoggingTemp = 1;
 		}
-	} else {
-		$enableLoggingTemp = 1;
-	}
 
-	if (isset($_GET['showBCMNumber']) && ($_GET['showBCMNumber']!= 'undefined')) {
-		$showBCMNumberTemp = $_GET['showBCMNumber'];
-		if ((int)$showBCMNumberTemp != $showBCMNumberTemp || (int)$showBCMNumberTemp < 0 || (int)$showBCMNumberTemp > 1) {
+		if (isset($_GET['showBCMNumber']) && ($_GET['showBCMNumber']!= 'undefined')) {
+			$showBCMNumberTemp = $_GET['showBCMNumber'];
+			if ((int)$showBCMNumberTemp != $showBCMNumberTemp || (int)$showBCMNumberTemp < 0 || (int)$showBCMNumberTemp > 1) {
+					$showBCMNumberTemp = 0;
+			}
+		} else 	{
 			$showBCMNumberTemp = 0;
 		}
-	} else {
-		$showBCMNumberTemp = 0;
-	}
 
-	if (isset($_GET['showWPiNumber']) && ($_GET['showWPiNumber']!= 'undefined')) {
-		$showWPiNumberTemp = $_GET['showWPiNumber'];
-		if ((int)$showWPiNumberTemp != $showWPiNumberTemp || (int)$showWPiNumberTemp < 0 || (int)$showWPiNumberTemp > 1) {
+		if (isset($_GET['showWPiNumber']) && ($_GET['showWPiNumber']!= 'undefined')) {
+			$showWPiNumberTemp = $_GET['showWPiNumber'];
+			if ((int)$showWPiNumberTemp != $showWPiNumberTemp || (int)$showWPiNumberTemp < 0 || (int)$showWPiNumberTemp > 1) {
+				$showWPiNumberTemp = 0;
+			}
+		} else {
 			$showWPiNumberTemp = 0;
 		}
-	} else {
-		$showWPiNumberTemp = 0;
-	}
 
-	if (isset($_GET['showDisableBox']) && ($_GET['showDisableBox']!= 'undefined')) {
-		$showDisableBoxTemp = $_GET['showDisableBox'];
-		if ((int)$showDisableBoxTemp != $showDisableBoxTemp || (int)$showDisableBoxTemp < 0 || (int)$showDisableBoxTemp > 1) {
+		if (isset($_GET['showDisableBox']) && ($_GET['showDisableBox']!= 'undefined')) {
+			$showDisableBoxTemp = $_GET['showDisableBox'];
+			if ((int)$showDisableBoxTemp != $showDisableBoxTemp || (int)$showDisableBoxTemp < 0 || (int)$showDisableBoxTemp > 1) {
+				$showDisableBoxTemp = 0;
+			}
+		} else {
 			$showDisableBoxTemp = 0;
 		}
-	} else {
-		$showDisableBoxTemp = 0;
-	}
 
-	if (isset($_GET['pinDelay']) && ($_GET['pinDelay']!= 'undefined')) {
-		$pinDelayTemp = $_GET['pinDelay'];
-		if ((int)$pinDelayTemp != $pinDelayTemp || (int)$pinDelayTemp < 0) {
+		if (isset($_GET['pinDelay']) && ($_GET['pinDelay']!= 'undefined')) {
+			$pinDelayTemp = $_GET['pinDelay'];
+			if ((int)$pinDelayTemp != $pinDelayTemp || (int)$pinDelayTemp < 0) {
+				$pinDelayTemp = 5;
+		}
+			} else {
 			$pinDelayTemp = 5;
 		}
-	} else {
-		$pinDelayTemp = 5;
-	}
 
-	// Update config fields as (if) needed.
-	$query_update = "";
+		// Update config fields as (if) needed.
+		$query_update = "";
 
-	try {
 		if ($updateConfig > 0) {
 			$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins, logPageSize = :logPageSize, enableLogging = :enableLogging, showBCMNumber = :showBCMNumber, showWPiNumber = :showWPiNumber, showDisableBox = :showDisableBox, pinDelay = :pinDelay WHERE configVersion = 1';
 			$qry_result = $db->prepare($query_update);
@@ -773,15 +731,22 @@ elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 			print '		<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . ' ' . $pageSizeTemp . ' ' . $enableLoggingTemp . "</pre>\r\n";
 			print '		<pre>' . $query_update . "</pre>\r\n";
 		}
-		unset($qry_result);
-		$db = null;
-	} catch (Exception $e) {
-		echo 'Exception -> ';
-		var_dump($e->getMessage());
 	}
-}
 
-else {
-	print "Logged out. Please reload page.\r\n";
+	else {
+		print "Logged out. Please reload page.\r\n";
+	}
+
+	// Cleanup.
+	unset($row);
+	unset($qry_result);
+	unset($qry_resultpn);
+	unset($row_fieldvalue);
+	unset($qry_fieldvalue_result);
+	$db = null;
+
+} catch (Exception $e) {
+	echo 'Exception -> ';
+	var_dump($e->getMessage());
 }
 ?>
