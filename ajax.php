@@ -92,7 +92,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$qry_result->execute();
 
 		// Refresh using current sort order.
-		print "	<a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "',0)\" class=\"page dark gradient\">Refresh</a>\r\n";
+		print "	<a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "')\" class=\"page dark gradient\">Refresh</a>\r\n";
 
 		// Edit Pin description.
 		print "	<a href=\"#\" onclick=\"changeSection(4)\" class=\"page dark gradient\">Edit Descriptions</a>\r\n";
@@ -293,6 +293,8 @@ elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
 		}
 		$display_string .= "			</tr>\r\n";
 
+		$editPins = '';
+		$editPinString = '';
 		while ($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
 			$display_string .= "			<tr>\r\n";
 			$editPinString .= "			var editPin" . $row['pinID'] . "=document.getElementById('editPin" . $row['pinID'] . "').value);\r\n";
