@@ -33,7 +33,7 @@ function changeSection(secID) {
 	ajaxRequest.onreadystatechange = function() {
 		if (ajaxRequest.readyState == 4) {
 			var ajaxDisplay = document.getElementById('section');
-			ajaxDisplay.innerHTML = ajaxRequest.responseText;
+			$(ajaxDisplay).html(ajaxRequest.responseText);
 		}
 	};
 	switch(secID) {
@@ -65,7 +65,7 @@ function showPage() {
 	ajaxRequest.onreadystatechange = function() {
 		if (ajaxRequest.readyState == 4) {
 			var ajaxDisplay = document.getElementById(elementID);
-			ajaxDisplay.innerHTML = ajaxRequest.responseText;
+			$(ajaxDisplay).html(ajaxRequest.responseText);
 		}
 	};
 	switch(arguments[0]) {
