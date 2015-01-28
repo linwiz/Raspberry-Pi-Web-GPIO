@@ -116,7 +116,7 @@ function showPage() {
 			break;
 		// Edit page.
 		case 4:
-			// Params:
+			// Params: pin description fields
 			var queryString = "?pageType=" + pageType[arguments[0]];
 			var editPins = arguments[1];
 			for (i = 0; i < editPins.length; i++) {

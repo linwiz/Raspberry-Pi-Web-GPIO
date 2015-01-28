@@ -192,12 +192,16 @@ try {
 		$qry_result= $db->prepare($query);
 		$qry_result->execute();
 
+		$display_string = "	<script type=\"text/javascript\">\r\n";
+		$display_string .= "			var editPins = [!!REPLACE_ME!!];\r\n";
+		$display_string .= "		</script>\r\n";
+
 		// Edit Pin description.
-		print "	<a href=\"#\" onclick=\"showPage(4,editPins)\" class=\"page dark gradient\">Save</a>\r\n";
+		$display_string .= "		<a href=\"#\" onclick=\"showPage(4,editPins)\" class=\"page dark gradient\">Save</a>\r\n";
 
 		// Build Result String.
 		// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
-		$display_string = "		<table>\r\n";
+		$display_string .= "		<table>\r\n";
 		$display_string .= "			<tr>\r\n";
 
 		if ($_SESSION['debugMode']) {
@@ -269,9 +273,9 @@ try {
 			$display_string .= "			</tr>\r\n";
 		}
 		$display_string .= "		</table>\r\n";
-		$display_string .= "		<script type=\"text/javascript\">\r\n";
-		$display_string .= "			var editPins=[" . rtrim($editPins, ",") . "];\r\n";
-		$display_string .="		</script>\r\n";
+
+		$editPins = rtrim($editPins, ",");
+		$display_string = str_replace("!!REPLACE_ME!!", $editPins, $display_string);
 
 		print $display_string;
 
@@ -283,8 +287,6 @@ try {
 			print "		<pre>$query_update</pre>\r\n";
 			print "		<pre>:field=$field</pre>\r\n";
 			print "		<pre>:id=$id</pre>\r\n";
-			//print "		<pre>\r\n";
-			//print " 	</pre>\r\n";
 		}
 	}
 
@@ -580,7 +582,7 @@ try {
 		}
 
 		// Build Result String.
-		$display_string = "		<script type=\"text/javascript\">var logPageSize=document.getElementById('logPageSize').value); var pinDelay=document.getElementById('pinDelay').value);</script>\r\n";
+		$display_string = "		<script type=\"text/javascript\">var logPageSize = document.getElementById('logPageSize').value); var pinDelay = document.getElementById('pinDelay').value);</script>\r\n";
 		$display_string .= "		<table>\r\n";
 
 		// gpioserverd status..
