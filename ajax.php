@@ -427,16 +427,6 @@ elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
 			$qry_result = $db->prepare("TRUNCATE TABLE log;");
 			$qry_result->execute();
 		}
-//////////
-// TODO //
-//////////
-/* NEED TO REDUCE MYSQL QUERIES. E.G.:
-POSSIBLE FIXES: ????
-150127 20:25:36 222771 Connect  user@localhost on gpio
-                222771 Query    SELECT * FROM log WHERE id > 0  AND id >= '0' AND id <= '99999' ORDER BY id DESC
-                222771 Query    SELECT * FROM log WHERE id > 0  AND id >= '0' AND id <= '99999' ORDER BY id DESC LIMIT 0,10
-                222771 Quit
-*/
 
 		// Build query.
 		$query = 'SELECT * FROM log WHERE id > 0 ';
@@ -448,15 +438,8 @@ POSSIBLE FIXES: ????
 		$qry_resultpn = $db->prepare($query);
 		$qry_resultpn->execute(array(':id1'=>$id1, ':id2'=>$id2));
 		$logCount = $qry_resultpn->rowCount();
+		$logStart = (($pn - 1) * $_SESSION['logPageSize']);
 
-		$query .= " LIMIT " . (($pn - 1) * $_SESSION['logPageSize']) . "," . $_SESSION['logPageSize'];
-
-		// Execute query.
-		$qry_result = $db->prepare($query);
-		$qry_result->execute(array(':id1'=>$id1, ':id2'=>$id2));
-//////////////
-// END TODO //
-//////////////
 		// Determine number of pages needed.
 		$logPrev = $pn - 1;
 		$logNext = $pn + 1;
@@ -561,12 +544,18 @@ POSSIBLE FIXES: ????
 		$display_string .= "			</tr>\r\n";
 
 		// Insert a new row in the table for each result returned.
-		while ($row = $qry_result->fetch(PDO::FETCH_ASSOC)) {
-			$display_string .= "			<tr>\r\n";
-			$display_string .= "				<td>" . $row['id'] . "</td>\r\n";
-			$display_string .= "				<td>" . $row['date'] . "</td>\r\n";
-			$display_string .= "				<td>" . $row['data'] . "</td>\r\n";
-			$display_string .= "			</tr>\r\n";
+		$x = 0;
+		$i = 1;
+		while (($row = $qry_resultpn->fetch(PDO::FETCH_ASSOC)) && ($i <= $_SESSION['logPageSize'])) {
+			if ($x >= $logStart) {
+				$display_string .= "			<tr>\r\n";
+				$display_string .= "				<td>" . $row['id'] . "</td>\r\n";
+				$display_string .= "				<td>" . $row['date'] . "</td>\r\n";
+				$display_string .= "				<td>" . $row['data'] . "</td>\r\n";
+				$display_string .= "			</tr>\r\n";
+				$i++;
+			}
+			$x++;
 		}
 
 		$display_string .= "		</table>\r\n";
