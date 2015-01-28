@@ -24,6 +24,7 @@ try {
 		$_SESSION['showWPiNumber'] = $rowConfig['showWPiNumber'];
 		$_SESSION['showDisableBox'] = $rowConfig['showDisableBox'];
 		$_SESSION['pinDelay'] = $rowConfig['pinDelay'];
+		$_SESSION['sortDir'] = 'ASC';
 	}
 
 	// Page whitelist.

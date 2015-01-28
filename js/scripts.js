@@ -71,8 +71,8 @@ function showPage() {
 	switch(arguments[0]) {
 		// Pins page.
 		case 1:
-			// Params: sort pinID field
-			var queryString = "?pageType=" + pageType[arguments[0]]  + "&sort=" + arguments[1] + "&id=" + arguments[2] + "&field=" + arguments[3];
+			// Params: sort pinID field sortDir
+			var queryString = "?pageType=" + pageType[arguments[0]]  + "&sort=" + arguments[1] + "&id=" + arguments[2] + "&field=" + arguments[3] + "&sortDir=" + arguments[4];
 			break;
 		// Log page.
 		case 2:

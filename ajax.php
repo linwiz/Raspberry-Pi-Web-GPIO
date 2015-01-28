@@ -40,6 +40,13 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$sort = "pinNumberBCM+0";
 	}
 
+	$sortDir_whitelist = array('ASC', 'DESC');
+	if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
+		$_SESSION['sortDir'] = $_GET['sortDir'];
+	} else {
+		$_SESSION['sortDir'] = "ASC";
+	}
+
 	$field_whitelist = array('pinID', 'pinDirection', 'pinNumberBCM', 'pinNumberWPi', 'pinDescription', 'pinStatus', 'pinEnabled');
 	if (isset($_GET['id']) && in_array($_GET['field'], $field_whitelist)) {
 		$field = $_GET['field'];
@@ -87,7 +94,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		if ($_SESSION['showDisabledPins'] == 0) {
 			$query .= " AND pinEnabled = 1";
 		}
-		$query .= " ORDER BY $sort ASC";
+		$query .= " ORDER BY $sort " . $_SESSION['sortDir'];
 		$qry_result= $db->prepare($query);
 		$qry_result->execute();
 
@@ -103,24 +110,24 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		$display_string .= "			<tr>\r\n";
 
 		if ($_SESSION['debugMode']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinID%2B0',0,'none')\" class=\"page dark gradient\">pinID</a></th>\r\n";
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDirection',0,'none')\" class=\"page dark gradient\">Direction</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinID%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">pinID</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDirection',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Direction</a></th>\r\n";
 		}
 
 		if ($_SESSION['showBCMNumber']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none')\" class=\"page dark gradient\">BCM#</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">BCM#</a></th>\r\n";
 		}
 
 		if ($_SESSION['showWPiNumber']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none')\" class=\"page dark gradient\">WPi#</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">WPi#</a></th>\r\n";
 		}
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDescription',0,'none')\" class=\"page dark gradient\">Description</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDescription',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Description</a></th>\r\n";
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinStatus%2B0',0,'none')\" class=\"page dark gradient\">Status</a></th>\r\n";
+		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinStatus%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Status</a></th>\r\n";
 
 		if ($_SESSION['showDisableBox']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none')\" class=\"page dark gradient\">Enabled</a></th>\r\n";
+			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Enabled</a></th>\r\n";
 		}
 		$display_string .= "			</tr>\r\n";
 
@@ -259,7 +266,7 @@ elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
 		if ($_SESSION['showDisabledPins'] == 0) {
 			$query .= " AND pinEnabled = 1";
 		}
-		$query .= " ORDER BY $sort ASC";
+		$query .= " ORDER BY $sort " .  $_SESSION['sortDir'];
 		$qry_result= $db->prepare($query);
 		$qry_result->execute();
 
