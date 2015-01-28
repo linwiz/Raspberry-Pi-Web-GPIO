@@ -3,6 +3,7 @@ require 'set_config_vars.php';
 require_once('scrypt.php');
 
 try {
+	// Login.
 	if (isset($_POST['username'])) {
 		$post_username = $_POST['username'];
 		$post_password = $_POST['password'];
@@ -23,33 +24,8 @@ try {
 		unset($loginData);
 	}
 
-	// Set up calling params.
+	// Pins/Edit page query.
 	if (($_SESSION['pageType'] == "pins") || ($_SESSION['pageType'] == "edit") && (isset($_SESSION['username']))) {
-		$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
-		if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_whitelist)) {
-			$sort = $_GET['sort'];
-		} else {
-			$sort = "pinNumberBCM+0";
-		}
-
-		$field_whitelist = array('pinID', 'pinDirection', 'pinNumberBCM', 'pinNumberWPi', 'pinDescription', 'pinStatus', 'pinEnabled');
-		if (isset($_GET['id']) && in_array($_GET['field'], $field_whitelist)) {
-			$field = $_GET['field'];
-		} else {
-			$field = "none";
-		}
-
-		if (isset($_GET['id']) && ($_GET['id']!= 'undefined')) {
-			$id = $_GET['id'];
-			if ((int)$id != $id || (int)$id >= 0) {
-				$id = $_GET['id'];
-			} else {
-				$id = 0;
-			}
-		} else {
-			$id = 0;
-		}
-
 		$query_update = "";
 		if (isset($field) && $field != "none") {
 			$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
@@ -68,13 +44,6 @@ try {
 
 	// Pins page.
 	if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
-		$sortDir_whitelist = array('ASC', 'DESC');
-		if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
-			$_SESSION['sortDir'] = $_GET['sortDir'];
-		} else {
-			$_SESSION['sortDir'] = "ASC";
-		}
-
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
