@@ -61,6 +61,8 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 		} else {
 			$id = 0;
 		}
+	} else {
+		$id = 0;
 	}
 
 	$query_update = "";
@@ -235,8 +237,9 @@ elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
 		} else {
 			$id = 0;
 		}
+	} else {
+		$id = 0;
 	}
-
 	$query_update = "";
 	try {
 		if (isset($field) && $field != "none") {
