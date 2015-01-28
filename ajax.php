@@ -30,21 +30,13 @@ if (isset($_POST['username'])) { // if ajax request submitted
 	}
 }
 
-// Pins page.
-if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
+if ($_SESSION['pageType'] == "pins" || $_SESSION['pageType'] == "edit") {
 	// Set up calling params.
 	$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
 	if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_whitelist)) {
 		$sort = $_GET['sort'];
 	} else {
 		$sort = "pinNumberBCM+0";
-	}
-
-	$sortDir_whitelist = array('ASC', 'DESC');
-	if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
-		$_SESSION['sortDir'] = $_GET['sortDir'];
-	} else {
-		$_SESSION['sortDir'] = "ASC";
 	}
 
 	$field_whitelist = array('pinID', 'pinDirection', 'pinNumberBCM', 'pinNumberWPi', 'pinDescription', 'pinStatus', 'pinEnabled');
@@ -81,7 +73,21 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 				$field_value = 1;
 			}
 		}
+	} catch (Exception $e) {
+		echo 'Exception -> ';
+		var_dump($e->getMessage());
+	}
+}
 
+// Pins page.
+if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
+	$sortDir_whitelist = array('ASC', 'DESC');
+	if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
+		$_SESSION['sortDir'] = $_GET['sortDir'];
+	} else {
+		$_SESSION['sortDir'] = "ASC";
+	}
+	try {
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -215,48 +221,7 @@ if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
 
 // Edit page.
 elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
-	// Set up calling params.
-	$sort_whitelist = array('pinID+0', 'pinDirection', 'pinNumberBCM+0', 'pinNumberWPi+0', 'pinDescription', 'pinStatus+0', 'pinEnabled+0');
-	if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_whitelist)) {
-		$sort = $_GET['sort'];
-	} else {
-		$sort = "pinNumberBCM+0";
-	}
-
-	$field_whitelist = array('pinID', 'pinDirection', 'pinNumberBCM', 'pinNumberWPi', 'pinDescription', 'pinStatus', 'pinEnabled');
-	if (isset($_GET['id']) && in_array($_GET['field'], $field_whitelist)) {
-		$field = $_GET['field'];
-	} else {
-		$field = "none";
-	}
-
-	if (isset($_GET['id']) && ($_GET['id']!= 'undefined')) {
-		$id = $_GET['id'];
-		if ((int)$id != $id || (int)$id >= 0) {
-			$id = $_GET['id'];
-		} else {
-			$id = 0;
-		}
-	} else {
-		$id = 0;
-	}
-	$query_update = "";
 	try {
-		if (isset($field) && $field != "none") {
-			// Get value of $field.
-			$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
-			$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
-			$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
-				$qry_fieldvalue_result->execute();
-			$row_fieldvalue = $qry_fieldvalue_result->fetch(PDO::FETCH_ASSOC);
-			$field_value = $row_fieldvalue[$field];
-			if ($field_value == 1) {
-				$field_value = 0;
-			} else {
-				$field_value = 1;
-			}
-		}
-
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
