@@ -120,20 +120,20 @@ try {
 				$display_string .= "				<td><a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "'," . $row['pinID'] . ",'pinStatus')\">";
 				switch ($row['pinStatus']) {
 					case 1 :
-						$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+						$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 						break;
 					case 0 :
-						$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+						$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 				}
 				$display_string .= "</a></td>\r\n";
 			} else {
 				$display_string .= "				<td>";
 				switch ($row['pinStatus']) {
 					case 1 :
-		       			        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+		       			        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 						break;
 					case 0 :
-				                $display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				                $display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 				}
 				$display_string .= "</td>\r\n";
 			}
@@ -143,10 +143,10 @@ try {
 				$display_string .= "				<td><a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "'," . $row['pinID'] . ",'pinEnabled')\">";
 				switch ($row['pinEnabled']) {
 					case 1 :
-		        		        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+		        		        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 						break;
 					case 0 :
-        				        $display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+        				        $display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 				}
 				$display_string .= "</a></td>\r\n";
 			}
@@ -255,10 +255,10 @@ try {
 			$display_string .= "				<td>";
 			switch ($row['pinStatus']) {
 				case 1 :
-	       			        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+	       			        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 					break;
 				case 0 :
-			                $display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+			                $display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 			}
 			$display_string .= "</td>\r\n";
 
@@ -267,10 +267,10 @@ try {
 				$display_string .= "				<td>";
 				switch ($row['pinEnabled']) {
 					case 1 :
-		        		        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+		        		        $display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 						break;
 					case 0 :
-        				        $display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+        				        $display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 				}
 				$display_string .= "</td>\r\n";
 			}
@@ -366,11 +366,11 @@ try {
 		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\">Refresh</a> \r\n";
 		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\">Clear Log</a> \r\n";
 
-		print "		<form name=\"myForm\">ID Range: \r\n";
-		print "			<input type=\"text\" id=\"id1\" value=\"$id1\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
-		print "			<input type=\"text\" id=\"id2\" value=\"$id2\"onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" /><br />\r\n";
+		print "		<form action=\"post\"><fieldset><label for=\"id1\">ID Range:</label>\r\n";
+		print "			<input type=\"text\" id=\"id1\" value=\"$id1\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
+		print "			<input type=\"text\" id=\"id2\" value=\"$id2\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" /><br />\r\n";
 
-		print "		</form>\r\n";
+		print "		</fieldset></form>\r\n";
 
 		$logPagination = '';
 		if($logLastPage > 1) {
@@ -479,8 +479,8 @@ try {
 		if ($_SESSION['debugMode']) {
 			// Debug output.
 			print $configVariables . "\r\n";
-			print "		<pre>Range Set: $id1 <-> $id2</pre>\r\n";
-			print "		<pre>Select: $query</pre>";
+			print "		<pre>Range Set: $id1 &lt;-&gt; $id2</pre>\r\n";
+			print "		<pre>Select: " . htmlentities($query) . "</pre>";
 		}
 	}
 
@@ -586,7 +586,7 @@ try {
 		}
 
 		// Build Result String.
-		$display_string = "		<script type=\"text/javascript\">var logPageSize = document.getElementById('logPageSize').value); var pinDelay = document.getElementById('pinDelay').value);</script>\r\n";
+		$display_string = "		<script type=\"text/javascript\">var logPageSize = document.getElementById('logPageSize').value; var pinDelay = document.getElementById('pinDelay').value;</script>\r\n";
 		$display_string .= "		<table>\r\n";
 
 		// gpioserverd status..
@@ -600,101 +600,101 @@ try {
 		// Debug Mode.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Debug Mode</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
 
 		switch ($_SESSION['debugMode']) {
 			case 1 :
-				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 				break;
 			case 0 :
-				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 		}
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Show Disabled Pins.
 		$display_string .= "			<tr>\r\n";
-		$display_string .= "				<td>Show Disabled Pins</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
+		$display_string .= "				<td>Show Disabled Pins</td>\r\n";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
 
 		switch ($_SESSION['showDisabledPins']) {
 			case 1 :
-				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 				break;
 			case 0 :
-				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 		}
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Show BCM number.
 		$display_string .= "			<tr>\r\n";
-		$display_string .= "				<td>Show BCM pin number</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . ($_SESSION['showBCMNumber'] == 1 ? '0':'1') . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
+		$display_string .= "				<td>Show BCM pin number</td>\r\n";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . ($_SESSION['showBCMNumber'] == 1 ? '0':'1') . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
 
 		switch ($_SESSION['showBCMNumber']) {
 			case 1 :
-				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 				break;
 			case 0 :
-				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 		}
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Show WPi number.
 		$display_string .= "			<tr>\r\n";
-		$display_string .= "				<td>Show WPi number</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . ($_SESSION['showWPiNumber'] == 1 ? '0':'1')  . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
+		$display_string .= "				<td>Show WPi number</td>\r\n";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . ($_SESSION['showWPiNumber'] == 1 ? '0':'1')  . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
 
 		switch ($_SESSION['showWPiNumber']) {
 			case 1 :
-				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 				break;
 			case 0 :
-				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 		}
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Show Disable box.
 		$display_string .= "			<tr>\r\n";
-		$display_string .= "				<td>Show Disable box</a></td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . ($_SESSION['showDisableBox'] == 1 ? '0':'1') . ",pinDelay.value)\" />";
+		$display_string .= "				<td>Show Disable box</td>\r\n";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . ($_SESSION['showDisableBox'] == 1 ? '0':'1') . ",pinDelay.value)\">";
 
 		switch ($_SESSION['showDisableBox']) {
 			case 1 :
-				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 				break;
 			case 0 :
-				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 		}
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Enable logging.
 		$display_string .= "			<tr>\r\n";
-		$display_string .= "				<td>Enable Logging</a></td>\r\n";
-		$display_string .= " <td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" />";
+		$display_string .= "				<td>Enable Logging</td>\r\n";
+		$display_string .= " <td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
 		switch ($_SESSION['enableLogging']) {
 			case 1 :
-				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
 				break;
 			case 0 :
-				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" />";
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
 		}
 		$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
-		$display_string .= "                            <td>Log pagination</a></td>\r\n";
+		$display_string .= "                            <td>Log pagination</td>\r\n";
 		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 	        // Pin delay.
 		$display_string .= "                    <tr>\r\n";
-		$display_string .= "                            <td>Pin delay</a></td>\r\n";
+		$display_string .= "                            <td>Pin delay</td>\r\n";
 		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
