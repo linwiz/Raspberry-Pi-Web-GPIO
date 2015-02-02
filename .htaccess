@@ -2,7 +2,7 @@
 Order Allow,Deny
 Deny from all
 </Files>
-<Files "revision.py">
+<Files "GPIOServer.conf.sh">
 Order Allow,Deny
 Deny from all
 </Files>

@@ -13,89 +13,124 @@ dir="$(dirname "$0")"
 # Read config file (relative).
 source "$dir/GPIOServer.conf.sh"
 
-# Retrieve revision information.
-rev_cmd="python $dir/revision.py"
-revision=`$rev_cmd`
+checkMySQL() {
+	if ! nc -z "$dbhostname" "$dbport"; then
+		echo "MySQL is down.";
+		sudo service mysql start
+		sleep 5
+		if ! nc -z "$dbhostname" "$dbport"; then
+			echo "MySQL is down. Exiting";
+			sudo service gpioserver stop
+			exit;
+		fi
+	fi
+}
+
+checkMySQL
+
+dbExec() {
+	mysql -B --host="$dbhostname" --port="$dbport" --disable-column-names --user="$dbusername" --password="$dbpassword" "$dbdatabase" -e "$1"
+}
 
 addLogItem() {
-    logdatas="$1 $2 $3"
-    echo "INSERT INTO log (data) VALUES (\"$logdatas\");" | mysql --host=$mysqlhostname --user=$mysqlusername --password=$mysqlpassword $mysqldatabase;
+    dbExec "INSERT INTO log (data) VALUES (\"$1\");"
 }
+
+dbQuery() {
+	if ! dbExec "$1"; then
+		checkMySQL
+		addLogItem "$dbtype ERROR. Waiting 5 seconds to try again."
+		sleep 5
+		dbExec "$1"
+	fi
+}
+
+# Retrieve revision information.
+revision=`dbQuery "SELECT piRevision FROM config WHERE configVersion=1"`
 
 addLogItem "Starting GPIO Server"
 trap "addLogItem Stopping GPIO Server" EXIT
 
-mysqlquery="mysql -B --host=$mysqlhostname --disable-column-names --user=$mysqlusername --password=$mysqlpassword $mysqldatabase"
+# Retreive all GPIO pins.
+pins=`dbQuery "SELECT pinNumberBCM FROM pinRevision$revision WHERE concat('',pinNumberBCM * 1) = pinNumberBCM order by pinID"`
 
-# Retreive all pins.
-pins=`echo "SELECT pinNumberBCM FROM pinRevision$revision" | $mysqlquery`
-
-# Start Loop.
+# Start loop.
 while true; do
+	# Retrieve pinDelay.
+	pinDelay=`dbQuery "SELECT pinDelay FROM config WHERE configVersion=1"`
+
+	# Retrieve logging information.
+	logging=`dbQuery "SELECT enableLogging FROM config WHERE configVersion=1"`
 	for PIN in $pins ;
 		do
-			# Enable or Disable pins accordingly.
-			enabled[$PIN]=`echo "SELECT pinEnabled FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
-			if [ "${enabled[$PIN]}" == "1" ]; then
+			# Select current pin details.
+			currPIN[$PIN]=`dbQuery "SELECT pinID,pinEnabled,pinStatus,pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'"`
+			this_pin=${currPIN[$PIN]}
+			currPIN=($this_pin)
+
+			# Populate variables from query.
+			pinID=${currPIN[0]}
+			pinEnabled=${currPIN[1]}
+			pinStatus=${currPIN[2]}
+			pinDirection=${currPIN[3]}
+
+			if [ "$pinEnabled" == "1" ]; then
 				if [ ! -d "/sys/class/gpio/gpio$PIN" ]
 				then
-					gpio export $PIN out
-					if [ "$logging" ]; then addLogItem "Enabled Pin $PIN"; fi
+					echo $PIN > /sys/class/gpio/export
+					if [ "$logging" == "1" ]; then addLogItem "Enabled Pin $PIN"; fi
 				fi
 			else
 				if [ -d "/sys/class/gpio/gpio$PIN" ]
 				then
-					gpio unexport $PIN
-					if [ "$logging" ]; then addLogItem "Disabled Pin $PIN"; fi
+					echo $PIN > /sys/class/gpio/unexport
+					if [ "$logging" == "1" ]; then addLogItem "Disabled Pin $PIN"; fi
 				fi
 			fi
 
 			# Skip disabled pins.
 			if [ -d "/sys/class/gpio/gpio$PIN" ]; then
 
-				# Read Pin Directions.
-				direction[$PIN]=`echo "SELECT pinDirection FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
+				# Read pin directions.
 				direction2=`cat /sys/class/gpio/gpio$PIN/direction`
 
-				# Read Pin Status'.
-				status[$PIN]=`echo "SELECT pinStatus FROM pinRevision$revision WHERE pinNumberBCM='$PIN'" | $mysqlquery`
-				status2=`gpio -g read $PIN`
+				# Read pin status'.
+				status2=`cat /sys/class/gpio/gpio$PIN/value`
 
-				# Change Pin Status'.
-				if [ "${direction[$PIN]}" != "$direction2" ]; then
+				# Change pin status'.
+				if [ "$pinDirection" != "$direction2" ]; then
 					if [ -n $PIN ]; then
-						if [ -n ${direction[$PIN]} ]; then
-							gpio -g write $PIN ${direction[$PIN]}
-							if [ "$logging" ]; then
-								addLogItem "Pin $PIN direction to: ${direction[$PIN]}"
+						if [ -n $pinDirection ]; then
+							echo $pinDirection > /sys/class/gpio/gpio$PIN/direction
+							if [ "$logging" == "1" ]; then
+								addLogItem "Pin $PIN direction to: $pinDirection"
 							fi
-						elif [ -z ${direction[$PIN]} ]; then
-							addLogItem "PIN direction zero"
+						elif [ -z $pinDirection ]; then
+							addLogItem "Pin $PIN direction zero"
 						fi
 					elif [ -z $PIN ]; then
-						addLogItem "PIN value zero"
+						addLogItem "Pin $PIN value zero"
 					fi
 				fi
 
-				if [ "${status[$PIN]}" != "$status2" ]; then
+				if [ "$pinStatus" != "$status2" ]; then
 					if [ -n $PIN ]; then
-						if [ -n ${status[$PIN]} ]; then
-							gpio -g write $PIN ${status[$PIN]}
-							if [ "$logging" ]; then
-								 addLogItem "Pin $PIN changed to: ${status[$PIN]}"
+						if [ -n $pinStatus ]; then
+							echo $pinStatus > /sys/class/gpio/gpio$PIN/value
+							if [ "$logging" == "1" ]; then
+								 addLogItem "Pin $PIN changed to: $pinStatus"
 							fi
-						elif [ -z ${status[$PIN]} ]; then
-							addLogItem "PIN status zero"
+						elif [ -z $pinStatus ]; then
+							addLogItem "Pin $PIN status zero"
 						fi
 					elif [ -z $PIN ]; then
-						addLogItem "PIN value zero"
+						addLogItem "Pin $PIN value zero"
 					fi
 				fi
 			fi
-			sleep 0.2
 	done
 
-	# Complete Loop.
-	sleep $waitTime
+	# Complete loop.
+	sleep $pinDelay
 done
 } >> /var/log/GPIOServer.log
