@@ -364,13 +364,13 @@ try {
 		}
 
 		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\">Refresh</a> \r\n";
-		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\">Clear Log</a> \r\n";
+		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\">Clear Log</a><br />\r\n";
 
-		print "		<form action=\"post\"><fieldset><label for=\"id1\">ID Range:</label>\r\n";
-		print "			<input type=\"text\" id=\"id1\" value=\"$id1\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
-		print "			<input type=\"text\" id=\"id2\" value=\"$id2\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" /><br />\r\n";
+		print "		<label for=\"id1\">ID Range:</label>\r\n";
+		print "		<input type=\"text\" id=\"id1\" value=\"$id1\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
+		print "		<input type=\"text\" id=\"id2\" value=\"$id2\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" /><br />\r\n";
 
-		print "		</fieldset></form>\r\n";
+		print "		\r\n";
 
 		$logPagination = '';
 		if($logLastPage > 1) {
