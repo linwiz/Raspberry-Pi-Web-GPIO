@@ -111,8 +111,41 @@ function showPage() {
 			break;
 		// Config page.
 		case 3:
-			// Params: updateConfig debugMode showDisabledPins logPageSize showBCMNumber showWPiNumber showDisableBox pinDelay
-			var queryString = "?pageType=" + pageType[arguments[0]]  + "&updateConfig=" + arguments[1] + "&debugMode=" + arguments[2] + "&showDisabledPins=" + arguments[3] + "&logPageSize=" + arguments[4] + "&enableLogging=" + arguments[5] + "&showBCMNumber=" + arguments[6] + "&showWPiNumber=" + arguments[7] + "&showDisableBox=" + arguments[8] + "&pinDelay=" + arguments[9];
+			switch(arguments[1]) {
+				case 1:
+					var queryParams = "&debugMode=" + arguments[2];
+					break;
+				case 2:
+					var queryParams = "&showDisabledPins=" + arguments[2];
+					break;
+				case 3:
+				        var logPageSize = document.getElementById('logPageSize').value;
+					var queryParams = "&logPageSize=" + logPageSize;
+					break;
+				case 4:
+					var queryParams = "&enableLogging=" + arguments[2];
+					break;
+				case 5:
+					var queryParams = "&showBCMNumber=" + arguments[2];
+					break;
+				case 6:
+					var queryParams = "&showWPiNumber=" + arguments[2];
+					break;
+				case 7:
+					var queryParams = "&showDisableBox=" + arguments[2];
+					break;
+				case 8:
+				        var pinDelay = document.getElementById('pinDelay').value;
+					var queryParams = "&pinDelay=" + pinDelay;
+					break;
+				case 9:
+				        var chPassword1 = document.getElementById('chPassword1').value;
+				        var chPassword2 = document.getElementById('chPassword2').value;
+					var queryParams = "&chPassword1=" + chPassword1 + "&chPassword2=" + chPassword2;
+					break;
+				default:
+			}
+			var queryString = "?pageType=" + pageType[arguments[0]] + "&updateConfig=1" + queryParams;
 			break;
 		// Edit page.
 		case 4:
@@ -126,6 +159,7 @@ function showPage() {
 			break;
 		default:
  	}
+	alert(queryString);
         ajaxRequest.open("GET", "ajax.php" + queryString, true);
         ajaxRequest.send(null);
 }

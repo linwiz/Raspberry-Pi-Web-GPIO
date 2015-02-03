@@ -488,119 +488,152 @@ try {
 	elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Get params for update.
 		if (isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined')) {
-			$pageSizeTemp = $_GET['logPageSize'];
 			if ((int)$pageSizeTemp != $pageSizeTemp || (int)$pageSizeTemp <= 0) {
 				$pageSizeTemp = 10;
 			}
-		} else {
-			$pageSizeTemp = 10;
+			$pageSizeTemp = $_GET['logPageSize'];
 		}
 
 		if (isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined')) {
-			$updateConfig = $_GET['updateConfig'];
 			if ((int)$updateConfig != $updateConfig || (int)$updateConfig < 0 || (int)$updateConfig > 1) {
 				$updateConfig = 0;
 			}
- 		} else {
-			$updateConfig = 0;
-		}
+			$updateConfig = $_GET['updateConfig'];
+ 		}
 
 		if (isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined')) {
-			$debugModeTemp = $_GET['debugMode'];
 			if ((int)$debugModeTemp != $debugModeTemp || (int)$debugModeTemp < 0 || (int)$debugModeTemp > 1) {
 				$debugModeTemp = 0;
 			}
-		} else {
-			$debugModeTemp = 0;
+			$debugModeTemp = $_GET['debugMode'];
 		}
 
 		if (isset($_GET['showDisabledPins']) && ($_GET['showDisabledPins']!= 'undefined')) {
-			$showDisabledPinsTemp = $_GET['showDisabledPins'];
 			if ((int)$showDisabledPinsTemp != $showDisabledPinsTemp || (int)$showDisabledPinsTemp < 0 || (int)$showDisabledPinsTemp > 1) {
 				$showDisabledPinsTemp = 0;
 			}
-		} else {
-			$showDisabledPinsTemp = 0;
+			$showDisabledPinsTemp = $_GET['showDisabledPins'];
 		}
 
 		if (isset($_GET['enableLogging']) && ($_GET['enableLogging']!= 'undefined')) {
-			$enableLoggingTemp = $_GET['enableLogging'];
 			if ((int)$enableLoggingTemp != $enableLoggingTemp || (int)$enableLoggingTemp < 0 || (int)$enableLoggingTemp > 1) {
 				$enableLoggingTemp = 1;
 			}
-		} else {
-			$enableLoggingTemp = 1;
+			$enableLoggingTemp = $_GET['enableLogging'];
 		}
 
 		if (isset($_GET['showBCMNumber']) && ($_GET['showBCMNumber']!= 'undefined')) {
-			$showBCMNumberTemp = $_GET['showBCMNumber'];
 			if ((int)$showBCMNumberTemp != $showBCMNumberTemp || (int)$showBCMNumberTemp < 0 || (int)$showBCMNumberTemp > 1) {
 					$showBCMNumberTemp = 0;
 			}
-		} else 	{
-			$showBCMNumberTemp = 0;
+			$showBCMNumberTemp = $_GET['showBCMNumber'];
 		}
 
 		if (isset($_GET['showWPiNumber']) && ($_GET['showWPiNumber']!= 'undefined')) {
-			$showWPiNumberTemp = $_GET['showWPiNumber'];
 			if ((int)$showWPiNumberTemp != $showWPiNumberTemp || (int)$showWPiNumberTemp < 0 || (int)$showWPiNumberTemp > 1) {
 				$showWPiNumberTemp = 0;
 			}
-		} else {
-			$showWPiNumberTemp = 0;
+			$showWPiNumberTemp = $_GET['showWPiNumber'];
 		}
 
 		if (isset($_GET['showDisableBox']) && ($_GET['showDisableBox']!= 'undefined')) {
-			$showDisableBoxTemp = $_GET['showDisableBox'];
 			if ((int)$showDisableBoxTemp != $showDisableBoxTemp || (int)$showDisableBoxTemp < 0 || (int)$showDisableBoxTemp > 1) {
 				$showDisableBoxTemp = 0;
 			}
-		} else {
-			$showDisableBoxTemp = 0;
+			$showDisableBoxTemp = $_GET['showDisableBox'];
 		}
 
 		if (isset($_GET['pinDelay']) && ($_GET['pinDelay']!= 'undefined')) {
-			$pinDelayTemp = $_GET['pinDelay'];
 			if ((int)$pinDelayTemp != $pinDelayTemp || (int)$pinDelayTemp < 0) {
 				$pinDelayTemp = 5;
+			}
+			$pinDelayTemp = $_GET['pinDelay'];
 		}
-			} else {
-			$pinDelayTemp = 5;
+
+		if (isset($_GET['chPassword1']) && ($_GET['chPassword1']!= 'undefined')) {
+			if (isset($_GET['chPassword2']) && ($_GET['chPassword2']!= 'undefined')) {
+				$chPassword1Temp = $_GET['chPassword1'];
+				$chPassword2Temp = $_GET['chPassword2'];
+			}
 		}
 
 		// Update config fields as (if) needed.
 		$query_update = "";
-
+		$pdo_array = array();
 		if ($updateConfig > 0) {
-			$query_update = 'UPDATE config SET debugMode = :debugMode, showDisabledPins = :disabledPins, logPageSize = :logPageSize, enableLogging = :enableLogging, showBCMNumber = :showBCMNumber, showWPiNumber = :showWPiNumber, showDisableBox = :showDisableBox, pinDelay = :pinDelay WHERE configVersion = 1';
+			$query_update = 'UPDATE config SET ';
+
+			if (isset($debugModeTemp)) {
+				$query_update .= 'debugMode = :debugMode';
+				$_SESSION['debugMode'] = $debugModeTemp;
+				$pdo_array[':debugMode'] = $debugModeTemp;
+			}
+			if (isset($showDisabledPinsTemp)) {
+				$query_update .= 'showDisabledPins = :showDisabledPins';
+				$_SESSION['showDisabledPins'] = $showDisabledPinsTemp;
+				$pdo_array[':showDisabledPins'] = $showDisabledPinsTemp;
+			}
+			if (isset($pageSizeTemp)) {
+				$query_update .= 'logPageSize = :logPageSize';
+				$_SESSION['logPageSize'] = $pageSizeTemp;
+				$pdo_array[':logPageSize'] = $pageSizeTemp;
+			}
+			if (isset($enableLoggingTemp)) {
+				$query_update .= 'enableLogging = :enableLogging';
+				$_SESSION['enableLogging'] = $enableLoggingTemp;
+				$pdo_array[':enableLogging'] = $enableLoggingTemp;
+			}
+			if (isset($showBCMNumberTemp)) {
+				$query_update .= 'showBCMNumber = :showBCMNumber';
+				$_SESSION['showBCMNumber'] = $showBCMNumberTemp;
+				$pdo_array[':showBCMNumber'] = $showBCMNumberTemp;
+			}
+			if (isset($showWPiNumberTemp)) {
+				$query_update .= 'showWPiNumber = :showWPiNumber';
+				$_SESSION['showWPiNumber'] = $showWPiNumberTemp;
+				$pdo_array[':showWPiNumber'] = $showWPiNumberTemp;
+			}
+			if (isset($showDisableBoxTemp)) {
+				$query_update .= 'showDisableBox = :showDisableBox';
+				$_SESSION['showDisableBox'] = $showDisableBoxTemp;
+				$pdo_array[':showDisableBox'] = $showDisableBoxTemp;
+			}
+			if (isset($pinDelayTemp)) {
+				$query_update .= 'pinDelay = :pinDelay';
+				$_SESSION['pinDelay'] = $pinDelayTemp;
+				$pdo_array[':pinDelay'] = $pinDelayTemp;
+			}
+			$query_update .= ' WHERE configVersion = 1';
+
+			if (isset($chPassword1Temp)) {
+				if (isset($chPassword2Temp)) {
+					if ($chPassword1Temp == $chPassword2Temp) {
+						$pdo_array = array();
+						$query_update = 'UPDATE users SET password = :chPasswordTemp WHERE username = :username AND userID = :userID LIMIT 1';
+						$pdo_array[':chPasswordTemp'] = Password::hash($chPassword1Temp);
+						$pdo_array[':username'] = $_SESSION['username'];
+						$pdo_array[':userID'] = $_SESSION['userID'];
+					}
+				}
+			}
+
 			$qry_result = $db->prepare($query_update);
-			$qry_result->execute(array(':debugMode'=>$debugModeTemp, ':disabledPins'=>$showDisabledPinsTemp, ':logPageSize'=>$pageSizeTemp, ':enableLogging'=>$enableLoggingTemp, ':showBCMNumber'=>$showBCMNumberTemp, ':showWPiNumber'=>$showWPiNumberTemp, ':showDisableBox'=>$showDisableBoxTemp, ':pinDelay'=>$pinDelayTemp));
-			$_SESSION['debugMode'] = $debugModeTemp;
-			$_SESSION['showDisabledPins'] = $showDisabledPinsTemp;
-			$_SESSION['logPageSize'] = $pageSizeTemp;
-			$_SESSION['enableLogging'] = $enableLoggingTemp;
-			$_SESSION['showBCMNumber'] = $showBCMNumberTemp;
-			$_SESSION['showWPiNumber'] = $showWPiNumberTemp;
-			$_SESSION['showDisableBox'] = $showDisableBoxTemp;
-			$_SESSION['pinDelay'] = $pinDelayTemp;
+			$qry_result->execute($pdo_array);
 		}
 
 		// Build Result String.
-		$display_string = "		<script type=\"text/javascript\">var logPageSize = document.getElementById('logPageSize').value; var pinDelay = document.getElementById('pinDelay').value;</script>\r\n";
-		$display_string .= "		<table>\r\n";
+		$display_string = "		<table>\r\n";
 
 		// gpioserverd status..
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>gpioserverd status</td>\r\n";
-		$display_string .= "				<td>";
-		$display_string .= $_SESSION['gpioserverdStatus'];
-		$display_string .= "				</td>\r\n";
+		$display_string .= "				<td>" . $_SESSION['gpioserverdStatus'] . "</td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Debug Mode.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Debug Mode</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . ($_SESSION['debugMode'] == 1 ? '0':'1') . ")\">";
 
 		switch ($_SESSION['debugMode']) {
 			case 1 :
@@ -615,7 +648,7 @@ try {
 		// Show Disabled Pins.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show Disabled Pins</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,2," . ($_SESSION['showDisabledPins'] == 1 ? '0':'1') . ")\">";
 
 		switch ($_SESSION['showDisabledPins']) {
 			case 1 :
@@ -630,7 +663,7 @@ try {
 		// Show BCM number.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show BCM pin number</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . ($_SESSION['showBCMNumber'] == 1 ? '0':'1') . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,5," . ($_SESSION['showBCMNumber'] == 1 ? '0':'1') . ")\">";
 
 		switch ($_SESSION['showBCMNumber']) {
 			case 1 :
@@ -645,7 +678,7 @@ try {
 		// Show WPi number.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show WPi number</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . ($_SESSION['showWPiNumber'] == 1 ? '0':'1')  . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,6," . ($_SESSION['showWPiNumber'] == 1 ? '0':'1')  . ")\">";
 
 		switch ($_SESSION['showWPiNumber']) {
 			case 1 :
@@ -660,7 +693,7 @@ try {
 		// Show Disable box.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Show Disable box</td>\r\n";
-		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . ($_SESSION['showDisableBox'] == 1 ? '0':'1') . ",pinDelay.value)\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,7," . ($_SESSION['showDisableBox'] == 1 ? '0':'1') . ")\">";
 
 		switch ($_SESSION['showDisableBox']) {
 			case 1 :
@@ -675,7 +708,7 @@ try {
 		// Enable logging.
 		$display_string .= "			<tr>\r\n";
 		$display_string .= "				<td>Enable Logging</td>\r\n";
-		$display_string .= " <td><a href=\"#\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . "," . $_SESSION['logPageSize'] . "," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\">";
+		$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,4," . ($_SESSION['enableLogging'] == 1 ? '0':'1') . ")\">";
 		switch ($_SESSION['enableLogging']) {
 			case 1 :
 				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
@@ -689,13 +722,21 @@ try {
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Log pagination</td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,3)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 	        // Pin delay.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Pin delay</td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,1," . $_SESSION['debugMode'] . "," . $_SESSION['showDisabledPins'] . ",logPageSize.value," . $_SESSION['enableLogging'] . "," . $_SESSION['showBCMNumber'] . "," . $_SESSION['showWPiNumber'] . "," . $_SESSION['showDisableBox'] . ",pinDelay.value)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,8)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                    </tr>\r\n";
+
+	        // Update Password.
+		$display_string .= "                    <tr>\r\n";
+		$display_string .= "                            <td><label for=\"chPassword1\">Change password</label></td>\r\n";
+		$display_string .= "                            <td><input type=\"password\" id=\"chPassword1\" class=\"page dark gradient\" /><br />\r\n";
+                $display_string .= "                            <input type=\"password\" id=\"chPassword2\" class=\"page dark gradient\" /><br />\r\n";
+                $display_string .= "                            <input type=\"submit\" value=\"save\" onclick=\"showPage(3,9)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 		// Close table.
@@ -707,7 +748,6 @@ try {
 		if ($_SESSION['debugMode']) {
 			//debug output
 			print $configVariables . "\r\n";
-			print '		<pre>Query params: ' . $updateConfig . ' ' . $debugModeTemp . ' ' . $showDisabledPinsTemp . ' ' . $pageSizeTemp . ' ' . $enableLoggingTemp . "</pre>\r\n";
 			print '		<pre>' . $query_update . "</pre>\r\n";
 		}
 	}
