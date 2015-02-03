@@ -143,6 +143,9 @@ function showPage() {
 				        var chPassword2 = document.getElementById('chPassword2').value;
 					var queryParams = "&chPassword1=" + chPassword1 + "&chPassword2=" + chPassword2;
 					break;
+				case 10:
+					var queryParams = "&serverStatus=" + arguments[2];
+					break;
 				default:
 			}
 			var queryString = "?pageType=" + pageType[arguments[0]] + "&updateConfig=1" + queryParams;

@@ -488,66 +488,68 @@ try {
 	elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
 		// Get params for update.
 		if (isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined')) {
+			$pageSizeTemp = $_GET['logPageSize'];
 			if ((int)$pageSizeTemp != $pageSizeTemp || (int)$pageSizeTemp <= 0) {
 				$pageSizeTemp = 10;
 			}
-			$pageSizeTemp = $_GET['logPageSize'];
 		}
 
 		if (isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined')) {
+			$updateConfig = $_GET['updateConfig'];
 			if ((int)$updateConfig != $updateConfig || (int)$updateConfig < 0 || (int)$updateConfig > 1) {
 				$updateConfig = 0;
 			}
-			$updateConfig = $_GET['updateConfig'];
- 		}
+ 		} else {
+			$updateConfig = 0;
+		}
 
 		if (isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined')) {
+			$debugModeTemp = $_GET['debugMode'];
 			if ((int)$debugModeTemp != $debugModeTemp || (int)$debugModeTemp < 0 || (int)$debugModeTemp > 1) {
 				$debugModeTemp = 0;
 			}
-			$debugModeTemp = $_GET['debugMode'];
 		}
 
 		if (isset($_GET['showDisabledPins']) && ($_GET['showDisabledPins']!= 'undefined')) {
+			$showDisabledPinsTemp = $_GET['showDisabledPins'];
 			if ((int)$showDisabledPinsTemp != $showDisabledPinsTemp || (int)$showDisabledPinsTemp < 0 || (int)$showDisabledPinsTemp > 1) {
 				$showDisabledPinsTemp = 0;
 			}
-			$showDisabledPinsTemp = $_GET['showDisabledPins'];
 		}
 
 		if (isset($_GET['enableLogging']) && ($_GET['enableLogging']!= 'undefined')) {
+			$enableLoggingTemp = $_GET['enableLogging'];
 			if ((int)$enableLoggingTemp != $enableLoggingTemp || (int)$enableLoggingTemp < 0 || (int)$enableLoggingTemp > 1) {
 				$enableLoggingTemp = 1;
 			}
-			$enableLoggingTemp = $_GET['enableLogging'];
 		}
 
 		if (isset($_GET['showBCMNumber']) && ($_GET['showBCMNumber']!= 'undefined')) {
+			$showBCMNumberTemp = $_GET['showBCMNumber'];
 			if ((int)$showBCMNumberTemp != $showBCMNumberTemp || (int)$showBCMNumberTemp < 0 || (int)$showBCMNumberTemp > 1) {
 					$showBCMNumberTemp = 0;
 			}
-			$showBCMNumberTemp = $_GET['showBCMNumber'];
 		}
 
 		if (isset($_GET['showWPiNumber']) && ($_GET['showWPiNumber']!= 'undefined')) {
+			$showWPiNumberTemp = $_GET['showWPiNumber'];
 			if ((int)$showWPiNumberTemp != $showWPiNumberTemp || (int)$showWPiNumberTemp < 0 || (int)$showWPiNumberTemp > 1) {
 				$showWPiNumberTemp = 0;
 			}
-			$showWPiNumberTemp = $_GET['showWPiNumber'];
 		}
 
 		if (isset($_GET['showDisableBox']) && ($_GET['showDisableBox']!= 'undefined')) {
+			$showDisableBoxTemp = $_GET['showDisableBox'];
 			if ((int)$showDisableBoxTemp != $showDisableBoxTemp || (int)$showDisableBoxTemp < 0 || (int)$showDisableBoxTemp > 1) {
 				$showDisableBoxTemp = 0;
 			}
-			$showDisableBoxTemp = $_GET['showDisableBox'];
 		}
 
 		if (isset($_GET['pinDelay']) && ($_GET['pinDelay']!= 'undefined')) {
+			$pinDelayTemp = $_GET['pinDelay'];
 			if ((int)$pinDelayTemp != $pinDelayTemp || (int)$pinDelayTemp < 0) {
 				$pinDelayTemp = 5;
 			}
-			$pinDelayTemp = $_GET['pinDelay'];
 		}
 
 		if (isset($_GET['chPassword1']) && ($_GET['chPassword1']!= 'undefined')) {
@@ -561,6 +563,19 @@ try {
 		$query_update = "";
 		$pdo_array = array();
 		if ($updateConfig > 0) {
+			if (isset($_GET['serverStatus']) && ($_GET['serverStatus']!= 'undefined')) {
+				$serverStatusTemp = $_GET['serverStatus'];
+				if ((int)$serverStatusTemp == $serverStatusTemp && (int)$serverStatusTemp >= 0 & (int)$serverStatusTemp <= 1) {
+					if ($serverStatusTemp == 0) {
+						//exec("server_stop");
+						//$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
+					} else {
+						//exec("server_start");
+						//$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
+					}
+				}
+			}
+
 			$query_update = 'UPDATE config SET ';
 
 			if (isset($debugModeTemp)) {
@@ -626,8 +641,19 @@ try {
 
 		// gpioserverd status..
 		$display_string .= "			<tr>\r\n";
-		$display_string .= "				<td>gpioserverd status</td>\r\n";
-		$display_string .= "				<td>" . $_SESSION['gpioserverdStatus'] . "</td>\r\n";
+		$display_string .= "				<td>Server status</td>\r\n";
+		$display_string .= "				<td>";
+		//$display_string .= "				<td><a href=\"#\" onclick=\"showPage(3,10," . ($_SESSION['gpioserverdStatus'] == 1 ? '0':'1') . ")\">";
+
+		switch ($_SESSION['gpioserverdStatus']) {
+			case 1 :
+				$display_string .= "<img src=\"" . $stateIcon['on'] . "\" alt=\"" . $stateIcon['on'] . "\" />";
+				break;
+			case 0 :
+				$display_string .= "<img src=\"" . $stateIcon['off'] . "\" alt=\"" . $stateIcon['off'] . "\" />";
+		}
+		$display_string .= "</td>\r\n";
+		//$display_string .= "</a></td>\r\n";
 		$display_string .= "			</tr>\r\n";
 
 		// Debug Mode.

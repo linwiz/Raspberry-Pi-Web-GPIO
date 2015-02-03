@@ -64,12 +64,6 @@ try {
 		$id = 0;
 	}
 
-	if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
-		$_SESSION['sortDir'] = $_GET['sortDir'];
-	} else {
-		$_SESSION['sortDir'] = "ASC";
-	}
-
 	// Set up state icons.
 	$stateIcon = array();
 	$stateIcon['on'] =  'images/checkbox_checked_icon.png';
@@ -78,9 +72,9 @@ try {
 	// Daemon status.
 	exec("pgrep GPIOServer.sh", $pids);
 	if (empty($pids)) {
-		$_SESSION['gpioserverdStatus'] = 'stopped';
+		$_SESSION['gpioserverdStatus'] = 0;
 	} else {
-		$_SESSION['gpioserverdStatus'] = 'running';
+		$_SESSION['gpioserverdStatus'] = 1;
 	}
 
 	// Debug output.
