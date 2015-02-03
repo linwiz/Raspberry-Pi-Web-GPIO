@@ -159,7 +159,6 @@ function showPage() {
 			break;
 		default:
  	}
-	alert(queryString);
         ajaxRequest.open("GET", "ajax.php" + queryString, true);
         ajaxRequest.send(null);
 }
