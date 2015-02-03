@@ -64,6 +64,12 @@ try {
 		$id = 0;
 	}
 
+	if (isset($_GET['sortDir']) && in_array($_GET['sortDir'], $sortDir_whitelist)) {
+		$_SESSION['sortDir'] = $_GET['sortDir'];
+	} else {
+		$_SESSION['sortDir'] = "ASC";
+	}
+
 	// Set up state icons.
 	$stateIcon = array();
 	$stateIcon['on'] =  'images/checkbox_checked_icon.png';
