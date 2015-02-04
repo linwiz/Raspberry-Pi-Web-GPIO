@@ -85,24 +85,14 @@ try {
 
 	// Debug output.
 	$configVariables = "		<pre>System Wide Config Variables:</pre>\r\n";
-	$configVariables .= "		<pre>\r\n";
-	$configVariables .= "			[piRevision] => " . $_SESSION['piRevision'] . "\r\n";
-	$configVariables .= "			[debugMode] => " . $_SESSION['debugMode'] . "\r\n";
-	$configVariables .= "			[showDisabledPins] => " . $_SESSION['showDisabledPins'] . "\r\n";
-	$configVariables .= "			[enableLogging] => " . $_SESSION['enableLogging'] . "\r\n";
-	$configVariables .= "			[logPageSize] => " . $_SESSION['logPageSize'] . "\r\n";
-	$configVariables .= "			[showBCMNumber] => " . $_SESSION['showBCMNumber'] . "\r\n";
-	$configVariables .= "			[showWPiNumber] => " . $_SESSION['showWPiNumber'] . "\r\n";
-	$configVariables .= "			[showDisableBox] => " . $_SESSION['showDisableBox'] . "\r\n";
-	$configVariables .= "			[pinDelay] => " . $_SESSION['pinDelay'] . "\r\n";
-	if (isset($_SESSION['username'])) {
-		$configVariables .= "			[username] => " . $_SESSION['username'] . "\r\n";
+	foreach ($_SESSION as $key => $value) {
+		$configVariables .= "		<pre> " . $key . "=>" . $value . "</pre>\r\n";
 	}
-	if (isset($_SESSION['userID'])) {
-		$configVariables .= "			[userID] => " . $_SESSION['userID'] . "\r\n";
+
+	$configVariables .= "		<pre>GET Variables:</pre>\r\n";
+	foreach ($_GET as $key => $value) {
+		$configVariables .= "		<pre> " . $key . "=>" . $value . "</pre>\r\n";
 	}
-	$configVariables .= "			[pageType] => " . $_SESSION['pageType'] . "\r\n";
-	$configVariables .= "		</pre>\r\n";
 } catch(Exception $e) {
 	echo 'Exception -> ';
 	var_dump($e->getMessage());

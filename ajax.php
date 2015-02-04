@@ -158,11 +158,8 @@ try {
 		if ($_SESSION['debugMode']) {
 			// Debug output.
 			print $configVariables . "\r\n";
-			print "		<pre>$sort $id $field</pre>\r\n";
 			print "		<pre>$query</pre>\r\n";
 			print "		<pre>$query_update</pre>\r\n";
-			print "		<pre>:field=$field</pre>\r\n";
-			print "		<pre>:id=$id</pre>";
 		}
 	}
 
@@ -286,11 +283,8 @@ try {
 		if ($_SESSION['debugMode']) {
 			// Debug output.
 			print $configVariables . "\r\n";
-			print "		<pre>$sort $id $field</pre>\r\n";
 			print "		<pre>$query</pre>\r\n";
 			print "		<pre>$query_update</pre>\r\n";
-			print "		<pre>:field=$field</pre>\r\n";
-			print "		<pre>:id=$id</pre>\r\n";
 		}
 	}
 
@@ -479,7 +473,6 @@ try {
 		if ($_SESSION['debugMode']) {
 			// Debug output.
 			print $configVariables . "\r\n";
-			print "		<pre>Range Set: $id1 &lt;-&gt; $id2</pre>\r\n";
 			print "		<pre>Select: " . htmlentities($query) . "</pre>";
 		}
 	}
@@ -747,7 +740,7 @@ try {
 
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
-		$display_string .= "                            <td>Log pagination</td>\r\n";
+		$display_string .= "                            <td>Log entries/page</td>\r\n";
 		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,3)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
@@ -772,7 +765,7 @@ try {
 		print $display_string;
 
 		if ($_SESSION['debugMode']) {
-			//debug output
+			// Debug output.
 			print $configVariables . "\r\n";
 			print '		<pre>' . $query_update . "</pre>\r\n";
 		}
