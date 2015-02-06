@@ -175,12 +175,12 @@ $(function() {
 	$("#submit_login").click(function() { // if submit button is clicked
 		var username = $("input#username").val(); // define username variable
 		if (username == "") { // if username variable is empty
-			$('.errormess').html('Please Insert Your Username'); // printing error message
+			$('.errormess').html('Please Insert Your Username');
 			return false; // stop the script
 		}
 		var password = $("input#password").val(); // define password variable
 		if (password == "") { // if password variable is empty
-			$('.errormess').html('Please Insert Your Password'); // printing error message
+			$('.errormess').html('Please Insert Your Password');
 			return false; // stop the script
 		}
 
@@ -192,9 +192,9 @@ $(function() {
 			dataType: "html", // type of returned data
 			success: function(data) { // if ajax function results success
 				if (data == 0) { // if the returned data equal 0
-					$('.errormess').html('Wrong Login Data'); // print error message
+					$('.errormess').html('Username or password incorrect.');
 				} else { // if the reurned data not equal 0
-					$('.errormess').html('<b style="color: green;">You are logged in. Wait for redirection.</b>');// print success message
+					$('.errormess').html('<b style="color: green;">You are logged in. Wait for redirection.</b>');
 					changeSection(1);
 				}
 			}

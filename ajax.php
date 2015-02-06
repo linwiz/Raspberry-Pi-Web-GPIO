@@ -22,12 +22,13 @@ try {
 		}
 		unset($loginResult);
 		unset($loginData);
+		exit();
 	}
 
 	// Pins/Edit page query.
-	if (($_SESSION['pageType'] == "pins") || ($_SESSION['pageType'] == "edit") && (isset($_SESSION['username']))) {
+	if (($_SESSION['pageType'] == "pins") || ($_SESSION['debugMode']) || (($_SESSION['pageType'] == "edit") && (isset($_SESSION['username'])))) {
 		$query_update = "";
-		if (isset($field) && $field != "none") {
+		if ((isset($field)) && ($field != "none")) {
 			$query_fieldvalue = "SELECT $field FROM pinRevision" . $_SESSION['piRevision'] . " WHERE pinID=:id";
 			$qry_fieldvalue_result = $db->prepare($query_fieldvalue);
 			$qry_fieldvalue_result->bindParam(':id', $id, PDO::PARAM_INT);
@@ -43,7 +44,7 @@ try {
 	}
 
 	// Pins page.
-	if ($_SESSION['pageType'] == "pins" && isset($_SESSION['username'])) {
+	if (($_SESSION['pageType'] == "pins") && ((isset($_SESSION['username'])) || ($_SESSION['debugMode']))) {
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -164,7 +165,7 @@ try {
 	}
 
 	// Edit page.
-	elseif ($_SESSION['pageType'] == "edit" && isset($_SESSION['username'])) {
+	elseif (($_SESSION['pageType'] == "edit") && ((isset($_SESSION['username'])) || ($_SESSION['debugMode']))) {
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -289,7 +290,7 @@ try {
 	}
 
 	// Log page.
-	elseif ($_SESSION['pageType'] == "log" && isset($_SESSION['username'])) {
+	elseif (($_SESSION['pageType'] == "log") && ((isset($_SESSION['username'])) || ($_SESSION['debugMode']))) {
 		if (isset($_GET['id1'])) {
 			$id1 = $_GET['id1'];
 		} else {
@@ -312,10 +313,10 @@ try {
 		}
 
 		// Check for positive integers.
-		if ((int)$id1 != $id1 || (int)$id1 < 0) {
+		if (((int)$id1 != $id1) || ((int)$id1 < 0)) {
 			$id1 = 0;
 		}
-		if ((int)$id2 != $id2 || (int)$id2 < 0) {
+		if (((int)$id2 != $id2) || ((int)$id2 < 0)) {
 			$id2 = 99999;
 		}
 
@@ -327,7 +328,7 @@ try {
 		if ((int)$id2 < (int)$id1) {
 			$id2 = 99999;
 			}
-		if ((int)$pn != $pn || (int)$pn < 0) {
+		if (((int)$pn != $pn) || ((int)$pn < 0)) {
 			$pn = 1;
 		}
 
@@ -401,7 +402,7 @@ try {
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\">$logLastPage</a> ";
 				}
 				//in middle; hide some front and some back
-				elseif($logLastPage - (3 * 2) > $pn && $pn > (3 * 2)) {
+				elseif(($logLastPage - (3 * 2) > $pn) && ($pn > (3 * 2))) {
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\" class=\"page dark gradient\">1</a> ";
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\" class=\"page dark gradient\">2</a> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
@@ -478,75 +479,75 @@ try {
 	}
 
 	// Config page.
-	elseif ($_SESSION['pageType'] == "config" && isset($_SESSION['username'])) {
+	elseif (($_SESSION['pageType'] == "config") && ((isset($_SESSION['username'])) || ($_SESSION['debugMode']))) {
 		// Get params for update.
-		if (isset($_GET['logPageSize']) && ($_GET['logPageSize']!= 'undefined')) {
+		if ((isset($_GET['logPageSize'])) && ($_GET['logPageSize'] != 'undefined')) {
 			$pageSizeTemp = $_GET['logPageSize'];
-			if ((int)$pageSizeTemp != $pageSizeTemp || (int)$pageSizeTemp <= 0) {
+			if (((int)$pageSizeTemp != $pageSizeTemp) || ((int)$pageSizeTemp <= 0)) {
 				$pageSizeTemp = 10;
 			}
 		}
 
-		if (isset($_GET['updateConfig']) && ($_GET['updateConfig']!= 'undefined')) {
+		if ((isset($_GET['updateConfig'])) && ($_GET['updateConfig'] != 'undefined')) {
 			$updateConfig = $_GET['updateConfig'];
-			if ((int)$updateConfig != $updateConfig || (int)$updateConfig < 0 || (int)$updateConfig > 1) {
+			if (((int)$updateConfig != $updateConfig) || ((int)$updateConfig < 0) || ((int)$updateConfig > 1)) {
 				$updateConfig = 0;
 			}
  		} else {
 			$updateConfig = 0;
 		}
 
-		if (isset($_GET['debugMode']) && ($_GET['debugMode']!= 'undefined')) {
+		if ((isset($_GET['debugMode'])) && ($_GET['debugMode'] != 'undefined')) {
 			$debugModeTemp = $_GET['debugMode'];
-			if ((int)$debugModeTemp != $debugModeTemp || (int)$debugModeTemp < 0 || (int)$debugModeTemp > 1) {
+			if (((int)$debugModeTemp != $debugModeTemp) || ((int)$debugModeTemp < 0) || ((int)$debugModeTemp > 1)) {
 				$debugModeTemp = 0;
 			}
 		}
 
-		if (isset($_GET['showDisabledPins']) && ($_GET['showDisabledPins']!= 'undefined')) {
+		if ((isset($_GET['showDisabledPins'])) && ($_GET['showDisabledPins'] != 'undefined')) {
 			$showDisabledPinsTemp = $_GET['showDisabledPins'];
-			if ((int)$showDisabledPinsTemp != $showDisabledPinsTemp || (int)$showDisabledPinsTemp < 0 || (int)$showDisabledPinsTemp > 1) {
+			if (((int)$showDisabledPinsTemp != $showDisabledPinsTemp) || ((int)$showDisabledPinsTemp < 0) || ((int)$showDisabledPinsTemp > 1)) {
 				$showDisabledPinsTemp = 0;
 			}
 		}
 
-		if (isset($_GET['enableLogging']) && ($_GET['enableLogging']!= 'undefined')) {
+		if ((isset($_GET['enableLogging'])) && ($_GET['enableLogging'] != 'undefined')) {
 			$enableLoggingTemp = $_GET['enableLogging'];
-			if ((int)$enableLoggingTemp != $enableLoggingTemp || (int)$enableLoggingTemp < 0 || (int)$enableLoggingTemp > 1) {
+			if (((int)$enableLoggingTemp != $enableLoggingTemp) || ((int)$enableLoggingTemp < 0) || ((int)$enableLoggingTemp > 1)) {
 				$enableLoggingTemp = 1;
 			}
 		}
 
-		if (isset($_GET['showBCMNumber']) && ($_GET['showBCMNumber']!= 'undefined')) {
+		if ((isset($_GET['showBCMNumber'])) && ($_GET['showBCMNumber'] != 'undefined')) {
 			$showBCMNumberTemp = $_GET['showBCMNumber'];
-			if ((int)$showBCMNumberTemp != $showBCMNumberTemp || (int)$showBCMNumberTemp < 0 || (int)$showBCMNumberTemp > 1) {
+			if (((int)$showBCMNumberTemp != $showBCMNumberTemp) || ((int)$showBCMNumberTemp < 0) || ((int)$showBCMNumberTemp > 1)) {
 					$showBCMNumberTemp = 0;
 			}
 		}
 
-		if (isset($_GET['showWPiNumber']) && ($_GET['showWPiNumber']!= 'undefined')) {
+		if ((isset($_GET['showWPiNumber'])) && ($_GET['showWPiNumber'] != 'undefined')) {
 			$showWPiNumberTemp = $_GET['showWPiNumber'];
-			if ((int)$showWPiNumberTemp != $showWPiNumberTemp || (int)$showWPiNumberTemp < 0 || (int)$showWPiNumberTemp > 1) {
+			if (((int)$showWPiNumberTemp != $showWPiNumberTemp) || ((int)$showWPiNumberTemp < 0) || ((int)$showWPiNumberTemp > 1)) {
 				$showWPiNumberTemp = 0;
 			}
 		}
 
-		if (isset($_GET['showDisableBox']) && ($_GET['showDisableBox']!= 'undefined')) {
+		if ((isset($_GET['showDisableBox'])) && ($_GET['showDisableBox'] != 'undefined')) {
 			$showDisableBoxTemp = $_GET['showDisableBox'];
-			if ((int)$showDisableBoxTemp != $showDisableBoxTemp || (int)$showDisableBoxTemp < 0 || (int)$showDisableBoxTemp > 1) {
+			if (((int)$showDisableBoxTemp != $showDisableBoxTemp) || ((int)$showDisableBoxTemp < 0) || ((int)$showDisableBoxTemp > 1)) {
 				$showDisableBoxTemp = 0;
 			}
 		}
 
-		if (isset($_GET['pinDelay']) && ($_GET['pinDelay']!= 'undefined')) {
+		if ((isset($_GET['pinDelay'])) && ($_GET['pinDelay'] != 'undefined')) {
 			$pinDelayTemp = $_GET['pinDelay'];
-			if ((int)$pinDelayTemp != $pinDelayTemp || (int)$pinDelayTemp < 0) {
+			if (((int)$pinDelayTemp != $pinDelayTemp) || ((int)$pinDelayTemp < 0)) {
 				$pinDelayTemp = 5;
 			}
 		}
 
-		if (isset($_GET['chPassword1']) && ($_GET['chPassword1']!= 'undefined')) {
-			if (isset($_GET['chPassword2']) && ($_GET['chPassword2']!= 'undefined')) {
+		if ((isset($_GET['chPassword1'])) && ($_GET['chPassword1'] != 'undefined')) {
+			if ((isset($_GET['chPassword2'])) && ($_GET['chPassword2'] != 'undefined')) {
 				$chPassword1Temp = $_GET['chPassword1'];
 				$chPassword2Temp = $_GET['chPassword2'];
 			}
@@ -556,9 +557,9 @@ try {
 		$query_update = "";
 		$pdo_array = array();
 		if ($updateConfig > 0) {
-			if (isset($_GET['serverStatus']) && ($_GET['serverStatus']!= 'undefined')) {
+			if ((isset($_GET['serverStatus'])) && ($_GET['serverStatus'] != 'undefined')) {
 				$serverStatusTemp = $_GET['serverStatus'];
-				if ((int)$serverStatusTemp == $serverStatusTemp && (int)$serverStatusTemp >= 0 & (int)$serverStatusTemp <= 1) {
+				if (((int)$serverStatusTemp == $serverStatusTemp) && ((int)$serverStatusTemp >= 0) && ((int)$serverStatusTemp <= 1)) {
 					if ($serverStatusTemp == 0) {
 						//exec("server_stop");
 						//$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
@@ -741,21 +742,21 @@ try {
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Log entries/page</td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,3)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_logPageSize').click()\" /><input type=\"button\" value=\"save\" id=\"submit_logPageSize\" onclick=\"showPage(3,3)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 	        // Pin delay.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Pin delay</td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" /><input type=\"submit\" value=\"save\" onclick=\"showPage(3,8)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_pinDelay').click()\" /><input type=\"button\" value=\"save\" id=\"submit_pinDelay\" onclick=\"showPage(3,8)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 	        // Update Password.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td><label for=\"chPassword1\">Change password</label></td>\r\n";
-		$display_string .= "                            <td><input type=\"password\" id=\"chPassword1\" class=\"page dark gradient\" /><br />\r\n";
-                $display_string .= "                            <input type=\"password\" id=\"chPassword2\" class=\"page dark gradient\" /><br />\r\n";
-                $display_string .= "                            <input type=\"submit\" value=\"save\" onclick=\"showPage(3,9)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"password\" id=\"chPassword1\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_chPassword').click()\" /><br />\r\n";
+                $display_string .= "                            <input type=\"password\" id=\"chPassword2\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_chPassword').click()\" /><br />\r\n";
+                $display_string .= "                            <input type=\"button\" value=\"save\" id=\"submit_chPassword\" onclick=\"showPage(3,9)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 		// Close table.
