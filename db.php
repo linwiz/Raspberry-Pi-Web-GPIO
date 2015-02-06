@@ -1,6 +1,6 @@
 <?php
-// Leave these values blank. Edit GPIOServer.conf.sh
-// and run setup.py. eg; python setup.py OR ./setup.py
+// Leave these values blank. Run setup.py instead.
+// eg; python setup.py OR ./setup.py
 
 $db_Type = '';
 $db_Host = '';

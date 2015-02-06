@@ -7,6 +7,7 @@ or desktop browser, but this hasn't been tested.
 See http://linwiz.github.io/Raspberry-Pi-Web-GPIO page for screenshots.
 
 ## Requires
+* Python 2.7
 * [WiringPi](http://wiringpi.com)
 * [scrypt](https://github.com/DomBlack/php-scrypt)
 * MySQL
@@ -22,9 +23,6 @@ Copy all files into your web directory.
 Create MySQL database `gpio`.
 
 Create user for MySQL database `gpio`.
-
-### Edit GPIOServer.conf.sh
-Set MySQL connection information in `GPIOServer.conf.sh`
 
 ### Run the setup script
 Make sure the file has execute permissions.
