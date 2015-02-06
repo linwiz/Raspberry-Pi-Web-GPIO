@@ -13,7 +13,7 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 	<meta name="viewport" content="width=150, initial-scale=1, maximum-scale=5, user-scalable=1"/>
 	<meta content="yes" name="apple-mobile-web-app-capable" />
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-	<link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
 	<link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 	<script type="text/javascript" src="./js/jquery.min.js"></script>
 	<script type="text/javascript" src="./js/scripts.js"></script>
