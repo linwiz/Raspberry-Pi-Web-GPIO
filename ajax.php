@@ -557,19 +557,20 @@ try {
 		$query_update = "";
 		$pdo_array = array();
 		if ($updateConfig > 0) {
+/*
 			if ((isset($_GET['serverStatus'])) && ($_GET['serverStatus'] != 'undefined')) {
 				$serverStatusTemp = $_GET['serverStatus'];
 				if (((int)$serverStatusTemp == $serverStatusTemp) && ((int)$serverStatusTemp >= 0) && ((int)$serverStatusTemp <= 1)) {
 					if ($serverStatusTemp == 0) {
-						//exec("server_stop");
-						//$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
+						//Possible to stop service? sudo service gpioserver stop
+						$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
 					} else {
-						//exec("server_start");
-						//$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
+						//Possible to start service? sudo service gpioserver start
+						$_SESSION['gpioserverdStatus'] = $serverStatusTemp;
 					}
 				}
 			}
-
+*/
 			$query_update = 'UPDATE config SET ';
 
 			if (isset($debugModeTemp)) {
