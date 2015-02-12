@@ -66,10 +66,10 @@ try {
 		$qry_result->execute();
 
 		// Refresh using current sort order.
-		print "	<a href=\"#\" onclick=\"showPage(1,'" . urlencode($sort) . "')\" class=\"page dark gradient\">Refresh</a>\r\n";
+		print "	<input type=\"button\" onclick=\"showPage(1,'" . urlencode($sort) . "')\" class=\"page dark gradient\" value=\"Refresh\" />\r\n";
 
 		// Edit Pin description.
-		print "	<a href=\"#\" onclick=\"changeSection(4)\" class=\"page dark gradient\">Edit Descriptions</a>\r\n";
+		print "	<input type=\"button\" onclick=\"changeSection(4)\" class=\"page dark gradient\" value=\"Edit Descriptions\" />\r\n";
 
 		// Build Result String.
 		// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
@@ -77,24 +77,24 @@ try {
 		$display_string .= "			<tr>\r\n";
 
 		if ($_SESSION['debugMode']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinID%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">pinID</a></th>\r\n";
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDirection',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Direction</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinID%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"pinID\" /></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinDirection',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"Direction\" /></th>\r\n";
 		}
 
 		if ($_SESSION['showBCMNumber']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">BCM#</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"BCM#\" /></th>\r\n";
 		}
 
 		if ($_SESSION['showWPiNumber']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">WPi#</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"WPi#\" /></th>\r\n";
 		}
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDescription',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Description</a></th>\r\n";
+		$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinDescription',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"Description\" /></th>\r\n";
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinStatus%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Status</a></th>\r\n";
+		$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinStatus%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"Status\" /></th>\r\n";
 
 		if ($_SESSION['showDisableBox']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\">Enabled</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none','" . ($_SESSION['sortDir'] == 'ASC' ? 'DESC':'ASC') . "')\" class=\"page dark gradient\" value=\"Enabled\" /></th>\r\n";
 		}
 		$display_string .= "			</tr>\r\n";
 
@@ -199,7 +199,7 @@ try {
 		$display_string .= "		</script>\r\n";
 
 		// Edit Pin description.
-		$display_string .= "		<a href=\"#\" onclick=\"showPage(4,editPins)\" class=\"page dark gradient\">Save</a>\r\n";
+		$display_string .= "		<input type=\"button\" onclick=\"showPage(4,editPins)\" class=\"page dark gradient\" value=\"Save\" />\r\n";
 
 		// Build Result String.
 		// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
@@ -207,24 +207,24 @@ try {
 		$display_string .= "			<tr>\r\n";
 
 		if ($_SESSION['debugMode']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinID%2B0',0,'none')\" class=\"page dark gradient\">pinID</a></th>\r\n";
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDirection',0,'none')\" class=\"page dark gradient\">Direction</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinID%2B0',0,'none')\" class=\"page dark gradient\" value=\"pinID\" /></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinDirection',0,'none')\" class=\"page dark gradient\" value=\"Direction\" /></th>\r\n";
 		}
 
 		if ($_SESSION['showBCMNumber']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none')\" class=\"page dark gradient\">BCM#</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinNumberBCM%2B0',0,'none')\" class=\"page dark gradient\" value=\"BCM#\" /></th>\r\n";
 		}
 
 		if ($_SESSION['showWPiNumber']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none')\" class=\"page dark gradient\">WPi#</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinNumberWPi%2B0',0,'none')\" class=\"page dark gradient\" value=\"WPi#\" /></th>\r\n";
 		}
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinDescription',0,'none')\" class=\"page dark gradient\">Description</a></th>\r\n";
+		$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinDescription',0,'none')\" class=\"page dark gradient\" value=\"Description\" /></th>\r\n";
 
-		$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinStatus%2B0',0,'none')\" class=\"page dark gradient\">Status</a></th>\r\n";
+		$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinStatus%2B0',0,'none')\" class=\"page dark gradient\" value=\"Status\" /></th>\r\n";
 
 		if ($_SESSION['showDisableBox']) {
-			$display_string .= "				<th><a href=\"#\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none')\" class=\"page dark gradient\">Enabled</a></th>\r\n";
+			$display_string .= "				<th><input type=\"button\" onclick=\"showPage(1,'pinEnabled%2B0',0,'none')\" class=\"page dark gradient\" value=\"Enabled\" /></th>\r\n";
 		}
 		$display_string .= "			</tr>\r\n";
 
@@ -358,8 +358,8 @@ try {
 			$pn = $logLastPage;
 		}
 
-		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\">Refresh</a> \r\n";
-		print "	<a href=\"#\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\">Clear Log</a><br />\r\n";
+		print "	<input type=\"button\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\" value=\"Refresh\" /> \r\n";
+		print "	<input type=\"button\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\" value=\"Clear Log\" /><br />\r\n";
 
 		print "		<label for=\"id1\">ID Range:</label>\r\n";
 		print "		<input type=\"text\" id=\"id1\" value=\"$id1\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
@@ -373,7 +373,7 @@ try {
 			$logPagination .= "<div class=\"pagination dark\">";
 			//previous button
 			if ($pn > 1) {
-				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logPrev)\" class=\"page dark gradient\">prev</a> ";
+				$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logPrev)\" class=\"page dark gradient\" value=\"prev\" /> ";
 			} else {
 				$logPagination .= "<span class=\"page dark gradient\">prev</span>";
 			}
@@ -384,7 +384,7 @@ try {
 					if ($counter == $pn) {
 						$logPagination .= "<span class=\"page dark active\">$counter</span>";
 					} else {
-						$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
+						$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\" value=\"$counter\" /> ";
 					}
 				}
 			}
@@ -395,39 +395,39 @@ try {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
-							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
+							$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\" value=\"$counter\" /> ";
 						}
 					}
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\" class=\"page dark gradient\">$logNextToLastPage</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\">$logLastPage</a> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logNextToLastPage)\" class=\"page dark gradient\" value=\"$logNextToLastPage\" /> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\" value=\"$logLastPage\" /> ";
 				}
 				//in middle; hide some front and some back
 				elseif (($logLastPage - ($page_adjacents * 2) > $pn) && ($pn > ($page_adjacents * 2))) {
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\" class=\"page dark gradient\">1</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\" class=\"page dark gradient\">2</a> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,1)\" class=\"page dark gradient\" value=\"1\" /> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,2)\" class=\"page dark gradient\" value=\"2\" /> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
 					for ($counter = $pn - $page_adjacents; $counter <= $pn + $page_adjacents; $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
-							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
+							$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\" value=\"$counter\" /> ";
 						}
 					}
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNextToLastPage)\" class=\"page dark gradient\">$logNextToLastPage</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\">$logLastPage</a> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logNextToLastPage)\" class=\"page dark gradient\" value=\"$logNextToLastPage\" /> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\" value=\"$logLastPage\" /> ";
 				}
 				//close to end; only hide early pages
 				else {
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a> ";
-					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,1)\" value=\"1\" /> ";
+					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,2)\" value=\"2\" /> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
 					for ($counter = $logLastPage - (2 + ($page_adjacents * 2)); $counter <= $logLastPage; $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark gradient\">$counter</span>";
 						} else {
-							$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\">$counter</a> ";
+							$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$counter)\" class=\"page dark gradient\" value=\"$counter\" /> ";
 						}
 					}
 				}
@@ -435,7 +435,7 @@ try {
 
 			//next button
 			if ($pn < $counter - 1) {
-				$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logNext)\" class=\"page dark gradient\">next</a> ";
+				$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logNext)\" class=\"page dark gradient\" value=\"next\" /> ";
 			} else {
 				$logPagination .= "<span class=\"page dark gradient\">next</span>";
 			}
