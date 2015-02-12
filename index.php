@@ -36,10 +36,8 @@ if ($db_Host == '' || $db_User == '' || $db_Password == '' || $db_DataBase == ''
 			<div class="login_form">
 				<h3>Login</h3>
 				<fieldset>
-					<label for="username">Username</label>
-					<input type="text" name="username" id="username" placeholder="your username" class="page dark gradient" onkeydown="if (event.keyCode == 13) document.getElementById('submit_login').click()" /><br />
-					<label for="password">Password</label>
-					<input type="password" name="pasword" id="password" placeholder="your password" class="page dark gradient" onkeydown="if (event.keyCode == 13) document.getElementById('submit_login').click()" /><br />
+					<input type="text" name="username" id="username" placeholder="username" class="page dark gradient" onkeydown="if (event.keyCode == 13) document.getElementById('submit_login').click()" size="10" /><br />
+					<input type="password" name="pasword" id="password" placeholder="password" class="page dark gradient" onkeydown="if (event.keyCode == 13) document.getElementById('submit_login').click()" size="10" /><br />
 					<input type="button" id="submit_login" name="submit" value="Login" class="page dark gradient" />
 					<span class="login_loading"></span>
 					<span class="errormess"></span>

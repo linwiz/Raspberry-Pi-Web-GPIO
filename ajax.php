@@ -744,20 +744,20 @@ try {
 	        // Log page size.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Log entries/page</td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"3\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_logPageSize').click()\" /><input type=\"button\" value=\"save\" id=\"submit_logPageSize\" onclick=\"showPage(3,3)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"logPageSize\" value=\"" . $_SESSION['logPageSize'] . "\" size=\"2\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_logPageSize').click()\" /><input type=\"button\" value=\"save\" id=\"submit_logPageSize\" onclick=\"showPage(3,3)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 	        // Pin delay.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td>Pin delay</td>\r\n";
-		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"3\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_pinDelay').click()\" /><input type=\"button\" value=\"save\" id=\"submit_pinDelay\" onclick=\"showPage(3,8)\" class=\"page dark gradient\" /></td>\r\n";
+		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"2\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_pinDelay').click()\" /><input type=\"button\" value=\"save\" id=\"submit_pinDelay\" onclick=\"showPage(3,8)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
 	        // Update Password.
 		$display_string .= "                    <tr>\r\n";
 		$display_string .= "                            <td><label for=\"chPassword1\">Change password</label></td>\r\n";
-		$display_string .= "                            <td><input type=\"password\" id=\"chPassword1\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_chPassword').click()\" /><br />\r\n";
-                $display_string .= "                            <input type=\"password\" id=\"chPassword2\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_chPassword').click()\" /><br />\r\n";
+		$display_string .= "                            <td><input type=\"password\" id=\"chPassword1\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_chPassword').click()\" size=\"10\" /><br />\r\n";
+                $display_string .= "                            <input type=\"password\" id=\"chPassword2\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_chPassword').click()\" size=\"10\" /><br />\r\n";
                 $display_string .= "                            <input type=\"button\" value=\"save\" id=\"submit_chPassword\" onclick=\"showPage(3,9)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
