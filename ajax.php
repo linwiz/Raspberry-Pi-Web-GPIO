@@ -368,7 +368,8 @@ try {
 		print "		\r\n";
 
 		$logPagination = '';
-		if($logLastPage > 1) {
+		$page_adjacents = '1';
+		if ($logLastPage > 1) {
 			$logPagination .= "<div class=\"pagination dark\">";
 			//previous button
 			if ($pn > 1) {
@@ -378,7 +379,7 @@ try {
 			}
 
 			//pages
-			if ($logLastPage < 7 + (3 * 2)) {
+			if ($logLastPage < 7 + ($page_adjacents * 2)) {
 				for ($counter = 1; $counter <= $logLastPage; $counter++) {
 					if ($counter == $pn) {
 						$logPagination .= "<span class=\"page dark active\">$counter</span>";
@@ -387,10 +388,10 @@ try {
 					}
 				}
 			}
-			elseif($logLastPage > 5 + (3 * 2)) {
+			elseif ($logLastPage > 5 + ($page_adjacents * 2)) {
 				//close to beginning; only hide later pages
-				if($pn < 1 + (3 * 2)) {
-					for ($counter = 1; $counter < 4 + (3 * 2); $counter++) {
+				if ($pn < 1 + ($page_adjacents * 2)) {
+					for ($counter = 1; $counter < 4 + ($page_adjacents * 2); $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
@@ -402,11 +403,11 @@ try {
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,$logLastPage)\" class=\"page dark gradient\">$logLastPage</a> ";
 				}
 				//in middle; hide some front and some back
-				elseif(($logLastPage - (3 * 2) > $pn) && ($pn > (3 * 2))) {
+				elseif (($logLastPage - ($page_adjacents * 2) > $pn) && ($pn > ($page_adjacents * 2))) {
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\" class=\"page dark gradient\">1</a> ";
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\" class=\"page dark gradient\">2</a> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
-					for ($counter = $pn - 3; $counter <= $pn + 3; $counter++) {
+					for ($counter = $pn - $page_adjacents; $counter <= $pn + $page_adjacents; $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
@@ -422,7 +423,7 @@ try {
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,1)\">1</a> ";
 					$logPagination .= "<a href=\"#\" onclick=\"showPage(2,2)\">2</a> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
-					for ($counter = $logLastPage - (2 + (3 * 2)); $counter <= $logLastPage; $counter++) {
+					for ($counter = $logLastPage - (2 + ($page_adjacents * 2)); $counter <= $logLastPage; $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark gradient\">$counter</span>";
 						} else {
