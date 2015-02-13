@@ -66,10 +66,10 @@ try {
 		$qry_result->execute();
 
 		// Refresh using current sort order.
-		print "	<input type=\"button\" onclick=\"showPage(1,'" . urlencode($sort) . "')\" class=\"page dark gradient\" value=\"Refresh\" />\r\n";
+		print "<input type=\"button\" onclick=\"showPage(1,'" . urlencode($sort) . "')\" class=\"page dark gradient\" value=\"Refresh\" />\r\n";
 
 		// Edit Pin description.
-		print "	<input type=\"button\" onclick=\"changeSection(4)\" class=\"page dark gradient\" value=\"Edit Descriptions\" />\r\n";
+		print "		<input type=\"button\" onclick=\"changeSection(4)\" class=\"page dark gradient\" value=\"Edit Descriptions\" />\r\n";
 
 		// Build Result String.
 		// Important %2B0 is url encoded "+0" string passed to mySQL to force numerical varchars to be sorted as true numbers.
@@ -169,7 +169,7 @@ try {
 		// Update state and enabled fields as needed.
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-		foreach($_GET as $key => $editPinValue) {
+		foreach ($_GET as $key => $editPinValue) {
 			if (strpos($key,'editPin') !== false) {
 				$editPinID = str_replace("editPin", "", $key);
 				$query_update = "UPDATE pinRevision" . $_SESSION['piRevision'] . " SET pinDescription=:editPinValue WHERE pinID=:editPinID";
@@ -194,7 +194,7 @@ try {
 		$qry_result= $db->prepare($query);
 		$qry_result->execute();
 
-		$display_string = "	<script type=\"text/javascript\">\r\n";
+		$display_string = "<script type=\"text/javascript\">\r\n";
 		$display_string .= "			var editPins = [!!REPLACE_ME!!];\r\n";
 		$display_string .= "		</script>\r\n";
 
@@ -350,16 +350,16 @@ try {
 		$logStart = (($pn - 1) * $_SESSION['logPageSize']);
 
 		// Determine number of pages needed.
-		$logPrev = $pn - 1;
-		$logNext = $pn + 1;
+		$logPrev = ($pn - 1);
+		$logNext = ($pn + 1);
 		$logLastPage = ceil($logCount / $_SESSION['logPageSize']);
-		$logNextToLastPage = $logLastPage - 1;
+		$logNextToLastPage = ($logLastPage - 1);
 		if ((int)$pn > (int)$logLastPage) {
 			$pn = $logLastPage;
 		}
 
-		print "	<input type=\"button\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\" value=\"Refresh\" /> \r\n";
-		print "	<input type=\"button\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\" value=\"Clear Log\" /><br />\r\n";
+		print "<input type=\"button\" onclick=\"showPage(2,$pn,'false')\" class=\"page dark gradient\" value=\"Refresh\" /> \r\n";
+		print "		<input type=\"button\" onclick=\"showPage(2,$pn,'true')\" class=\"page dark gradient\" value=\"Clear Log\" /><br />\r\n";
 
 		print "		<label for=\"id1\">ID Range:</label>\r\n";
 		print "		<input type=\"text\" id=\"id1\" value=\"$id1\" onchange=\"showPage(2,$pn,'false')\" size=\"5\" class=\"page dark gradient\" />\r\n";
@@ -370,7 +370,7 @@ try {
 		$logPagination = '';
 		$page_adjacents = '1';
 		if ($logLastPage > 1) {
-			$logPagination .= "<div class=\"pagination dark\">";
+			$logPagination .= "		<div class=\"pagination dark\">";
 			//previous button
 			if ($pn > 1) {
 				$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logPrev)\" class=\"page dark gradient\" value=\"prev\" /> ";
@@ -379,7 +379,7 @@ try {
 			}
 
 			//pages
-			if ($logLastPage < 7 + ($page_adjacents * 2)) {
+			if ($logLastPage < (7 + ($page_adjacents * 2))) {
 				for ($counter = 1; $counter <= $logLastPage; $counter++) {
 					if ($counter == $pn) {
 						$logPagination .= "<span class=\"page dark active\">$counter</span>";
@@ -388,10 +388,10 @@ try {
 					}
 				}
 			}
-			elseif ($logLastPage > 5 + ($page_adjacents * 2)) {
+			elseif ($logLastPage > (5 + ($page_adjacents * 2))) {
 				//close to beginning; only hide later pages
-				if ($pn < 1 + ($page_adjacents * 2)) {
-					for ($counter = 1; $counter < 4 + ($page_adjacents * 2); $counter++) {
+				if ($pn < (1 + ($page_adjacents * 2))) {
+					for ($counter = 1; $counter < (4 + ($page_adjacents * 2)); $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
@@ -407,7 +407,7 @@ try {
 					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,1)\" class=\"page dark gradient\" value=\"1\" /> ";
 					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,2)\" class=\"page dark gradient\" value=\"2\" /> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
-					for ($counter = $pn - $page_adjacents; $counter <= $pn + $page_adjacents; $counter++) {
+					for ($counter = ($pn - $page_adjacents); $counter <= ($pn + $page_adjacents); $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark active\">$counter</span>";
 						} else {
@@ -423,7 +423,7 @@ try {
 					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,1)\" value=\"1\" /> ";
 					$logPagination .= "<input type=\"button\" onclick=\"showPage(2,2)\" value=\"2\" /> ";
 					$logPagination .= "<span class=\"page dark gradient\">...</span>";
-					for ($counter = $logLastPage - (2 + ($page_adjacents * 2)); $counter <= $logLastPage; $counter++) {
+					for ($counter = ($logLastPage - (2 + ($page_adjacents * 2))); $counter <= $logLastPage; $counter++) {
 						if ($counter == $pn) {
 							$logPagination .= "<span class=\"page dark gradient\">$counter</span>";
 						} else {
@@ -434,7 +434,7 @@ try {
 			}
 
 			//next button
-			if ($pn < $counter - 1) {
+			if ($pn < ($counter - 1)) {
 				$logPagination .= "<input type=\"button\" onclick=\"showPage(2,$logNext)\" class=\"page dark gradient\" value=\"next\" /> ";
 			} else {
 				$logPagination .= "<span class=\"page dark gradient\">next</span>";
@@ -633,7 +633,7 @@ try {
 		}
 
 		// Build Result String.
-		$display_string = "		<table>\r\n";
+		$display_string = "	<table>\r\n";
 
 		// gpioserverd status..
 		$display_string .= "			<tr>\r\n";
