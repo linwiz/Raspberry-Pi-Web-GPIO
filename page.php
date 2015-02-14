@@ -10,6 +10,7 @@ require_once('set_config_vars.php');
 <script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
+	<span class="errormess"></span>
 	<div id='<?php print $_SESSION['pageType']; ?>'>
         <?php
         // Check if user logged in.

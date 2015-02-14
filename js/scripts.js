@@ -142,13 +142,13 @@ function showPage() {
 				        var chPassword1 = document.getElementById('chPassword1').value;
 				        var chPassword2 = document.getElementById('chPassword2').value;
 					if (chPassword1 != chPassword2) {
-						alert("Passwords do not match");
+						$('.errormess').html('<b style="color: red;">Passwords do not match.</b>');
 						chPassword1.value = '';
 						chPassword2.value = '';
 						break;
 					}
 					else if (chPassword1 == '' || chPassword2 == '') {
-						alert("Passwords must not be blank");
+						$('.errormess').html('<b style="color: red;">Passwords must not be blank.</b>');
 						break;
 					}
 					var queryParams = "&chPassword1=" + chPassword1 + "&chPassword2=" + chPassword2;
@@ -202,7 +202,7 @@ $(function() {
 			dataType: "html", // type of returned data
 			success: function(data) { // if ajax function results success
 				if (data == 0) { // if the returned data equal 0
-					$('.errormess').html('Username or password incorrect.');
+					$('.errormess').html('<b style="color: red;">Username or password incorrect.</b>');
 				} else { // if the reurned data not equal 0
 					$('.errormess').html('<b style="color: green;">You are logged in. Wait for redirection.</b>');
 					changeSection(1);
