@@ -549,8 +549,10 @@ try {
 
 		if ((isset($_GET['chPassword1'])) && ($_GET['chPassword1'] != 'undefined')) {
 			if ((isset($_GET['chPassword2'])) && ($_GET['chPassword2'] != 'undefined')) {
-				$chPassword1Temp = $_GET['chPassword1'];
-				$chPassword2Temp = $_GET['chPassword2'];
+				if (($_GET['chPassword2'] != "") && ($_GET['chPassword2'] != "")) {
+					$chPassword1Temp = $_GET['chPassword1'];
+					$chPassword2Temp = $_GET['chPassword2'];
+				}
 			}
 		}
 

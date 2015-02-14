@@ -141,6 +141,16 @@ function showPage() {
 				case 9:
 				        var chPassword1 = document.getElementById('chPassword1').value;
 				        var chPassword2 = document.getElementById('chPassword2').value;
+					if (chPassword1 != chPassword2) {
+						alert("Passwords do not match");
+						chPassword1.value = '';
+						chPassword2.value = '';
+						break;
+					}
+					else if (chPassword1 == '' || chPassword2 == '') {
+						alert("Passwords must not be blank");
+						break;
+					}
 					var queryParams = "&chPassword1=" + chPassword1 + "&chPassword2=" + chPassword2;
 					break;
 				case 10:
