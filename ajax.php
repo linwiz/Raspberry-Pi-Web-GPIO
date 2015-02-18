@@ -751,7 +751,7 @@ try {
 
 	        // Pin delay.
 		$display_string .= "                    <tr>\r\n";
-		$display_string .= "                            <td>Pin delay</td>\r\n";
+		$display_string .= "                            <td>Pin delay in seconds<br /><i><small>The shorter the time<br />the more cpu will be used</i></small></td>\r\n";
 		$display_string .= "                            <td><input type=\"text\" id=\"pinDelay\" value=\"" . $_SESSION['pinDelay'] . "\" size=\"2\" class=\"page dark gradient\" onkeydown=\"if (event.keyCode == 13) document.getElementById('submit_pinDelay').click()\" /><input type=\"button\" value=\"save\" id=\"submit_pinDelay\" onclick=\"showPage(3,8)\" class=\"page dark gradient\" /></td>\r\n";
 		$display_string .= "                    </tr>\r\n";
 
